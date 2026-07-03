@@ -1,8 +1,8 @@
 ---
-import { listTemplates } from '@website-factory/templates';
-import { listThemes, themeCssText } from '@website-factory/themes';
+import { listThemes, themeClassNames, themeCssText } from '@website-factory/themes';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getExampleSites } from '../lib/examples';
+import { getTemplatePrototypes } from '../lib/templatePrototypes';
 
 const sites = await getExampleSites();
 const styleCards = listThemes()
@@ -12,36 +12,31 @@ const styleCards = listThemes()
     description: theme.description,
     defaultMode: theme.defaultMode,
     tags: theme.tags,
+    className: ['card', 'style-card', ...themeClassNames(theme, theme.defaultMode)].join(' '),
     cssText: themeCssText(theme, theme.defaultMode),
+    heroLayout: theme.tokens.hero.layout,
+    mediaShape: theme.tokens.hero.mediaShape,
+    navigationLayout: theme.tokens.navigation.layout,
+    navigationIndicator: theme.tokens.navigation.activeIndicator,
+    footerLayout: theme.tokens.footer.layout,
+    footerDensity: theme.tokens.footer.density,
+    cardRadius: theme.tokens.cards.standard.radius,
+    visualLabel: `${theme.displayName} theme preview using ${theme.tokens.hero.layout} hero, ${theme.tokens.hero.mediaShape} media, and ${theme.tokens.navigation.layout} navigation tokens.`
   }))
   .sort((left, right) => left.displayName.localeCompare(right.displayName));
-const templateCards = listTemplates()
-  .map((template) => {
-    const sections = [...template.sections].sort((left, right) => left.order - right.order);
-    const requiredSectionCount = sections.filter((section) => section.required).length;
-    const rhythmLabel = [
-      `${template.name} section rhythm preview`,
-      `${sections.length} total sections`,
-      `${requiredSectionCount} required`,
-      `order: ${sections.map((section) => section.schemaType).join(', ')}`,
-    ].join('; ');
+const templateCards = [...getTemplatePrototypes()].sort((left, right) => left.name.localeCompare(right.name));
 
-    return {
-      id: template.id,
-      name: template.name,
-      description: template.description,
-      audience: template.audience,
-      layout: template.layout,
-      defaultTheme: template.defaultTheme,
-      tags: template.tags,
-      sections,
-      requiredSectionCount,
-      sectionCount: sections.length,
-      rhythmLabel,
-      prototypeHref: `/templates/${template.id}/`,
-    };
-  })
-  .sort((left, right) => left.name.localeCompare(right.name));
+function templateCardClassName(templateCard: TemplatePrototype): string {
+  return ['card', 'template-card', ...templateCard.theme.classNames].join(' ');
+}
+
+function templateCardStyle(templateCard: TemplatePrototype): string {
+  return [
+    templateCard.theme.cssText,
+    `--template-section-count: ${templateCard.sections.length};`,
+    `--template-required-ratio: ${templateCard.visual.requiredRatio.toFixed(3)};`
+  ].join('\n');
+}
 ---
 <SiteLayout
   title="Website Factory Tailnet Preview"
@@ -128,12 +123,47 @@ const templateCards = listTemplates()
         </div>
         <div class="style-grid">
           {styleCards.map((styleCard) => (
-            <article id={`style-${styleCard.id}`} class="card style-card" style={styleCard.cssText}>
-              <div class="style-preview" aria-hidden="true">
-                <span class="style-swatch style-swatch-primary"></span>
-                <span class="style-swatch style-swatch-secondary"></span>
-                <span class="style-swatch style-swatch-accent"></span>
-                <span class="style-swatch style-swatch-surface"></span>
+            <article
+              id={`style-${styleCard.id}`}
+              class={styleCard.className}
+              style={styleCard.cssText}
+              data-hero-layout={styleCard.heroLayout}
+              data-media-shape={styleCard.mediaShape}
+              data-nav-layout={styleCard.navigationLayout}
+              data-nav-indicator={styleCard.navigationIndicator}
+              data-footer-layout={styleCard.footerLayout}
+              data-footer-density={styleCard.footerDensity}
+            >
+              <div class="style-preview" role="img" aria-label={styleCard.visualLabel}>
+                <div class="style-preview-nav" aria-hidden="true">
+                  <span class="style-preview-brand"></span>
+                  <span class="style-preview-link style-preview-link-active"></span>
+                  <span class="style-preview-link"></span>
+                  <span class="style-preview-cta"></span>
+                </div>
+                <div class="style-preview-hero" aria-hidden="true">
+                  <div class="style-preview-copy">
+                    <span class="style-preview-eyebrow"></span>
+                    <span class="style-preview-title"></span>
+                    <span class="style-preview-line"></span>
+                    <span class="style-preview-line style-preview-line-short"></span>
+                    <span class="style-preview-button"></span>
+                  </div>
+                  <div class="style-preview-media">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+                <div class="style-preview-card-row" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="style-preview-footer" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
               <p class="eyebrow">{styleCard.id}</p>
               <h3>{styleCard.displayName}</h3>
@@ -142,6 +172,22 @@ const templateCards = listTemplates()
                 <div>
                   <dt>Default mode</dt>
                   <dd>{styleCard.defaultMode}</dd>
+                </div>
+                <div>
+                  <dt>Hero</dt>
+                  <dd>{styleCard.heroLayout} · {styleCard.mediaShape}</dd>
+                </div>
+                <div>
+                  <dt>Navigation</dt>
+                  <dd>{styleCard.navigationLayout} · {styleCard.navigationIndicator}</dd>
+                </div>
+                <div>
+                  <dt>Card radius</dt>
+                  <dd>{styleCard.cardRadius}</dd>
+                </div>
+                <div>
+                  <dt>Footer</dt>
+                  <dd>{styleCard.footerLayout} · {styleCard.footerDensity}</dd>
                 </div>
               </dl>
               <ul class="tag-list" aria-label={`${styleCard.displayName} tags`}>
@@ -162,30 +208,74 @@ const templateCards = listTemplates()
         </div>
         <div class="template-grid">
           {templateCards.map((templateCard) => (
-            <article id={`template-${templateCard.id}`} class="card template-card">
+            <article
+              id={`template-${templateCard.id}`}
+              class={templateCardClassName(templateCard)}
+              style={templateCardStyle(templateCard)}
+              data-layout={templateCard.visual.layout}
+              data-audience={templateCard.visual.audience}
+              data-hero-layout={templateCard.visual.heroLayout}
+              data-media-shape={templateCard.visual.mediaShape}
+              data-nav-layout={templateCard.visual.navigationLayout}
+              data-footer-layout={templateCard.visual.footerLayout}
+              data-footer-density={templateCard.visual.footerDensity}
+            >
               <div class="template-wireframe" role="img" aria-label={templateCard.rhythmLabel}>
-                {templateCard.sections.map((section) => (
-                  <span
-                    class={`wireframe-segment wireframe-segment-${section.slot}${section.required ? ' wireframe-segment-required' : ''}`}
-                    aria-hidden="true"
-                  ></span>
-                ))}
+                <div class="template-art-nav" aria-hidden="true">
+                  <span class="template-art-brand"></span>
+                  <span></span>
+                  <span></span>
+                  <span class="template-art-cta"></span>
+                </div>
+                <div class="template-art-hero" aria-hidden="true">
+                  <div class="template-art-copy">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div class="template-art-media">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+                <div class="template-art-rhythm" aria-hidden="true">
+                  {templateCard.sections.filter((section) => section.slot === 'main').slice(0, 8).map((section) => (
+                    <span
+                      class={`wireframe-segment wireframe-segment-${section.slot} wireframe-schema-${section.schemaTypeClassName}${section.required ? ' wireframe-segment-required' : ''}`}
+                      data-schema={section.schemaType}
+                      data-component={section.componentClassName}
+                    >
+                      <span></span>
+                    </span>
+                  ))}
+                </div>
+                <div class="template-art-footer" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
               <p class="eyebrow">{templateCard.id}</p>
               <h3>{templateCard.name}</h3>
-              <p>{templateCard.description}</p>
+              <p>{templateCard.heroLead}</p>
               <dl class="compact-meta template-meta">
                 <div>
                   <dt>Audience</dt>
-                  <dd>{templateCard.audience}</dd>
+                  <dd>{templateCard.audienceLabel}</dd>
                 </div>
                 <div>
                   <dt>Layout</dt>
-                  <dd>{templateCard.layout}</dd>
+                  <dd>{templateCard.layoutLabel}</dd>
                 </div>
                 <div>
                   <dt>Default theme</dt>
-                  <dd>{templateCard.defaultTheme}</dd>
+                  <dd>{templateCard.theme.displayName}</dd>
+                </div>
+                <div>
+                  <dt>Hero treatment</dt>
+                  <dd>{templateCard.visual.heroLayout} · {templateCard.visual.mediaShape}</dd>
                 </div>
                 <div>
                   <dt>Required sections</dt>
@@ -193,7 +283,7 @@ const templateCards = listTemplates()
                 </div>
                 <div>
                   <dt>Total sections</dt>
-                  <dd>{templateCard.sectionCount}</dd>
+                  <dd>{templateCard.sections.length}</dd>
                 </div>
               </dl>
               <ul class="tag-list" aria-label={`${templateCard.name} tags`}>
@@ -202,7 +292,7 @@ const templateCards = listTemplates()
               <div class="button-row card-actions">
                 <a
                   class="button button-primary"
-                  href={templateCard.prototypeHref}
+                  href={templateCard.canonicalPath}
                   aria-label={`Open ${templateCard.name} prototype website`}
                 >
                   Open prototype website

@@ -15,10 +15,25 @@ interface Props {
 
 const { prototype } = Astro.props;
 const prototypeClassName = ['template-prototype-site', ...prototype.theme.classNames].join(' ');
-const canonicalPath = `/templates/${prototype.id}/`;
+const prototypeStyle = [
+  prototype.theme.cssText,
+  `--template-section-count: ${prototype.sections.length};`,
+  `--template-required-ratio: ${prototype.visual.requiredRatio.toFixed(3)};`
+].join('\n');
+const canonicalPath = prototype.canonicalPath;
 ---
 <SiteLayout title={prototype.pageTitle} description={prototype.pageDescription} canonicalPath={canonicalPath}>
-  <div class={prototypeClassName} style={prototype.theme.cssText}>
+  <div
+    class={prototypeClassName}
+    style={prototypeStyle}
+    data-layout={prototype.visual.layout}
+    data-audience={prototype.visual.audience}
+    data-hero-layout={prototype.visual.heroLayout}
+    data-media-shape={prototype.visual.mediaShape}
+    data-nav-layout={prototype.visual.navigationLayout}
+    data-footer-layout={prototype.visual.footerLayout}
+    data-footer-density={prototype.visual.footerDensity}
+  >
     <div class="prototype-shell">
       <div class="prototype-banner">
         <span>{prototype.name} template prototype · {prototype.theme.displayName}</span>
@@ -43,11 +58,32 @@ const canonicalPath = `/templates/${prototype.id}/`;
             <p class="eyebrow">{prototype.eyebrow}</p>
             <h1 id="prototype-title">{prototype.heroTitle}</h1>
             <p>{prototype.heroLead}</p>
+            <div class="prototype-hero-actions">
+              <a class="prototype-button prototype-button-primary" href="#template-rhythm">Explore rhythm</a>
+              <a class="prototype-button prototype-button-secondary" href="/#templates">Compare templates</a>
+            </div>
             <ul class="tag-list" aria-label={`${prototype.name} template tags`}>
               {prototype.tags.map((tag) => <li>{tag}</li>)}
             </ul>
           </div>
           <aside class="prototype-hero-card" aria-labelledby="prototype-meta-title">
+            <div class="prototype-hero-visual" role="img" aria-label={`${prototype.name} ${prototype.theme.displayName} themed website preview`}>
+              <div class="prototype-visual-nav" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="prototype-visual-stage" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="prototype-visual-cards" aria-hidden="true">
+                {prototype.sections.filter((section) => section.slot === 'main').slice(0, 4).map((section) => (
+                  <span data-schema={section.schemaType}></span>
+                ))}
+              </div>
+            </div>
             <h2 id="prototype-meta-title">Prototype defaults</h2>
             <dl class="prototype-template-meta">
               {prototype.metrics.map((item) => (
@@ -68,21 +104,48 @@ const canonicalPath = `/templates/${prototype.id}/`;
             content rhythm, conversion callout, and footer. Each section below follows the template order and shows its
             schema type, component variant, purpose, and required/optional status.
           </p>
+          <div class="prototype-rhythm-strip" role="img" aria-label={prototype.rhythmLabel}>
+            {prototype.sections.map((section) => (
+              <span
+                class={`prototype-rhythm-item prototype-rhythm-${section.slot}${section.required ? ' prototype-rhythm-required' : ''}`}
+                data-schema={section.schemaType}
+                aria-hidden="true"
+              ></span>
+            ))}
+          </div>
         </section>
 
         {prototype.sections.map((section) => (
-          <section class="prototype-section" id={section.fragmentId} aria-labelledby={`${section.fragmentId}-title`}>
-            <p class="eyebrow">{section.eyebrow}</p>
-            <h2 id={`${section.fragmentId}-title`}>{section.heading}</h2>
-            <p><strong>{section.purposeLabel}:</strong> {section.purpose}</p>
-            <dl class="prototype-template-meta">
-              {section.meta.map((item) => (
-                <div>
-                  <dt>{item.term}</dt>
-                  <dd>{item.description}</dd>
+          <section
+            class={`prototype-section prototype-section-${section.schemaTypeClassName}`}
+            id={section.fragmentId}
+            aria-labelledby={`${section.fragmentId}-title`}
+            data-slot={section.slot}
+            data-schema={section.schemaType}
+            data-component={section.componentClassName}
+            data-required={section.required ? 'true' : 'false'}
+          >
+            <div class="prototype-section-layout">
+              <div class="prototype-section-copy">
+                <p class="eyebrow">{section.eyebrow}</p>
+                <h2 id={`${section.fragmentId}-title`}>{section.heading}</h2>
+                <p><strong>{section.purposeLabel}:</strong> {section.purpose}</p>
+                <dl class="prototype-template-meta">
+                  {section.meta.map((item) => (
+                    <div>
+                      <dt>{item.term}</dt>
+                      <dd>{item.description}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div class="prototype-section-preview" role="img" aria-label={section.visualLabel}>
+                <span class="prototype-section-preview-kicker" aria-hidden="true">{section.schemaType}</span>
+                <div class="prototype-section-preview-main" aria-hidden="true">
+                  {section.previewItems.map((item) => <span>{item}</span>)}
                 </div>
-              ))}
-            </dl>
+              </div>
+            </div>
             <div class="prototype-section-grid">
               {section.details.map((detail) => (
                 <article class={`prototype-section-card ${section.required ? 'prototype-section-required' : 'prototype-section-optional'}`}>

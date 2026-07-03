@@ -1,5 +1,5 @@
-import { listTemplates, type TemplateLayout, type TemplateSectionDefinition, type TemplateSlot, type WebsiteTemplate } from '@website-factory/templates';
-import { resolveTheme, themeClassNames, themeCssText, type ThemeMode } from '@website-factory/themes';
+import { listTemplates, type TemplateAudience, type TemplateLayout, type TemplateSectionDefinition, type TemplateSlot, type WebsiteTemplate } from '@website-factory/templates';
+import { resolveTheme, themeClassNames, themeCssText, type FooterTokens, type HeroTokens, type NavigationTokens, type ThemeMode } from '@website-factory/themes';
 
 export interface TemplatePrototypeMetaItem {
   readonly term: string;
@@ -27,23 +27,41 @@ export interface TemplatePrototypeTheme {
 export interface TemplatePrototypeSection {
   readonly id: string;
   readonly fragmentId: string;
+  readonly schemaTypeClassName: string;
+  readonly componentClassName: string;
   readonly heading: string;
   readonly eyebrow: string;
   readonly purposeLabel: string;
   readonly purpose: string;
   readonly schemaType: string;
   readonly componentLabel: string;
+  readonly slot: TemplateSlot;
   readonly slotLabel: string;
   readonly required: boolean;
   readonly requirementLabel: string;
+  readonly visualLabel: string;
+  readonly previewItems: readonly string[];
   readonly details: readonly TemplatePrototypeDetail[];
   readonly meta: readonly TemplatePrototypeMetaItem[];
+}
+
+export interface TemplatePrototypeVisual {
+  readonly audience: TemplateAudience;
+  readonly layout: TemplateLayout;
+  readonly heroLayout: HeroTokens['layout'];
+  readonly mediaShape: HeroTokens['mediaShape'];
+  readonly navigationLayout: NavigationTokens['layout'];
+  readonly navigationIndicator: NavigationTokens['activeIndicator'];
+  readonly footerLayout: FooterTokens['layout'];
+  readonly footerDensity: FooterTokens['density'];
+  readonly requiredRatio: number;
 }
 
 export interface TemplatePrototype {
   readonly id: string;
   readonly name: string;
   readonly brandName: string;
+  readonly canonicalPath: string;
   readonly pageTitle: string;
   readonly pageDescription: string;
   readonly eyebrow: string;
@@ -51,7 +69,9 @@ export interface TemplatePrototype {
   readonly heroLead: string;
   readonly audienceLabel: string;
   readonly layoutLabel: string;
+  readonly rhythmLabel: string;
   readonly theme: TemplatePrototypeTheme;
+  readonly visual: TemplatePrototypeVisual;
   readonly tags: readonly string[];
   readonly sections: readonly TemplatePrototypeSection[];
   readonly navItems: readonly TemplatePrototypeNavItem[];
@@ -113,6 +133,15 @@ function fragmentId(sectionId: string): string {
   return `section-${humanize(sectionId).replace(/\s+/g, '-')}`;
 }
 
+function classFragment(value: string): string {
+  const fragment = humanize(value).replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return fragment.length > 0 ? fragment : 'item';
+}
+
+function templatePrototypePath(templateId: string): string {
+  return `/templates/${templateId}/`;
+}
+
 function sectionHeading(definition: TemplateSectionDefinition): string {
   const baseLabel = titleCase(definition.id === definition.schemaType ? definition.schemaType : definition.id);
   return `${baseLabel} ${definition.required ? 'anchor' : 'support'}`;
@@ -157,6 +186,46 @@ function requirementBody(definition: TemplateSectionDefinition): string {
   }
 
   return 'This optional section enriches the page when matching content exists, without blocking the template from rendering.';
+}
+
+function sectionPreviewItems(definition: TemplateSectionDefinition): readonly string[] {
+  switch (definition.schemaType) {
+    case 'breadcrumbs':
+      return ['Parent page', 'Current page', 'Context trail'];
+    case 'contact':
+      return ['Inquiry path', 'Phone detail', 'Location cue'];
+    case 'emergencyBanner':
+      return ['Urgent CTA', 'Response detail', 'Phone action'];
+    case 'faq':
+      return ['Question', 'Answer', 'Objection'];
+    case 'footer':
+      return ['Durable links', 'Business facts', 'Final CTA'];
+    case 'gallery':
+      return ['Feature image', 'Detail image', 'Visual proof'];
+    case 'hero':
+      return ['Promise', 'Proof badge', 'Primary action'];
+    case 'hours':
+      return ['Today', 'Availability', 'Visit detail'];
+    case 'navigation':
+      return ['Brand mark', 'Primary links', 'CTA'];
+    case 'pricing':
+      return ['Offer tier', 'Package detail', 'Decision CTA'];
+    case 'reviews':
+    case 'testimonials':
+      return ['Quote', 'Rating', 'Outcome'];
+    case 'services':
+      return definition.repeatable ? ['Offer path', 'Repeatable card', 'Comparison cue'] : ['Offer path', 'Detail card', 'Support copy'];
+    case 'team':
+      return ['Profile', 'Credential', 'Trust cue'];
+    case 'trustBadges':
+      return ['Credential', 'Metric', 'Affiliation'];
+    default:
+      return [`${titleCase(definition.schemaType)} block`, `${titleCase(definition.variant)} variant`, definition.required ? 'Required role' : 'Optional support'];
+  }
+}
+
+function sectionVisualLabel(definition: TemplateSectionDefinition): string {
+  return `${sentenceCase(definition.schemaType)} ${definition.variant} preview`;
 }
 
 function sectionDetails(definition: TemplateSectionDefinition, template: WebsiteTemplate): readonly TemplatePrototypeDetail[] {
@@ -226,15 +295,20 @@ function createPrototypeSection(definition: TemplateSectionDefinition, template:
   return {
     id: definition.id,
     fragmentId: fragmentId(definition.id),
+    schemaTypeClassName: classFragment(definition.schemaType),
+    componentClassName: classFragment(definition.component),
     heading: sectionHeading(definition),
     eyebrow: `${slotLabels[definition.slot]} · order ${definition.order}`,
     purposeLabel: definition.purpose ? 'Template purpose' : 'Prototype purpose',
     purpose,
     schemaType: definition.schemaType,
     componentLabel: `${definition.component} / ${definition.variant}`,
+    slot: definition.slot,
     slotLabel: slotLabels[definition.slot],
     required: definition.required,
     requirementLabel: definition.required ? 'Required' : 'Optional',
+    visualLabel: sectionVisualLabel(definition),
+    previewItems: sectionPreviewItems(definition),
     details: sectionDetails(definition, template),
     meta: sectionMeta(definition)
   };
@@ -250,6 +324,50 @@ function createNavItems(sections: readonly TemplatePrototypeSection[]): readonly
   }));
 }
 
+function createRhythmLabel(template: WebsiteTemplate, sections: readonly TemplatePrototypeSection[]): string {
+  const requiredSectionCount = sections.filter((section) => section.required).length;
+
+  return [
+    `${template.name} section rhythm preview`,
+    `${sections.length} total sections`,
+    `${requiredSectionCount} required`,
+    `order: ${sections.map((section) => section.schemaType).join(', ')}`
+  ].join('; ');
+}
+
+function createVisualMetadata(template: WebsiteTemplate, sections: readonly TemplatePrototypeSection[], requiredSectionCount: number, theme: ReturnType<typeof resolveTheme>): TemplatePrototypeVisual {
+  return {
+    audience: template.audience,
+    layout: template.layout,
+    heroLayout: theme.tokens.hero.layout,
+    mediaShape: theme.tokens.hero.mediaShape,
+    navigationLayout: theme.tokens.navigation.layout,
+    navigationIndicator: theme.tokens.navigation.activeIndicator,
+    footerLayout: theme.tokens.footer.layout,
+    footerDensity: theme.tokens.footer.density,
+    requiredRatio: sections.length > 0 ? requiredSectionCount / sections.length : 0
+  };
+}
+
+function dedupeTemplatePrototypes(prototypes: readonly TemplatePrototype[]): readonly TemplatePrototype[] {
+  const prototypesByPath = new Map<string, TemplatePrototype>();
+
+  for (const prototype of prototypes) {
+    const existingPrototype = prototypesByPath.get(prototype.canonicalPath);
+
+    if (!existingPrototype) {
+      prototypesByPath.set(prototype.canonicalPath, prototype);
+      continue;
+    }
+
+    if (JSON.stringify(existingPrototype) !== JSON.stringify(prototype)) {
+      throw new Error(`Duplicate template prototype route ${prototype.canonicalPath} has conflicting metadata.`);
+    }
+  }
+
+  return [...prototypesByPath.values()];
+}
+
 export function createTemplatePrototype(template: WebsiteTemplate): TemplatePrototype {
   const theme = resolveTheme(template.defaultTheme);
   const themeMode = theme.defaultMode;
@@ -258,11 +376,13 @@ export function createTemplatePrototype(template: WebsiteTemplate): TemplateProt
   const optionalSectionCount = sections.length - requiredSectionCount;
   const audienceLabel = titleCase(template.audience);
   const layoutLabel = layoutLabels[template.layout];
+  const visual = createVisualMetadata(template, sections, requiredSectionCount, theme);
 
   return {
     id: template.id,
     name: template.name,
     brandName: `${template.name} prototype`,
+    canonicalPath: templatePrototypePath(template.id),
     pageTitle: `${template.name} template prototype | Website Factory`,
     pageDescription: `${template.description} Preview the ${template.name} section rhythm and default ${theme.displayName} theme.`,
     eyebrow: `${audienceLabel} · ${layoutLabel}`,
@@ -270,6 +390,7 @@ export function createTemplatePrototype(template: WebsiteTemplate): TemplateProt
     heroLead: template.description,
     audienceLabel,
     layoutLabel,
+    rhythmLabel: createRhythmLabel(template, sections),
     theme: {
       id: theme.id,
       displayName: theme.displayName,
@@ -277,6 +398,7 @@ export function createTemplatePrototype(template: WebsiteTemplate): TemplateProt
       cssText: themeCssText(theme, themeMode),
       classNames: themeClassNames(theme, themeMode)
     },
+    visual,
     tags: template.tags,
     sections,
     navItems: createNavItems(sections),
@@ -312,5 +434,5 @@ export function createTemplatePrototype(template: WebsiteTemplate): TemplateProt
 }
 
 export function getTemplatePrototypes(): readonly TemplatePrototype[] {
-  return listTemplates().map(createTemplatePrototype);
+  return dedupeTemplatePrototypes(listTemplates().map(createTemplatePrototype));
 }

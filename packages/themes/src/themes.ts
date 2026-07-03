@@ -2712,6 +2712,3946 @@ export const themes = {
         motion: lowMotion
       }
     )
+  }),
+  auroraGlass: defineTheme({
+    id: 'auroraGlass',
+    displayName: 'Aurora Glass',
+    description: 'Luminous AI/product theme with translucent surfaces, aurora gradients, and airy glass-card depth.',
+    tags: ['ai', 'product', 'glass', 'gradient'],
+    tokens: brandTokens(
+      {
+        background: '#f2f8ff',
+        surface: '#ffffff',
+        surfaceAlt: '#ebe7ff',
+        text: '#0d1b2f',
+        textMuted: '#516176',
+        primary: '#7c3aed',
+        primaryForeground: '#ffffff',
+        secondary: '#0f766e',
+        secondaryForeground: '#ffffff',
+        accent: '#06b6d4',
+        accentForeground: '#06131f',
+        border: '#c7d2fe',
+        focus: '#8b5cf6',
+        link: '#6d28d9',
+        overlay: 'rgb(13 27 47 / 0.58)'
+      },
+      {
+        background: '#07111f',
+        surface: '#101c2f',
+        surfaceAlt: '#1a2440',
+        text: '#f7fbff',
+        textMuted: '#c1d1e4',
+        primary: '#c4b5fd',
+        primaryForeground: '#130b2e',
+        secondary: '#67e8f9',
+        secondaryForeground: '#05252e',
+        accent: '#5eead4',
+        accentForeground: '#052522',
+        border: '#33446b',
+        focus: '#a78bfa',
+        link: '#ddd6fe',
+        overlay: 'rgb(3 8 18 / 0.78)'
+      },
+      {
+        typography: {
+          display: {
+            ...baseTypography.display,
+            fontFamily: 'Sora, Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3rem, 7vw, 6.25rem)',
+            lineHeight: '0.92',
+            letterSpacing: '-0.065em'
+          },
+          heading: {
+            ...baseTypography.heading,
+            fontFamily: 'Sora, Inter, ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '-0.045em'
+          },
+          caption: {
+            ...baseTypography.caption,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase'
+          }
+        },
+        spacing: spaciousSpacing,
+        radius: softRadius,
+        elevation: glassElevation,
+        buttons: {
+          primary: {
+            background: `linear-gradient(135deg, ${color('primary')}, ${color('accent')})`,
+            hoverBackground: `linear-gradient(135deg, ${colorMix('primary', 'white 8%')}, ${colorMix('accent', 'white 8%')})`,
+            radius: 'pill',
+            shadow: 'md',
+            hoverShadow: 'xl'
+          },
+          secondary: {
+            background: colorMix('surface', 'transparent 14%'),
+            hoverBackground: colorMix('accent', 'transparent 82%'),
+            hoverBorder: `1px solid ${colorMix('accent', 'transparent 24%')}`,
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'lg'
+          },
+          ghost: {
+            hoverBackground: colorMix('primary', 'transparent 88%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: colorMix('surface', 'transparent 10%'),
+            border: `1px solid ${colorMix('primary', 'transparent 68%')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'xl'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('surface', 'transparent 10%')}, ${colorMix('accent', 'transparent 84%')})`,
+            border: `1px solid ${colorMix('accent', 'transparent 60%')}`,
+            radius: '2xl',
+            shadow: 'lg',
+            hoverShadow: '2xl'
+          },
+          testimonial: {
+            background: colorMix('background', 'transparent 10%'),
+            border: `1px solid ${colorMix('secondary', 'transparent 72%')}`,
+            radius: '2xl'
+          },
+          pricing: {
+            background: `linear-gradient(160deg, ${colorMix('primary', 'transparent 86%')}, ${colorMix('surface', 'transparent 6%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 42%')}`,
+            radius: '2xl'
+          }
+        },
+        hero: {
+          layout: 'app',
+          background: `radial-gradient(circle at 18% 16%, ${colorMix('accent', 'transparent 68%')}, transparent 32%), radial-gradient(circle at 84% 18%, ${colorMix('primary', 'transparent 70%')}, transparent 34%), ${color('background')}`,
+          mediaShape: 'device',
+          contentWidth: 'min(740px, 100%)',
+          gap: 'clamp(2.5rem, 6vw, 6.5rem)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: colorMix('surface', 'transparent 18%'),
+          border: colorMix('primary', 'transparent 72%'),
+          height: '5rem',
+          blur: true,
+          shadow: 'sm',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          layout: 'rich',
+          background: colorMix('surfaceAlt', 'transparent 20%'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: colorMix('primary', 'transparent 72%'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'soft'
+        },
+        sections: {
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('primary', 'transparent 92%'),
+            eyebrowColor: color('secondary')
+          },
+          process: {
+            background: colorMix('accent', 'transparent 92%'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: colorMix('surface', 'transparent 14%')
+          },
+          content: {
+            alignment: 'center'
+          }
+        },
+        icons: {
+          ...softIcons,
+          style: 'duotone',
+          background: colorMix('accent', 'transparent 82%'),
+          foreground: color('primary'),
+          radius: '2xl'
+        },
+        motion: expressiveMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  brutalistMono: defineTheme({
+    id: 'brutalistMono',
+    displayName: 'Brutalist Mono',
+    description: 'Stark monochrome theme with block navigation, squared cards, heavy type, and zero decorative shadow.',
+    tags: ['brutalist', 'monochrome', 'editorial', 'architecture'],
+    tokens: brandTokens(
+      {
+        background: '#ffffff',
+        surface: '#f4f4f2',
+        surfaceAlt: '#e6e6e0',
+        text: '#050505',
+        textMuted: '#343434',
+        textInverse: '#ffffff',
+        primary: '#050505',
+        primaryForeground: '#ffffff',
+        secondary: '#2a2a2a',
+        secondaryForeground: '#ffffff',
+        accent: '#737373',
+        accentForeground: '#ffffff',
+        border: '#050505',
+        focus: '#050505',
+        link: '#050505',
+        overlay: 'rgb(0 0 0 / 0.72)'
+      },
+      {
+        background: '#050505',
+        surface: '#111111',
+        surfaceAlt: '#1f1f1f',
+        text: '#ffffff',
+        textMuted: '#e5e5e5',
+        textInverse: '#050505',
+        primary: '#ffffff',
+        primaryForeground: '#050505',
+        secondary: '#d4d4d4',
+        secondaryForeground: '#050505',
+        accent: '#a3a3a3',
+        accentForeground: '#050505',
+        border: '#ffffff',
+        focus: '#ffffff',
+        link: '#ffffff',
+        overlay: 'rgb(0 0 0 / 0.86)'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Archivo Black", Impact, "Arial Black", ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3rem, 8.5vw, 7rem)',
+            lineHeight: '0.82',
+            fontWeight: '900',
+            letterSpacing: '-0.075em',
+            textTransform: 'uppercase'
+          },
+          heading: {
+            fontFamily: '"Archivo Black", Impact, "Arial Black", ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(1.75rem, 4vw, 3.4rem)',
+            lineHeight: '0.94',
+            fontWeight: '900',
+            letterSpacing: '-0.05em',
+            textTransform: 'uppercase'
+          },
+          body: {
+            fontFamily: '"IBM Plex Mono", "SFMono-Regular", Consolas, monospace',
+            fontSize: '0.98rem',
+            lineHeight: '1.6',
+            fontWeight: '500'
+          },
+          caption: {
+            fontFamily: '"IBM Plex Mono", "SFMono-Regular", Consolas, monospace',
+            fontSize: '0.78rem',
+            lineHeight: '1.4',
+            fontWeight: '700',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            fontFamily: '"IBM Plex Mono", "SFMono-Regular", Consolas, monospace',
+            fontSize: '0.9rem',
+            lineHeight: '1',
+            fontWeight: '800',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: {
+            ...technicalTypography.mono,
+            fontWeight: '700'
+          }
+        },
+        spacing: compactSpacing,
+        radius: {
+          xs: '0',
+          sm: '0',
+          md: '0',
+          lg: '0',
+          xl: '0',
+          '2xl': '0',
+          pill: '0'
+        },
+        elevation: flatElevation,
+        buttons: {
+          primary: {
+            background: color('text'),
+            color: color('textInverse'),
+            border: `2px solid ${color('text')}`,
+            hoverBackground: color('background'),
+            hoverColor: color('text'),
+            hoverBorder: `2px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            transform: 'translate(3px, -3px)'
+          },
+          secondary: {
+            background: color('background'),
+            color: color('text'),
+            border: `2px solid ${color('text')}`,
+            hoverBackground: color('text'),
+            hoverColor: color('textInverse'),
+            hoverBorder: `2px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            transform: 'translate(3px, -3px)'
+          },
+          ghost: {
+            hoverBackground: color('text'),
+            hoverColor: color('textInverse'),
+            hoverBorder: `2px solid ${color('text')}`,
+            radius: 'none'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('background'),
+            border: `2px solid ${color('text')}`,
+            radius: 'none',
+            padding: 'clamp(1rem, 2.5vw, 1.75rem)',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          },
+          feature: {
+            background: color('surfaceAlt'),
+            border: `2px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          },
+          testimonial: {
+            background: color('text'),
+            foreground: color('textInverse'),
+            border: `2px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          },
+          pricing: {
+            background: color('background'),
+            border: `3px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          }
+        },
+        hero: {
+          layout: 'docs',
+          background: `linear-gradient(90deg, ${color('background')} 0 50%, ${color('surfaceAlt')} 50% 100%)`,
+          mediaShape: 'none',
+          minHeight: 'min(700px, calc(100vh - 4rem))',
+          contentWidth: 'min(920px, 100%)',
+          gap: 'clamp(1.5rem, 4vw, 4rem)'
+        },
+        navigation: {
+          layout: 'sidebar',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('text'),
+          border: color('text'),
+          height: '4rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'block'
+        },
+        footer: {
+          layout: 'simple',
+          background: color('text'),
+          foreground: color('textInverse'),
+          link: color('textInverse'),
+          border: color('text'),
+          density: 'compact',
+          divider: false,
+          socialIconStyle: 'plain'
+        },
+        sections: {
+          services: {
+            cardVariant: 'standard'
+          },
+          proof: {
+            background: color('text'),
+            foreground: color('textInverse'),
+            eyebrowColor: color('textInverse'),
+            alignment: 'start'
+          },
+          process: {
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: color('surfaceAlt'),
+            alignment: 'start'
+          },
+          content: {
+            container: 'content'
+          }
+        },
+        icons: {
+          style: 'minimal',
+          size: '1.35rem',
+          strokeWidth: '2.4',
+          background: 'transparent',
+          foreground: color('text'),
+          radius: 'none'
+        },
+        responsive: compactResponsive,
+        motion: lowMotion
+      }
+    )
+  }),
+  cyberpunkNeon: defineTheme({
+    id: 'cyberpunkNeon',
+    displayName: 'Cyberpunk Neon',
+    description: 'Dark neon theme with magenta, cyan, and lime energy, glowing cards, and high-motion launch styling.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['cyberpunk', 'gaming', 'nightlife', 'launch'],
+    tokens: brandTokens(
+      {
+        background: '#fff7ff',
+        surface: '#ffffff',
+        surfaceAlt: '#f3e8ff',
+        text: '#18051f',
+        textMuted: '#6b4b76',
+        primary: '#c026d3',
+        primaryForeground: '#ffffff',
+        secondary: '#0891b2',
+        secondaryForeground: '#ffffff',
+        accent: '#65a30d',
+        accentForeground: '#071200',
+        border: '#f0abfc',
+        focus: '#06b6d4',
+        link: '#0891b2'
+      },
+      {
+        background: '#05000f',
+        surface: '#12071f',
+        surfaceAlt: '#1f0b34',
+        text: '#fbf7ff',
+        textMuted: '#cbb9e8',
+        primary: '#ff2bd6',
+        primaryForeground: '#1b0014',
+        secondary: '#00e5ff',
+        secondaryForeground: '#001b20',
+        accent: '#a3ff12',
+        accentForeground: '#071200',
+        border: '#5b2387',
+        focus: '#00e5ff',
+        link: '#67e8f9',
+        overlay: 'rgb(5 0 15 / 0.84)'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Rajdhani", "Orbitron", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3rem, 8vw, 6.75rem)',
+            lineHeight: '0.88',
+            fontWeight: '800',
+            letterSpacing: '-0.035em',
+            textTransform: 'uppercase'
+          },
+          heading: {
+            fontFamily: '"Rajdhani", "Orbitron", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(1.8rem, 3.6vw, 3.2rem)',
+            lineHeight: '1',
+            fontWeight: '800',
+            letterSpacing: '-0.025em',
+            textTransform: 'uppercase'
+          },
+          body: {
+            ...technicalTypography.body,
+            fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif'
+          },
+          caption: {
+            ...technicalTypography.caption,
+            fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...technicalTypography.button,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          },
+          mono: technicalTypography.mono
+        },
+        radius: crispRadius,
+        elevation: {
+          sm: '0 0 0 1px rgb(255 43 214 / 0.28), 0 0 22px rgb(0 229 255 / 0.22)',
+          md: '0 0 0 1px rgb(255 43 214 / 0.35), 0 0 38px rgb(0 229 255 / 0.28)',
+          lg: '0 0 0 1px rgb(163 255 18 / 0.28), 0 0 64px rgb(255 43 214 / 0.28)',
+          xl: '0 0 0 1px rgb(0 229 255 / 0.34), 0 0 90px rgb(255 43 214 / 0.34)',
+          '2xl': '0 0 0 1px rgb(163 255 18 / 0.35), 0 0 120px rgb(0 229 255 / 0.34)'
+        },
+        buttons: {
+          primary: {
+            background: `linear-gradient(100deg, ${color('primary')}, ${color('secondary')})`,
+            hoverBackground: `linear-gradient(100deg, ${colorMix('primary', 'white 10%')}, ${colorMix('secondary', 'white 10%')})`,
+            border: `1px solid ${colorMix('secondary', 'transparent 36%')}`,
+            hoverBorder: `1px solid ${color('accent')}`,
+            radius: 'md',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            transform: 'translateY(-3px) skewX(-2deg)'
+          },
+          secondary: {
+            background: 'transparent',
+            color: color('secondary'),
+            border: `1px solid ${color('secondary')}`,
+            hoverBackground: colorMix('secondary', 'transparent 82%'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('accent')}`,
+            radius: 'md',
+            shadow: 'sm',
+            hoverShadow: 'lg'
+          },
+          ghost: {
+            color: color('accent'),
+            hoverBackground: colorMix('accent', 'transparent 84%'),
+            hoverColor: color('accent'),
+            radius: 'md'
+          }
+        },
+        cards: {
+          standard: {
+            background: colorMix('surface', 'transparent 8%'),
+            border: `1px solid ${colorMix('secondary', 'transparent 48%')}`,
+            radius: 'lg',
+            shadow: 'md',
+            hoverShadow: 'xl'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('primary', 'transparent 86%')}, ${colorMix('surfaceAlt', 'transparent 6%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 32%')}`,
+            radius: 'lg',
+            shadow: 'lg',
+            hoverShadow: '2xl'
+          },
+          testimonial: {
+            background: colorMix('surfaceAlt', 'transparent 12%'),
+            border: `1px solid ${colorMix('accent', 'transparent 56%')}`,
+            radius: 'lg'
+          },
+          pricing: {
+            background: `linear-gradient(150deg, ${colorMix('secondary', 'transparent 84%')}, ${colorMix('primary', 'transparent 86%')})`,
+            border: `1px solid ${color('accent')}`,
+            radius: 'lg',
+            shadow: 'xl'
+          }
+        },
+        hero: {
+          layout: 'media',
+          background: `radial-gradient(circle at 20% 20%, ${colorMix('primary', 'transparent 60%')}, transparent 30%), radial-gradient(circle at 82% 8%, ${colorMix('secondary', 'transparent 58%')}, transparent 32%), radial-gradient(circle at 52% 88%, ${colorMix('accent', 'transparent 72%')}, transparent 36%), ${color('background')}`,
+          mediaShape: 'bleed',
+          minHeight: 'min(840px, calc(100vh - 4.5rem))',
+          contentWidth: 'min(760px, 100%)'
+        },
+        navigation: {
+          layout: 'split',
+          background: colorMix('surface', 'transparent 4%'),
+          foreground: color('text'),
+          linkHover: color('secondary'),
+          border: colorMix('secondary', 'transparent 55%'),
+          height: '4.5rem',
+          blur: true,
+          shadow: 'md',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          ...richFooter,
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('secondary'),
+          border: colorMix('primary', 'transparent 42%')
+        },
+        sections: {
+          services: {
+            background: color('background'),
+            eyebrowColor: color('secondary'),
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('primary', 'transparent 90%'),
+            eyebrowColor: color('accent')
+          },
+          process: {
+            background: colorMix('secondary', 'transparent 92%'),
+            eyebrowColor: color('accent')
+          },
+          testimonials: {
+            background: color('surface'),
+            eyebrowColor: color('primary')
+          },
+          faq: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          style: 'filled',
+          size: '1.65rem',
+          strokeWidth: '1.6',
+          background: `linear-gradient(135deg, ${color('primary')}, ${color('secondary')})`,
+          foreground: color('primaryForeground'),
+          radius: 'md'
+        },
+        animation: {
+          durationFast: '90ms',
+          durationBase: '170ms',
+          durationSlow: '460ms'
+        },
+        motion: {
+          subtle: {
+            duration: '180ms',
+            translateY: '0.35rem',
+            scale: '0.99'
+          },
+          standard: {
+            duration: '300ms',
+            translateY: '0.9rem',
+            scale: '0.985'
+          },
+          expressive: {
+            duration: '620ms',
+            translateY: '1.6rem',
+            scale: '0.96'
+          },
+          entrance: {
+            duration: '760ms',
+            translateY: '2rem',
+            scale: '0.95'
+          }
+        }
+      }
+    )
+  }),
+  botanicalSerif: defineTheme({
+    id: 'botanicalSerif',
+    displayName: 'Botanical Serif',
+    description: 'Warm botanical theme with cream papers, natural greens, editorial serif type, and soft organic cards.',
+    tags: ['botanical', 'wellness', 'editorial', 'organic'],
+    tokens: brandTokens(
+      {
+        background: '#fbf7ea',
+        surface: '#fffdf5',
+        surfaceAlt: '#e9eed7',
+        text: '#24301f',
+        textMuted: '#66705c',
+        primary: '#4f6f3a',
+        primaryForeground: '#ffffff',
+        secondary: '#7a4f2f',
+        secondaryForeground: '#fff7ea',
+        accent: '#c8914b',
+        accentForeground: '#24301f',
+        border: '#d8dcc4',
+        focus: '#5f7f45',
+        link: '#3f5f2f'
+      },
+      {
+        background: '#10160d',
+        surface: '#192113',
+        surfaceAlt: '#27331c',
+        text: '#f6f1df',
+        textMuted: '#cfc7ae',
+        primary: '#b7d29a',
+        primaryForeground: '#10160d',
+        secondary: '#f0c58a',
+        secondaryForeground: '#10160d',
+        accent: '#d6a35b',
+        accentForeground: '#10160d',
+        border: '#4d5c3b',
+        link: '#d7efb4'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(3rem, 7vw, 6rem)',
+            lineHeight: '0.96',
+            fontWeight: '700',
+            letterSpacing: '-0.045em'
+          },
+          heading: {
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(2rem, 4vw, 3.35rem)',
+            lineHeight: '1.08',
+            fontWeight: '700',
+            letterSpacing: '-0.025em'
+          },
+          body: {
+            fontFamily: '"Libre Baskerville", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.05rem',
+            lineHeight: '1.82',
+            fontWeight: '400'
+          },
+          caption: serifTypography.caption,
+          button: {
+            ...serifTypography.button,
+            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: editorialSpacing,
+        radius: {
+          ...softRadius,
+          xl: '2.25rem',
+          '2xl': '3rem'
+        },
+        elevation: glassElevation,
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'black 10%'),
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          secondary: {
+            background: colorMix('surface', 'transparent 8%'),
+            border: `1px solid ${colorMix('primary', 'transparent 50%')}`,
+            hoverBackground: colorMix('primary', 'transparent 88%'),
+            radius: 'pill'
+          },
+          ghost: {
+            hoverBackground: colorMix('accent', 'transparent 88%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            padding: 'clamp(1.5rem, 4vw, 2.75rem)',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: colorMix('primary', 'transparent 88%'),
+            border: `1px solid ${colorMix('primary', 'transparent 58%')}`,
+            radius: '2xl',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            mediaRadius: 'full'
+          },
+          pricing: {
+            background: colorMix('accent', 'transparent 86%'),
+            border: `1px solid ${colorMix('accent', 'transparent 45%')}`,
+            radius: '2xl'
+          }
+        },
+        hero: {
+          layout: 'editorial',
+          background: `radial-gradient(circle at 12% 14%, ${colorMix('primary', 'transparent 84%')}, transparent 30%), ${color('background')}`,
+          mediaShape: 'arch',
+          contentWidth: 'min(720px, 100%)',
+          gap: 'clamp(2.5rem, 6vw, 6rem)'
+        },
+        navigation: {
+          ...centeredNavigation,
+          background: color('background'),
+          linkHover: color('primary'),
+          border: color('border'),
+          activeIndicator: 'dot'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'soft'
+        },
+        sections: {
+          ...editorialSections,
+          services: {
+            background: color('surface'),
+            cardVariant: 'feature',
+            alignment: 'center'
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent'),
+            cardVariant: 'feature'
+          },
+          faq: {
+            background: color('surfaceAlt'),
+            container: 'prose'
+          }
+        },
+        icons: {
+          ...softIcons,
+          background: colorMix('primary', 'transparent 82%'),
+          foreground: color('primary'),
+          radius: 'full'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  neoBanking: defineTheme({
+    id: 'neoBanking',
+    displayName: 'Neo Banking',
+    description: 'Premium fintech theme with app-like layouts, crisp controls, trustworthy blue-green color, and disciplined cards.',
+    tags: ['fintech', 'banking', 'app', 'professional'],
+    tokens: brandTokens(
+      {
+        background: '#f4f8fb',
+        surface: '#ffffff',
+        surfaceAlt: '#e6eef5',
+        text: '#071827',
+        textMuted: '#4a5a68',
+        primary: '#0b5cff',
+        primaryForeground: '#ffffff',
+        secondary: '#047857',
+        secondaryForeground: '#ffffff',
+        accent: '#14b8a6',
+        accentForeground: '#04201e',
+        border: '#cfdae6',
+        focus: '#0b5cff',
+        link: '#0848c8'
+      },
+      {
+        background: '#06111f',
+        surface: '#0d1b2b',
+        surfaceAlt: '#14263a',
+        text: '#f5fbff',
+        textMuted: '#b9c8d8',
+        primary: '#74a7ff',
+        primaryForeground: '#06111f',
+        secondary: '#5eead4',
+        secondaryForeground: '#06111f',
+        accent: '#2dd4bf',
+        accentForeground: '#06111f',
+        border: '#2a435e',
+        link: '#9ec0ff'
+      },
+      {
+        typography: {
+          display: {
+            ...baseTypography.display,
+            fontFamily: '"IBM Plex Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(2.75rem, 6vw, 5.5rem)',
+            lineHeight: '0.98',
+            letterSpacing: '-0.06em'
+          },
+          heading: {
+            ...baseTypography.heading,
+            fontFamily: '"IBM Plex Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '-0.035em'
+          },
+          caption: {
+            ...baseTypography.caption,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: technicalTypography.mono
+        },
+        spacing: {
+          section: 'clamp(4.25rem, 7vw, 7rem)',
+          container: 'min(1180px, calc(100vw - 2rem))'
+        },
+        radius: crispRadius,
+        elevation: {
+          sm: '0 1px 2px rgb(7 24 39 / 0.08)',
+          md: '0 18px 45px rgb(7 24 39 / 0.12)',
+          lg: '0 28px 70px rgb(7 24 39 / 0.16)',
+          xl: '0 42px 100px rgb(7 24 39 / 0.2)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'black 10%'),
+            radius: 'lg',
+            padding: '0.95rem 1.45rem',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          secondary: {
+            background: color('surface'),
+            color: color('secondary'),
+            border: `1px solid ${colorMix('secondary', 'transparent 50%')}`,
+            hoverBackground: colorMix('secondary', 'transparent 90%'),
+            hoverColor: color('secondary'),
+            radius: 'lg'
+          },
+          ghost: {
+            hoverBackground: colorMix('primary', 'transparent 91%'),
+            radius: 'lg'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'lg',
+            shadow: 'xs',
+            hoverShadow: 'md'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${color('surface')}, ${colorMix('primary', 'transparent 92%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 62%')}`,
+            radius: 'xl',
+            shadow: 'md',
+            hoverShadow: 'lg'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'lg'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'xl',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'app',
+          background: `linear-gradient(135deg, ${color('background')} 0%, ${colorMix('primary', 'transparent 90%')} 48%, ${colorMix('secondary', 'transparent 90%')} 100%)`,
+          mediaShape: 'device',
+          minHeight: 'min(780px, calc(100vh - 4.75rem))',
+          contentWidth: 'min(700px, 100%)'
+        },
+        navigation: {
+          layout: 'split',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '4.75rem',
+          blur: true,
+          shadow: 'xs',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('secondary'),
+          foreground: color('secondaryForeground'),
+          link: color('accent'),
+          border: colorMix('secondary', 'white 16%'),
+          density: 'comfortable',
+          divider: true,
+          socialIconStyle: 'outlined'
+        },
+        pageTemplates: {
+          checkout: {
+            maxWidth: 'wide',
+            sidebarWidth: '24rem'
+          },
+          directory: {
+            sidebarWidth: '19rem'
+          }
+        },
+        forms: {
+          background: color('surface'),
+          shadow: 'xs',
+          radius: 'lg'
+        },
+        sections: {
+          services: {
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: color('surface'),
+            eyebrowColor: color('secondary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent')
+          },
+          testimonials: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          ...solidIcons,
+          background: colorMix('primary', 'transparent 86%'),
+          foreground: color('primary'),
+          radius: 'lg'
+        },
+        motion: lowMotion
+      }
+    )
+  }),
+  noirEditorial: defineTheme({
+    id: 'noirEditorial',
+    displayName: 'Noir Editorial',
+    description: 'Dark literary editorial theme with couture serif scale, gold accents, restrained motion, and high-fashion contrast.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['editorial', 'fashion', 'luxury', 'dark'],
+    tokens: brandTokens(
+      {
+        background: '#f7f2e8',
+        surface: '#fffaf0',
+        surfaceAlt: '#e8ddc9',
+        text: '#17120d',
+        textMuted: '#63594d',
+        primary: '#7a5c25',
+        primaryForeground: '#ffffff',
+        secondary: '#17120d',
+        secondaryForeground: '#f7f2e8',
+        accent: '#b68a35',
+        accentForeground: '#17120d',
+        border: '#d7c9ad',
+        link: '#6f511d'
+      },
+      {
+        background: '#050505',
+        surface: '#11100e',
+        surfaceAlt: '#1d1914',
+        text: '#f8f1e3',
+        textMuted: '#c5b8a2',
+        primary: '#d6b25e',
+        primaryForeground: '#050505',
+        secondary: '#f8f1e3',
+        secondaryForeground: '#050505',
+        accent: '#b88935',
+        accentForeground: '#050505',
+        border: '#4c4030',
+        link: '#f0d28a',
+        overlay: 'rgb(0 0 0 / 0.82)'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Playfair Display", Didot, Georgia, Cambria, serif',
+            fontSize: 'clamp(3.5rem, 9vw, 7.5rem)',
+            lineHeight: '0.86',
+            fontWeight: '700',
+            letterSpacing: '-0.06em'
+          },
+          heading: {
+            fontFamily: '"Playfair Display", Didot, Georgia, Cambria, serif',
+            fontSize: 'clamp(2rem, 4.5vw, 3.75rem)',
+            lineHeight: '0.98',
+            fontWeight: '700',
+            letterSpacing: '-0.035em'
+          },
+          body: {
+            fontFamily: '"Libre Baskerville", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.08rem',
+            lineHeight: '1.86',
+            fontWeight: '400'
+          },
+          caption: {
+            ...editorialTypography.caption,
+            letterSpacing: '0.18em'
+          },
+          button: {
+            ...serifTypography.button,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: crispRadius,
+        elevation: {
+          sm: '0 10px 30px rgb(0 0 0 / 0.2)',
+          md: '0 20px 55px rgb(0 0 0 / 0.3)',
+          lg: '0 34px 90px rgb(0 0 0 / 0.38)',
+          xl: '0 48px 120px rgb(0 0 0 / 0.46)'
+        },
+        buttons: luxuryButtons,
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${colorMix('primary', 'transparent 55%')}`,
+            radius: 'md',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          feature: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${colorMix('primary', 'transparent 44%')}`,
+            radius: 'lg'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'md'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'lg',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'editorial',
+          background: `linear-gradient(135deg, ${color('background')} 0%, ${color('surface')} 58%, ${colorMix('primary', 'transparent 86%')} 100%)`,
+          mediaShape: 'arch',
+          minHeight: 'min(820px, calc(100vh - 5rem))',
+          contentWidth: 'min(760px, 100%)',
+          gap: 'clamp(2.75rem, 7vw, 7rem)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          ...richFooter,
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          socialIconStyle: 'plain'
+        },
+        sections: editorialSections,
+        icons: {
+          ...minimalIcons,
+          foreground: color('primary'),
+          strokeWidth: '1.25'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  sunsetGradient: defineTheme({
+    id: 'sunsetGradient',
+    displayName: 'Sunset Gradient',
+    description: 'Expressive creator theme with coral, violet, and golden gradients, rounded UI, and energetic motion.',
+    tags: ['creator', 'agency', 'campaign', 'gradient'],
+    tokens: brandTokens(
+      {
+        background: '#fff5ed',
+        surface: '#ffffff',
+        surfaceAlt: '#ffe3d4',
+        text: '#25132c',
+        textMuted: '#6f5a72',
+        primary: '#f97316',
+        primaryForeground: '#ffffff',
+        secondary: '#7c3aed',
+        secondaryForeground: '#ffffff',
+        accent: '#facc15',
+        accentForeground: '#25132c',
+        border: '#fecdb6',
+        focus: '#7c3aed',
+        link: '#c2410c'
+      },
+      {
+        background: '#18091f',
+        surface: '#25102d',
+        surfaceAlt: '#3b1746',
+        text: '#fff7ed',
+        textMuted: '#f1cfc6',
+        primary: '#fb923c',
+        primaryForeground: '#18091f',
+        secondary: '#c4b5fd',
+        secondaryForeground: '#18091f',
+        accent: '#fde047',
+        accentForeground: '#18091f',
+        border: '#6f3357',
+        link: '#fdba74'
+      },
+      {
+        typography: {
+          display: {
+            ...friendlyTypography.display,
+            fontFamily: '"Space Grotesk", Nunito, Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3.1rem, 7.5vw, 6.5rem)',
+            lineHeight: '0.9',
+            letterSpacing: '-0.06em'
+          },
+          heading: {
+            ...friendlyTypography.heading,
+            fontFamily: '"Space Grotesk", Nunito, Inter, ui-sans-serif, system-ui, sans-serif'
+          },
+          body: friendlyTypography.body,
+          caption: {
+            ...friendlyTypography.caption,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
+          },
+          button: friendlyTypography.button,
+          mono: baseTypography.mono
+        },
+        radius: {
+          ...softRadius,
+          xl: '2.25rem',
+          '2xl': '2.75rem'
+        },
+        elevation: glassElevation,
+        buttons: {
+          primary: {
+            background: `linear-gradient(100deg, ${color('primary')}, ${color('secondary')})`,
+            hoverBackground: `linear-gradient(100deg, ${colorMix('primary', 'white 8%')}, ${colorMix('secondary', 'white 8%')})`,
+            radius: 'pill',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            transform: 'translateY(-3px) rotate(-0.5deg)'
+          },
+          secondary: {
+            background: colorMix('accent', 'transparent 16%'),
+            color: color('text'),
+            border: `1px solid ${colorMix('accent', 'transparent 42%')}`,
+            hoverBackground: colorMix('accent', 'transparent 4%'),
+            hoverColor: color('text'),
+            radius: 'pill',
+            shadow: 'sm'
+          },
+          ghost: {
+            hoverBackground: colorMix('secondary', 'transparent 88%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: `linear-gradient(135deg, ${colorMix('primary', 'transparent 84%')}, ${colorMix('secondary', 'transparent 88%')})`,
+            border: `1px solid ${colorMix('secondary', 'transparent 60%')}`,
+            radius: '2xl',
+            shadow: 'lg'
+          },
+          testimonial: {
+            background: colorMix('surface', 'transparent 8%'),
+            border: `1px solid ${colorMix('primary', 'transparent 68%')}`,
+            radius: '2xl'
+          },
+          pricing: {
+            background: `linear-gradient(145deg, ${colorMix('accent', 'transparent 62%')}, ${color('surface')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 44%')}`,
+            radius: '2xl',
+            shadow: 'xl'
+          }
+        },
+        hero: {
+          layout: 'centered',
+          background: `radial-gradient(circle at 12% 22%, ${colorMix('primary', 'transparent 65%')}, transparent 32%), radial-gradient(circle at 80% 18%, ${colorMix('secondary', 'transparent 70%')}, transparent 34%), radial-gradient(circle at 52% 90%, ${colorMix('accent', 'transparent 66%')}, transparent 38%), ${color('background')}`,
+          mediaShape: 'circle',
+          minHeight: 'min(800px, calc(100vh - 5rem))',
+          contentWidth: 'min(860px, 100%)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: colorMix('surface', 'transparent 12%'),
+          foreground: color('text'),
+          linkHover: color('secondary'),
+          border: colorMix('primary', 'transparent 72%'),
+          height: '5rem',
+          blur: true,
+          shadow: 'sm',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'centered',
+          background: `linear-gradient(135deg, ${colorMix('primary', 'transparent 78%')}, ${colorMix('secondary', 'transparent 82%')})`,
+          foreground: color('text'),
+          link: color('secondary'),
+          border: colorMix('primary', 'transparent 60%'),
+          density: 'spacious',
+          divider: false,
+          socialIconStyle: 'filled'
+        },
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('accent', 'transparent 82%')
+          },
+          process: {
+            background: colorMix('secondary', 'transparent 92%'),
+            cardVariant: 'feature'
+          },
+          faq: {
+            background: colorMix('primary', 'transparent 92%')
+          }
+        },
+        icons: {
+          style: 'solid',
+          size: '1.55rem',
+          strokeWidth: '1.8',
+          background: `linear-gradient(135deg, ${color('secondary')}, ${color('primary')})`,
+          foreground: color('primaryForeground'),
+          radius: '2xl'
+        },
+        motion: expressiveMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  industrialGrid: defineTheme({
+    id: 'industrialGrid',
+    displayName: 'Industrial Grid',
+    description: 'Graphite and safety-orange theme with architectural grids, block geometry, durable cards, and direct navigation.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['industrial', 'construction', 'architecture', 'grid'],
+    tokens: brandTokens(
+      {
+        background: '#f3f1eb',
+        surface: '#ffffff',
+        surfaceAlt: '#dedbd2',
+        text: '#171717',
+        textMuted: '#525252',
+        primary: '#ea580c',
+        primaryForeground: '#111111',
+        secondary: '#262626',
+        secondaryForeground: '#ffffff',
+        accent: '#facc15',
+        accentForeground: '#171717',
+        border: '#b9b4aa',
+        focus: '#ea580c',
+        link: '#c2410c'
+      },
+      {
+        background: '#0d0f10',
+        surface: '#171a1c',
+        surfaceAlt: '#252a2d',
+        text: '#f4f4f2',
+        textMuted: '#c6c4bd',
+        primary: '#ff6b00',
+        primaryForeground: '#111111',
+        secondary: '#f4f4f2',
+        secondaryForeground: '#0d0f10',
+        accent: '#ffd000',
+        accentForeground: '#111111',
+        border: '#454b50',
+        focus: '#ff8a2b',
+        link: '#ff9a3d'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Barlow Condensed", "Arial Narrow", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3.25rem, 8vw, 6.9rem)',
+            lineHeight: '0.86',
+            fontWeight: '800',
+            letterSpacing: '-0.04em',
+            textTransform: 'uppercase'
+          },
+          heading: {
+            fontFamily: '"Barlow Condensed", "Arial Narrow", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(2rem, 4vw, 3.4rem)',
+            lineHeight: '0.95',
+            fontWeight: '800',
+            letterSpacing: '-0.025em',
+            textTransform: 'uppercase'
+          },
+          body: {
+            ...baseTypography.body,
+            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif'
+          },
+          caption: {
+            ...technicalTypography.caption,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...baseTypography.button,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: technicalTypography.mono
+        },
+        spacing: compactSpacing,
+        radius: blockRadius,
+        elevation: flatElevation,
+        buttons: {
+          primary: {
+            background: color('primary'),
+            color: color('primaryForeground'),
+            border: `2px solid ${color('primary')}`,
+            hoverBackground: color('accent'),
+            hoverColor: color('accentForeground'),
+            hoverBorder: `2px solid ${color('accent')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: color('surface'),
+            color: color('text'),
+            border: `2px solid ${color('border')}`,
+            hoverBackground: color('surfaceAlt'),
+            hoverBorder: `2px solid ${color('primary')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          ghost: {
+            hoverBackground: colorMix('primary', 'transparent 84%'),
+            hoverBorder: `2px solid ${color('primary')}`,
+            radius: 'sm'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `2px solid ${color('border')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'sm'
+          },
+          feature: {
+            background: color('surfaceAlt'),
+            border: `2px solid ${color('primary')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'sm'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `2px solid ${color('border')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `3px solid ${color('primary')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none'
+          }
+        },
+        hero: {
+          layout: 'split',
+          background: `linear-gradient(${colorMix('border', 'transparent 68%')} 1px, transparent 1px), linear-gradient(90deg, ${colorMix('border', 'transparent 68%')} 1px, transparent 1px), ${color('background')}`,
+          mediaShape: 'rounded',
+          minHeight: 'min(760px, calc(100vh - 4.5rem))',
+          contentWidth: 'min(700px, 100%)',
+          gap: 'clamp(2rem, 5vw, 5rem)'
+        },
+        navigation: {
+          layout: 'sidebar',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '4.25rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'block'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'compact',
+          divider: true,
+          socialIconStyle: 'filled'
+        },
+        pageTemplates: {
+          landing: {
+            maxWidth: 'full',
+            grid: 'repeat(12, minmax(0, 1fr))'
+          },
+          directory: {
+            sidebarWidth: '20rem',
+            grid: 'minmax(18rem, 0.32fr) minmax(0, 1fr)'
+          }
+        },
+        sections: {
+          services: {
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: color('surfaceAlt'),
+            alignment: 'start',
+            eyebrowColor: color('primary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: color('surface')
+          },
+          content: {
+            container: 'content'
+          }
+        },
+        icons: {
+          style: 'solid',
+          size: '1.4rem',
+          strokeWidth: '2',
+          background: color('primary'),
+          foreground: color('primaryForeground'),
+          radius: 'sm'
+        },
+        motion: lowMotion,
+        responsive: compactResponsive
+      }
+    )
+  }),
+  candyPop: defineTheme({
+    id: 'candyPop',
+    displayName: 'Candy Pop',
+    description: 'Playful pastel theme with oversized radius, bubbly commerce cards, bright CTAs, and bouncy motion.',
+    tags: ['playful', 'commerce', 'community', 'pastel'],
+    tokens: brandTokens(
+      {
+        background: '#fff7fb',
+        surface: '#ffffff',
+        surfaceAlt: '#f5e8ff',
+        text: '#2a1636',
+        textMuted: '#715d7b',
+        primary: '#db2777',
+        primaryForeground: '#ffffff',
+        secondary: '#7c3aed',
+        secondaryForeground: '#ffffff',
+        accent: '#fbbf24',
+        accentForeground: '#2a1636',
+        border: '#fbcfe8',
+        focus: '#db2777',
+        link: '#be185d'
+      },
+      {
+        background: '#1b1026',
+        surface: '#28163a',
+        surfaceAlt: '#3a2052',
+        text: '#fff7fb',
+        textMuted: '#e9cfe9',
+        primary: '#f472b6',
+        primaryForeground: '#1b1026',
+        secondary: '#c4b5fd',
+        secondaryForeground: '#1b1026',
+        accent: '#fde68a',
+        accentForeground: '#1b1026',
+        border: '#704071',
+        link: '#f9a8d4'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Fredoka", Nunito, Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3rem, 8vw, 6.5rem)',
+            lineHeight: '0.92',
+            fontWeight: '800',
+            letterSpacing: '-0.045em'
+          },
+          heading: {
+            ...friendlyTypography.heading,
+            fontFamily: '"Fredoka", Nunito, Inter, ui-sans-serif, system-ui, sans-serif',
+            fontWeight: '800'
+          },
+          body: friendlyTypography.body,
+          caption: {
+            ...friendlyTypography.caption,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...friendlyTypography.button,
+            fontWeight: '800'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: {
+          md: '1.25rem',
+          lg: '1.75rem',
+          xl: '2.5rem',
+          '2xl': '3.25rem',
+          pill: '999px'
+        },
+        elevation: {
+          sm: '0 8px 0 rgb(219 39 119 / 0.16)',
+          md: '0 14px 0 rgb(124 58 237 / 0.14), 0 24px 50px rgb(219 39 119 / 0.12)',
+          lg: '0 18px 0 rgb(251 191 36 / 0.22), 0 32px 70px rgb(124 58 237 / 0.16)',
+          xl: '0 24px 0 rgb(219 39 119 / 0.18), 0 48px 110px rgb(124 58 237 / 0.18)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'white 8%'),
+            radius: 'pill',
+            padding: '1rem 1.6rem',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            transform: 'translateY(-4px) scale(1.02)'
+          },
+          secondary: {
+            background: color('accent'),
+            color: color('accentForeground'),
+            border: `1px solid ${colorMix('accent', 'black 8%')}`,
+            hoverBackground: colorMix('accent', 'white 10%'),
+            hoverColor: color('accentForeground'),
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            transform: 'translateY(-3px)'
+          },
+          ghost: {
+            hoverBackground: colorMix('secondary', 'transparent 88%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: `linear-gradient(135deg, ${colorMix('secondary', 'transparent 90%')}, ${colorMix('primary', 'transparent 90%')})`,
+            border: `1px solid ${colorMix('secondary', 'transparent 64%')}`,
+            radius: '2xl',
+            shadow: 'lg',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: colorMix('accent', 'transparent 78%'),
+            border: `1px solid ${colorMix('accent', 'transparent 42%')}`,
+            radius: '2xl'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `2px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'xl'
+          }
+        },
+        hero: {
+          layout: 'centered',
+          background: `radial-gradient(circle at 16% 20%, ${colorMix('accent', 'transparent 58%')}, transparent 30%), radial-gradient(circle at 82% 18%, ${colorMix('secondary', 'transparent 78%')}, transparent 34%), radial-gradient(circle at 50% 88%, ${colorMix('primary', 'transparent 82%')}, transparent 36%), ${color('background')}`,
+          mediaShape: 'circle',
+          minHeight: 'min(780px, calc(100vh - 5rem))',
+          contentWidth: 'min(840px, 100%)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: true,
+          shadow: 'sm',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'centered',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'spacious',
+          divider: false,
+          socialIconStyle: 'filled'
+        },
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('accent', 'transparent 80%')
+          },
+          process: {
+            background: colorMix('primary', 'transparent 92%'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: colorMix('secondary', 'transparent 92%')
+          }
+        },
+        icons: {
+          ...softIcons,
+          style: 'duotone',
+          size: '1.65rem',
+          background: colorMix('primary', 'transparent 82%'),
+          foreground: color('primary'),
+          radius: 'full'
+        },
+        motion: {
+          subtle: {
+            duration: '180ms',
+            translateY: '0.4rem',
+            scale: '0.99'
+          },
+          standard: {
+            duration: '280ms',
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            translateY: '0.85rem',
+            scale: '0.985'
+          },
+          expressive: {
+            duration: '560ms',
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            translateY: '1.4rem',
+            scale: '0.96'
+          },
+          entrance: {
+            duration: '720ms',
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            translateY: '1.8rem',
+            scale: '0.94'
+          }
+        },
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  zenInk: defineTheme({
+    id: 'zenInk',
+    displayName: 'Zen Ink',
+    description: 'Calm rice-paper theme with centered editorial composition, monochrome ink tones, hairline cards, and minimal motion.',
+    tags: ['minimal', 'zen', 'editorial', 'wellness'],
+    tokens: brandTokens(
+      {
+        background: '#fbf7ef',
+        surface: '#fffdf8',
+        surfaceAlt: '#eee7dc',
+        text: '#1c1917',
+        textMuted: '#6b6258',
+        primary: '#1c1917',
+        primaryForeground: '#fbf7ef',
+        secondary: '#6f604e',
+        secondaryForeground: '#fbf7ef',
+        accent: '#9c7c54',
+        accentForeground: '#1c1917',
+        border: '#ded5c7',
+        focus: '#6f604e',
+        link: '#4d4338'
+      },
+      {
+        background: '#0e0d0b',
+        surface: '#171511',
+        surfaceAlt: '#242017',
+        text: '#f5efe4',
+        textMuted: '#c8bdad',
+        primary: '#f5efe4',
+        primaryForeground: '#0e0d0b',
+        secondary: '#d6c6ad',
+        secondaryForeground: '#0e0d0b',
+        accent: '#b79768',
+        accentForeground: '#0e0d0b',
+        border: '#443c31',
+        link: '#ead8bd'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Zen Old Mincho", "Noto Serif", Georgia, Cambria, serif',
+            fontSize: 'clamp(2.75rem, 6.2vw, 5.75rem)',
+            lineHeight: '1',
+            fontWeight: '600',
+            letterSpacing: '-0.04em'
+          },
+          heading: {
+            fontFamily: '"Zen Old Mincho", "Noto Serif", Georgia, Cambria, serif',
+            fontSize: 'clamp(1.85rem, 3.5vw, 3rem)',
+            lineHeight: '1.18',
+            fontWeight: '600',
+            letterSpacing: '-0.02em'
+          },
+          body: {
+            fontFamily: '"Noto Serif", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.05rem',
+            lineHeight: '1.86',
+            fontWeight: '400'
+          },
+          caption: {
+            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: '0.8rem',
+            lineHeight: '1.5',
+            fontWeight: '600',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: '0.88rem',
+            lineHeight: '1',
+            fontWeight: '700',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: crispRadius,
+        elevation: flatElevation,
+        buttons: {
+          primary: {
+            background: color('primary'),
+            color: color('primaryForeground'),
+            border: `1px solid ${color('primary')}`,
+            hoverBackground: color('background'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('text')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none',
+            transform: 'none'
+          },
+          secondary: {
+            background: 'transparent',
+            color: color('text'),
+            border: `1px solid ${color('border')}`,
+            hoverBackground: color('surfaceAlt'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('text')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          ghost: {
+            hoverBackground: color('surfaceAlt'),
+            radius: 'sm'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'sm',
+            padding: 'clamp(1.5rem, 4vw, 2.75rem)',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'sm'
+          },
+          feature: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'md',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          testimonial: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${color('border')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('text')}`,
+            radius: 'md',
+            shadow: 'none',
+            hoverShadow: 'none'
+          }
+        },
+        hero: {
+          layout: 'centered',
+          background: `radial-gradient(circle at 50% 12%, ${colorMix('accent', 'transparent 88%')}, transparent 34%), ${color('background')}`,
+          mediaShape: 'none',
+          minHeight: 'min(720px, calc(100vh - 4.75rem))',
+          contentWidth: 'min(760px, 100%)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('secondary'),
+          border: color('border'),
+          height: '4.75rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'underline'
+        },
+        footer: minimalFooter,
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'standard'
+          },
+          proof: {
+            background: color('surfaceAlt'),
+            eyebrowColor: color('secondary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent')
+          },
+          testimonials: {
+            background: color('surface')
+          },
+          faq: {
+            container: 'prose'
+          },
+          content: {
+            alignment: 'center',
+            container: 'prose'
+          }
+        },
+        icons: {
+          ...minimalIcons,
+          foreground: color('text'),
+          strokeWidth: '1.2'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  plasmaDashboard: defineTheme({
+    id: 'plasmaDashboard',
+    displayName: 'Plasma Dashboard',
+    description: 'Deep product dashboard theme with blue-violet plasma glow, app-style hero media, and luminous data cards.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['dashboard', 'saas', 'product', 'analytics'],
+    tokens: brandTokens(
+      {
+        background: '#f3f7ff',
+        surface: '#ffffff',
+        surfaceAlt: '#e5edff',
+        text: '#0c1224',
+        textMuted: '#4d5b78',
+        primary: '#4f46e5',
+        primaryForeground: '#ffffff',
+        secondary: '#0f172a',
+        secondaryForeground: '#ffffff',
+        accent: '#0891b2',
+        accentForeground: '#06131f',
+        border: '#c9d8ff',
+        focus: '#6366f1',
+        link: '#4338ca',
+        overlay: 'rgb(12 18 36 / 0.64)'
+      },
+      {
+        background: '#040816',
+        surface: '#0b1224',
+        surfaceAlt: '#151a3a',
+        text: '#f7fbff',
+        textMuted: '#b9c8e8',
+        primary: '#8b5cf6',
+        primaryForeground: '#14072e',
+        secondary: '#38bdf8',
+        secondaryForeground: '#04131f',
+        accent: '#22d3ee',
+        accentForeground: '#04131f',
+        border: '#2b3566',
+        focus: '#a78bfa',
+        link: '#c4b5fd',
+        overlay: 'rgb(4 8 22 / 0.84)'
+      },
+      {
+        typography: {
+          display: {
+            ...technicalTypography.display,
+            fontFamily: '"Sora", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(2.9rem, 7vw, 6rem)',
+            lineHeight: '0.92',
+            letterSpacing: '-0.065em'
+          },
+          heading: {
+            ...technicalTypography.heading,
+            fontFamily: '"Sora", Inter, ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '-0.045em'
+          },
+          caption: {
+            ...technicalTypography.caption,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...technicalTypography.button,
+            letterSpacing: '0.08em'
+          },
+          mono: technicalTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: {
+          ...softRadius,
+          lg: '1.25rem',
+          xl: '1.75rem',
+          '2xl': '2.5rem'
+        },
+        elevation: {
+          sm: '0 0 0 1px rgb(139 92 246 / 0.18), 0 10px 28px rgb(34 211 238 / 0.12)',
+          md: '0 0 0 1px rgb(139 92 246 / 0.22), 0 22px 55px rgb(56 189 248 / 0.18)',
+          lg: '0 0 0 1px rgb(34 211 238 / 0.26), 0 34px 84px rgb(139 92 246 / 0.24)',
+          xl: '0 0 0 1px rgb(167 139 250 / 0.28), 0 48px 120px rgb(34 211 238 / 0.24)',
+          '2xl': '0 0 0 1px rgb(34 211 238 / 0.35), 0 60px 150px rgb(139 92 246 / 0.3)'
+        },
+        buttons: {
+          primary: {
+            background: `linear-gradient(120deg, ${color('primary')}, ${color('secondary')})`,
+            hoverBackground: `linear-gradient(120deg, ${colorMix('primary', 'white 8%')}, ${colorMix('secondary', 'white 8%')})`,
+            border: `1px solid ${colorMix('secondary', 'transparent 46%')}`,
+            hoverBorder: `1px solid ${color('accent')}`,
+            radius: 'lg',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: colorMix('surface', 'transparent 10%'),
+            color: color('text'),
+            border: `1px solid ${colorMix('secondary', 'transparent 58%')}`,
+            hoverBackground: colorMix('secondary', 'transparent 86%'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('secondary')}`,
+            radius: 'lg',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          ghost: {
+            color: color('secondary'),
+            hoverBackground: colorMix('primary', 'transparent 88%'),
+            hoverColor: color('text'),
+            radius: 'lg'
+          }
+        },
+        cards: {
+          standard: {
+            background: colorMix('surface', 'transparent 8%'),
+            border: `1px solid ${colorMix('secondary', 'transparent 66%')}`,
+            radius: 'xl',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            mediaRadius: 'lg'
+          },
+          feature: {
+            background: `linear-gradient(150deg, ${colorMix('primary', 'transparent 84%')}, ${colorMix('surfaceAlt', 'transparent 8%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 50%')}`,
+            radius: '2xl',
+            shadow: 'lg',
+            hoverShadow: '2xl',
+            mediaRadius: 'xl'
+          },
+          testimonial: {
+            background: colorMix('surfaceAlt', 'transparent 10%'),
+            border: `1px solid ${colorMix('accent', 'transparent 62%')}`,
+            radius: 'xl'
+          },
+          pricing: {
+            background: `linear-gradient(145deg, ${colorMix('secondary', 'transparent 82%')}, ${colorMix('primary', 'transparent 86%')})`,
+            border: `1px solid ${color('secondary')}`,
+            radius: '2xl',
+            shadow: 'xl'
+          }
+        },
+        hero: {
+          layout: 'app',
+          background: `radial-gradient(circle at 16% 18%, ${colorMix('primary', 'transparent 58%')}, transparent 34%), radial-gradient(circle at 82% 14%, ${colorMix('secondary', 'transparent 60%')}, transparent 34%), radial-gradient(circle at 56% 86%, ${colorMix('accent', 'transparent 74%')}, transparent 38%), ${color('background')}`,
+          mediaShape: 'device',
+          minHeight: 'min(820px, calc(100vh - 4.75rem))',
+          contentWidth: 'min(740px, 100%)',
+          gap: 'clamp(2.5rem, 6vw, 6.5rem)'
+        },
+        navigation: {
+          layout: 'split',
+          background: colorMix('surface', 'transparent 8%'),
+          foreground: color('text'),
+          linkHover: color('secondary'),
+          border: colorMix('secondary', 'transparent 66%'),
+          height: '4.75rem',
+          blur: true,
+          shadow: 'md',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'rich',
+          background: color('surface'),
+          foreground: color('text'),
+          link: color('secondary'),
+          border: colorMix('secondary', 'transparent 70%'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'soft'
+        },
+        pageTemplates: {
+          docs: {
+            sidebarWidth: '18rem',
+            grid: 'minmax(16rem, 0.26fr) minmax(0, 1fr)'
+          },
+          landing: {
+            maxWidth: 'full'
+          }
+        },
+        sections: {
+          services: {
+            alignment: 'start',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('secondary', 'transparent 92%'),
+            eyebrowColor: color('accent')
+          },
+          process: {
+            background: colorMix('primary', 'transparent 92%'),
+            eyebrowColor: color('secondary'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: colorMix('surface', 'transparent 14%')
+          },
+          faq: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          style: 'duotone',
+          size: '1.55rem',
+          strokeWidth: '1.7',
+          background: `linear-gradient(135deg, ${colorMix('primary', 'transparent 76%')}, ${colorMix('secondary', 'transparent 76%')})`,
+          foreground: color('secondary'),
+          radius: 'xl'
+        },
+        animation: {
+          durationFast: '100ms',
+          durationBase: '190ms',
+          durationSlow: '480ms'
+        },
+        motion: expressiveMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  museumCanvas: defineTheme({
+    id: 'museumCanvas',
+    displayName: 'Museum Canvas',
+    description: 'Quiet gallery theme with ivory canvases, serif curation, restrained borders, and exhibition-style pacing.',
+    tags: ['museum', 'gallery', 'editorial', 'culture'],
+    tokens: brandTokens(
+      {
+        background: '#fbf8ef',
+        surface: '#fffdf6',
+        surfaceAlt: '#eee8da',
+        text: '#201b16',
+        textMuted: '#665d51',
+        primary: '#6d4c2f',
+        primaryForeground: '#ffffff',
+        secondary: '#2f3437',
+        secondaryForeground: '#fbf8ef',
+        accent: '#9a7a45',
+        accentForeground: '#201b16',
+        border: '#ded4c2',
+        focus: '#6d4c2f',
+        link: '#5f4329'
+      },
+      {
+        background: '#11100d',
+        surface: '#1b1813',
+        surfaceAlt: '#29241b',
+        text: '#f7f0e2',
+        textMuted: '#cfc4b1',
+        primary: '#d4b98a',
+        primaryForeground: '#11100d',
+        secondary: '#f7f0e2',
+        secondaryForeground: '#11100d',
+        accent: '#b99a62',
+        accentForeground: '#11100d',
+        border: '#4a4032',
+        link: '#ead2a0'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(3rem, 7vw, 6.25rem)',
+            lineHeight: '0.98',
+            fontWeight: '600',
+            letterSpacing: '-0.045em'
+          },
+          heading: {
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(1.9rem, 3.8vw, 3.25rem)',
+            lineHeight: '1.12',
+            fontWeight: '600',
+            letterSpacing: '-0.02em'
+          },
+          body: {
+            fontFamily: '"Libre Baskerville", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.0625rem',
+            lineHeight: '1.86',
+            fontWeight: '400'
+          },
+          caption: {
+            ...serifTypography.caption,
+            letterSpacing: '0.18em'
+          },
+          button: {
+            ...serifTypography.button,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: {
+          section: 'clamp(5.5rem, 10vw, 9.5rem)',
+          container: 'min(1180px, calc(100vw - 2rem))',
+          '4xl': '7rem'
+        },
+        radius: crispRadius,
+        elevation: flatElevation,
+        buttons: {
+          primary: {
+            background: color('text'),
+            color: color('textInverse'),
+            border: `1px solid ${color('text')}`,
+            hoverBackground: color('background'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('text')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            transform: 'none'
+          },
+          secondary: {
+            background: 'transparent',
+            color: color('text'),
+            border: `1px solid ${color('border')}`,
+            hoverBackground: color('surfaceAlt'),
+            hoverColor: color('text'),
+            hoverBorder: `1px solid ${color('primary')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          ghost: {
+            hoverBackground: color('surfaceAlt'),
+            radius: 'none'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'none',
+            padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          },
+          feature: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none',
+            mediaRadius: 'none'
+          },
+          testimonial: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${color('border')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'none',
+            shadow: 'none',
+            hoverShadow: 'none'
+          }
+        },
+        hero: {
+          layout: 'editorial',
+          background: `linear-gradient(90deg, ${color('background')} 0%, ${color('background')} 58%, ${color('surfaceAlt')} 58%, ${color('surfaceAlt')} 100%)`,
+          mediaShape: 'bleed',
+          minHeight: 'min(820px, calc(100vh - 5rem))',
+          contentWidth: 'min(760px, 100%)',
+          gap: 'clamp(3rem, 7vw, 7rem)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'underline'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'plain'
+        },
+        sections: {
+          ...editorialSections,
+          services: {
+            background: color('surface'),
+            alignment: 'start',
+            cardVariant: 'standard'
+          },
+          proof: {
+            background: color('background'),
+            alignment: 'center',
+            eyebrowColor: color('accent')
+          },
+          content: {
+            container: 'prose'
+          }
+        },
+        icons: {
+          ...minimalIcons,
+          foreground: color('primary'),
+          strokeWidth: '1.1'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  ecoImpact: defineTheme({
+    id: 'ecoImpact',
+    displayName: 'Eco Impact',
+    description: 'Vibrant environmental campaign theme with living greens, earth tones, friendly cards, and hopeful motion.',
+    tags: ['environment', 'nonprofit', 'campaign', 'sustainability'],
+    tokens: brandTokens(
+      {
+        background: '#f6fbec',
+        surface: '#ffffff',
+        surfaceAlt: '#e3f4c5',
+        text: '#173018',
+        textMuted: '#53694d',
+        primary: '#15803d',
+        primaryForeground: '#ffffff',
+        secondary: '#0f766e',
+        secondaryForeground: '#ffffff',
+        accent: '#f59e0b',
+        accentForeground: '#1f2a0d',
+        border: '#c9e8a9',
+        focus: '#16a34a',
+        link: '#166534',
+        overlay: 'rgb(23 48 24 / 0.62)'
+      },
+      {
+        background: '#071308',
+        surface: '#0f2111',
+        surfaceAlt: '#1a341a',
+        text: '#f3fde8',
+        textMuted: '#c8deb8',
+        primary: '#86efac',
+        primaryForeground: '#071308',
+        secondary: '#5eead4',
+        secondaryForeground: '#071308',
+        accent: '#fbbf24',
+        accentForeground: '#071308',
+        border: '#315d32',
+        link: '#bbf7d0'
+      },
+      {
+        typography: {
+          display: {
+            ...friendlyTypography.display,
+            fontFamily: '"Nunito", "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3rem, 7.2vw, 6.1rem)',
+            lineHeight: '0.94'
+          },
+          heading: {
+            ...friendlyTypography.heading,
+            fontFamily: '"Nunito", "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif'
+          },
+          body: friendlyTypography.body,
+          caption: {
+            ...friendlyTypography.caption,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...friendlyTypography.button,
+            fontWeight: '800'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: softRadius,
+        elevation: {
+          sm: '0 10px 24px rgb(21 128 61 / 0.1)',
+          md: '0 20px 50px rgb(21 128 61 / 0.14)',
+          lg: '0 30px 76px rgb(15 118 110 / 0.16)',
+          xl: '0 44px 104px rgb(21 128 61 / 0.2)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'black 8%'),
+            radius: 'pill',
+            padding: '1rem 1.55rem',
+            shadow: 'sm',
+            hoverShadow: 'lg',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: colorMix('accent', 'transparent 10%'),
+            color: color('text'),
+            border: `1px solid ${colorMix('accent', 'transparent 38%')}`,
+            hoverBackground: colorMix('accent', 'transparent 0%'),
+            hoverColor: color('accentForeground'),
+            radius: 'pill',
+            shadow: 'xs',
+            hoverShadow: 'md'
+          },
+          ghost: {
+            hoverBackground: colorMix('primary', 'transparent 88%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            shadow: 'sm',
+            hoverShadow: 'lg',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('primary', 'transparent 88%')}, ${colorMix('accent', 'transparent 82%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 54%')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${colorMix('secondary', 'transparent 64%')}`,
+            radius: '2xl',
+            mediaRadius: 'full'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `2px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'split',
+          background: `radial-gradient(circle at 12% 18%, ${colorMix('accent', 'transparent 70%')}, transparent 32%), radial-gradient(circle at 82% 16%, ${colorMix('primary', 'transparent 76%')}, transparent 36%), ${color('background')}`,
+          mediaShape: 'circle',
+          minHeight: 'min(800px, calc(100vh - 5rem))',
+          contentWidth: 'min(720px, 100%)'
+        },
+        navigation: {
+          layout: 'split',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: true,
+          shadow: 'xs',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'rich',
+          background: color('primary'),
+          foreground: color('primaryForeground'),
+          link: color('accent'),
+          border: colorMix('primary', 'white 16%'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'filled'
+        },
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('secondary', 'transparent 90%'),
+            eyebrowColor: color('secondary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          style: 'duotone',
+          size: '1.7rem',
+          strokeWidth: '1.7',
+          background: colorMix('primary', 'transparent 82%'),
+          foreground: color('primary'),
+          radius: 'full'
+        },
+        motion: expressiveMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  executiveSlate: defineTheme({
+    id: 'executiveSlate',
+    displayName: 'Executive Slate',
+    description: 'High-trust executive theme with slate authority, crisp controls, measured spacing, and restrained motion.',
+    tags: ['executive', 'professional', 'consulting', 'b2b'],
+    tokens: brandTokens(
+      {
+        background: '#f5f7fa',
+        surface: '#ffffff',
+        surfaceAlt: '#e7edf3',
+        text: '#111827',
+        textMuted: '#4b5563',
+        primary: '#1e3a5f',
+        primaryForeground: '#ffffff',
+        secondary: '#0f172a',
+        secondaryForeground: '#ffffff',
+        accent: '#64748b',
+        accentForeground: '#ffffff',
+        border: '#cfd8e3',
+        focus: '#1d4ed8',
+        link: '#1e3a5f'
+      },
+      {
+        background: '#070b12',
+        surface: '#111827',
+        surfaceAlt: '#1c2636',
+        text: '#f8fafc',
+        textMuted: '#c3cedb',
+        primary: '#93b5df',
+        primaryForeground: '#070b12',
+        secondary: '#e2e8f0',
+        secondaryForeground: '#070b12',
+        accent: '#94a3b8',
+        accentForeground: '#070b12',
+        border: '#334155',
+        link: '#bfdbfe'
+      },
+      {
+        typography: {
+          display: {
+            ...baseTypography.display,
+            fontFamily: '"IBM Plex Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(2.75rem, 6vw, 5.4rem)',
+            lineHeight: '0.98',
+            letterSpacing: '-0.055em'
+          },
+          heading: {
+            ...baseTypography.heading,
+            fontFamily: '"IBM Plex Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '-0.035em'
+          },
+          caption: {
+            ...baseTypography.caption,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...baseTypography.button,
+            letterSpacing: '0.04em'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: {
+          section: 'clamp(4.25rem, 7vw, 7rem)',
+          container: 'min(1160px, calc(100vw - 2rem))'
+        },
+        radius: crispRadius,
+        elevation: {
+          sm: '0 1px 2px rgb(15 23 42 / 0.08)',
+          md: '0 14px 34px rgb(15 23 42 / 0.12)',
+          lg: '0 22px 58px rgb(15 23 42 / 0.16)',
+          xl: '0 34px 88px rgb(15 23 42 / 0.2)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'black 10%'),
+            radius: 'sm',
+            shadow: 'xs',
+            hoverShadow: 'sm',
+            transform: 'translateY(-1px)'
+          },
+          secondary: {
+            background: color('surface'),
+            color: color('text'),
+            border: `1px solid ${color('border')}`,
+            hoverBackground: color('surfaceAlt'),
+            hoverColor: color('primary'),
+            hoverBorder: `1px solid ${color('primary')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'xs'
+          },
+          ghost: {
+            hoverBackground: color('surfaceAlt'),
+            radius: 'sm'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'md',
+            shadow: 'xs',
+            hoverShadow: 'sm',
+            mediaRadius: 'md'
+          },
+          feature: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${color('border')}`,
+            radius: 'lg',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'md'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'lg',
+            shadow: 'md'
+          }
+        },
+        hero: {
+          layout: 'split',
+          background: `linear-gradient(135deg, ${color('background')} 0%, ${color('surfaceAlt')} 100%)`,
+          mediaShape: 'rounded',
+          minHeight: 'min(740px, calc(100vh - 4.75rem))',
+          contentWidth: 'min(720px, 100%)'
+        },
+        navigation: {
+          layout: 'split',
+          background: color('secondary'),
+          foreground: color('secondaryForeground'),
+          linkHover: color('primary'),
+          border: colorMix('secondary', 'white 14%'),
+          height: '4.5rem',
+          blur: false,
+          shadow: 'sm',
+          activeIndicator: 'block'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('secondary'),
+          foreground: color('secondaryForeground'),
+          link: color('primary'),
+          border: colorMix('secondary', 'white 14%'),
+          density: 'comfortable',
+          divider: true,
+          socialIconStyle: 'outlined'
+        },
+        sections: {
+          services: {
+            background: color('background'),
+            cardVariant: 'standard'
+          },
+          proof: {
+            background: color('secondary'),
+            foreground: color('secondaryForeground'),
+            eyebrowColor: color('primary'),
+            alignment: 'center'
+          },
+          process: {
+            background: color('surface'),
+            eyebrowColor: color('accent'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: color('surfaceAlt')
+          },
+          content: {
+            container: 'content'
+          }
+        },
+        icons: {
+          ...minimalIcons,
+          foreground: color('primary'),
+          strokeWidth: '1.6'
+        },
+        responsive: compactResponsive,
+        motion: lowMotion
+      }
+    )
+  }),
+  culinaryMarket: defineTheme({
+    id: 'culinaryMarket',
+    displayName: 'Culinary Market',
+    description: 'Vibrant food-market theme with warm produce colors, editorial hospitality rhythm, and image-forward sections.',
+    tags: ['food', 'market', 'restaurant', 'hospitality'],
+    tokens: brandTokens(
+      {
+        background: '#fff7e8',
+        surface: '#fffdf7',
+        surfaceAlt: '#ffe0b8',
+        text: '#2d1b12',
+        textMuted: '#715946',
+        primary: '#b91c1c',
+        primaryForeground: '#ffffff',
+        secondary: '#166534',
+        secondaryForeground: '#ffffff',
+        accent: '#f59e0b',
+        accentForeground: '#2d1b12',
+        border: '#f0c48e',
+        focus: '#b91c1c',
+        link: '#991b1b'
+      },
+      {
+        background: '#170c07',
+        surface: '#25150d',
+        surfaceAlt: '#3a2112',
+        text: '#fff7e8',
+        textMuted: '#ebc9a3',
+        primary: '#fb7185',
+        primaryForeground: '#170c07',
+        secondary: '#86efac',
+        secondaryForeground: '#170c07',
+        accent: '#fbbf24',
+        accentForeground: '#170c07',
+        border: '#68401f',
+        link: '#fda4af'
+      },
+      {
+        typography: {
+          display: {
+            ...editorialTypography.display,
+            fontFamily: '"Fraunces", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(3.2rem, 8vw, 6.8rem)',
+            lineHeight: '0.9'
+          },
+          heading: {
+            ...editorialTypography.heading,
+            fontFamily: '"Fraunces", Georgia, Cambria, "Times New Roman", serif'
+          },
+          body: {
+            ...friendlyTypography.body,
+            fontSize: '1.05rem',
+            lineHeight: '1.78'
+          },
+          caption: {
+            ...friendlyTypography.caption,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...friendlyTypography.button,
+            letterSpacing: '0.02em'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: editorialSpacing,
+        radius: {
+          ...softRadius,
+          xl: '1.85rem',
+          '2xl': '2.75rem'
+        },
+        elevation: {
+          sm: '0 8px 18px rgb(185 28 28 / 0.1)',
+          md: '0 18px 42px rgb(185 28 28 / 0.14)',
+          lg: '0 28px 70px rgb(45 27 18 / 0.18)',
+          xl: '0 42px 100px rgb(45 27 18 / 0.24)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            hoverBackground: colorMix('primary', 'black 8%'),
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'lg',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: color('secondary'),
+            color: color('secondaryForeground'),
+            border: `1px solid ${color('secondary')}`,
+            hoverBackground: colorMix('secondary', 'black 8%'),
+            hoverColor: color('secondaryForeground'),
+            hoverBorder: `1px solid ${colorMix('secondary', 'black 8%')}`,
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'md'
+          },
+          ghost: {
+            hoverBackground: colorMix('accent', 'transparent 82%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'xl',
+            shadow: 'sm',
+            hoverShadow: 'lg',
+            mediaRadius: 'xl'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('accent', 'transparent 76%')}, ${colorMix('secondary', 'transparent 90%')})`,
+            border: `1px solid ${colorMix('accent', 'transparent 42%')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'xl',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${color('border')}`,
+            radius: 'xl'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `2px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'media',
+          background: `radial-gradient(circle at 12% 20%, ${colorMix('accent', 'transparent 58%')}, transparent 28%), radial-gradient(circle at 86% 12%, ${colorMix('secondary', 'transparent 78%')}, transparent 34%), ${color('background')}`,
+          mediaShape: 'bleed',
+          minHeight: 'min(840px, calc(100vh - 5rem))',
+          contentWidth: 'min(760px, 100%)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: false,
+          shadow: 'xs',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          layout: 'rich',
+          background: color('secondary'),
+          foreground: color('secondaryForeground'),
+          link: color('accent'),
+          border: colorMix('secondary', 'white 18%'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'filled'
+        },
+        sections: {
+          ...editorialSections,
+          services: {
+            background: color('surface'),
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('accent', 'transparent 78%'),
+            eyebrowColor: color('primary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('secondary'),
+            cardVariant: 'feature'
+          }
+        },
+        icons: {
+          style: 'filled',
+          size: '1.55rem',
+          strokeWidth: '1.7',
+          background: color('accent'),
+          foreground: color('accentForeground'),
+          radius: 'full'
+        },
+        motion: expressiveMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  glowMedspa: defineTheme({
+    id: 'glowMedspa',
+    displayName: 'Glow Medspa',
+    description: 'Premium med-spa glow theme with pearl, rose, and lavender tones, soft radius, and an elegant hero.',
+    tags: ['medspa', 'beauty', 'wellness', 'premium'],
+    tokens: brandTokens(
+      {
+        background: '#fff9fb',
+        surface: '#ffffff',
+        surfaceAlt: '#f5eafa',
+        text: '#2d2430',
+        textMuted: '#756879',
+        primary: '#9f5360',
+        primaryForeground: '#ffffff',
+        secondary: '#6f5a9d',
+        secondaryForeground: '#ffffff',
+        accent: '#e9c7d4',
+        accentForeground: '#2d2430',
+        border: '#edd8e7',
+        focus: '#9f5360',
+        link: '#87424f',
+        overlay: 'rgb(45 36 48 / 0.58)'
+      },
+      {
+        background: '#171018',
+        surface: '#241925',
+        surfaceAlt: '#342438',
+        text: '#fff8fb',
+        textMuted: '#e3cbd9',
+        primary: '#f0a8b7',
+        primaryForeground: '#2d1018',
+        secondary: '#c4b5fd',
+        secondaryForeground: '#171018',
+        accent: '#f8d6e2',
+        accentForeground: '#171018',
+        border: '#5e4056',
+        link: '#f0a8b7'
+      },
+      {
+        typography: {
+          display: {
+            ...serifTypography.display,
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(3rem, 7vw, 6rem)',
+            lineHeight: '0.98',
+            fontWeight: '600'
+          },
+          heading: {
+            ...serifTypography.heading,
+            fontFamily: '"Cormorant Garamond", Georgia, Cambria, "Times New Roman", serif',
+            fontWeight: '600'
+          },
+          body: {
+            ...baseTypography.body,
+            fontFamily: '"Avenir Next", Inter, ui-sans-serif, system-ui, sans-serif',
+            lineHeight: '1.78'
+          },
+          caption: {
+            ...serifTypography.caption,
+            letterSpacing: '0.16em'
+          },
+          button: {
+            ...baseTypography.button,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: {
+          md: '1.25rem',
+          lg: '1.75rem',
+          xl: '2.5rem',
+          '2xl': '3rem',
+          pill: '999px'
+        },
+        elevation: {
+          sm: '0 10px 26px rgb(183 110 121 / 0.1)',
+          md: '0 20px 54px rgb(124 106 166 / 0.14)',
+          lg: '0 34px 86px rgb(183 110 121 / 0.18)',
+          xl: '0 48px 120px rgb(124 106 166 / 0.22)'
+        },
+        buttons: {
+          primary: {
+            background: `linear-gradient(135deg, ${color('primary')}, ${color('secondary')})`,
+            hoverBackground: `linear-gradient(135deg, ${colorMix('primary', 'white 8%')}, ${colorMix('secondary', 'white 8%')})`,
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'lg',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: colorMix('accent', 'transparent 24%'),
+            color: color('text'),
+            border: `1px solid ${colorMix('primary', 'transparent 58%')}`,
+            hoverBackground: colorMix('accent', 'transparent 6%'),
+            hoverColor: color('text'),
+            radius: 'pill',
+            shadow: 'xs',
+            hoverShadow: 'md'
+          },
+          ghost: {
+            hoverBackground: colorMix('primary', 'transparent 90%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: colorMix('surface', 'transparent 4%'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('accent', 'transparent 52%')}, ${colorMix('secondary', 'transparent 92%')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 60%')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: '2xl',
+            mediaRadius: 'full'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'editorial',
+          background: `radial-gradient(circle at 16% 18%, ${colorMix('accent', 'transparent 54%')}, transparent 30%), radial-gradient(circle at 82% 16%, ${colorMix('secondary', 'transparent 84%')}, transparent 35%), ${color('background')}`,
+          mediaShape: 'arch',
+          minHeight: 'min(800px, calc(100vh - 5rem))',
+          contentWidth: 'min(720px, 100%)',
+          gap: 'clamp(2.75rem, 7vw, 7rem)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: colorMix('surface', 'transparent 12%'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: true,
+          shadow: 'xs',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'spacious',
+          divider: true,
+          socialIconStyle: 'soft'
+        },
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('accent', 'transparent 64%'),
+            eyebrowColor: color('primary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('secondary')
+          },
+          faq: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          style: 'duotone',
+          size: '1.55rem',
+          strokeWidth: '1.45',
+          background: colorMix('accent', 'transparent 42%'),
+          foreground: color('primary'),
+          radius: 'full'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  terminalDocs: defineTheme({
+    id: 'terminalDocs',
+    displayName: 'Terminal Docs',
+    description: 'Dark terminal documentation theme with mono accents, sidebar/block navigation, and command-line card treatments.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['developer', 'documentation', 'terminal', 'technical'],
+    tokens: brandTokens(
+      {
+        background: '#f7faf8',
+        surface: '#ffffff',
+        surfaceAlt: '#e8f0ec',
+        text: '#0d1b16',
+        textMuted: '#4f625b',
+        primary: '#047857',
+        primaryForeground: '#ffffff',
+        secondary: '#0f172a',
+        secondaryForeground: '#ffffff',
+        accent: '#0ea5e9',
+        accentForeground: '#06131f',
+        border: '#c9d8d0',
+        focus: '#059669',
+        link: '#047857'
+      },
+      {
+        background: '#020807',
+        surface: '#071311',
+        surfaceAlt: '#0d211d',
+        text: '#eafff4',
+        textMuted: '#a8cdbd',
+        primary: '#34d399',
+        primaryForeground: '#020807',
+        secondary: '#eafff4',
+        secondaryForeground: '#020807',
+        accent: '#38bdf8',
+        accentForeground: '#020807',
+        border: '#1f4a3c',
+        focus: '#5eead4',
+        link: '#6ee7b7',
+        overlay: 'rgb(2 8 7 / 0.88)'
+      },
+      {
+        typography: {
+          display: {
+            ...technicalTypography.display,
+            fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+            fontSize: 'clamp(2.35rem, 5.4vw, 4.8rem)',
+            lineHeight: '1',
+            fontWeight: '700',
+            letterSpacing: '-0.055em'
+          },
+          heading: {
+            ...technicalTypography.heading,
+            fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+            fontSize: 'clamp(1.45rem, 2.7vw, 2.5rem)',
+            lineHeight: '1.12',
+            fontWeight: '700',
+            letterSpacing: '-0.035em'
+          },
+          body: {
+            ...technicalTypography.body,
+            fontFamily: '"IBM Plex Sans", Inter, ui-sans-serif, system-ui, sans-serif'
+          },
+          caption: {
+            ...technicalTypography.caption,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...technicalTypography.button,
+            letterSpacing: '0.08em'
+          },
+          mono: technicalTypography.mono
+        },
+        spacing: compactSpacing,
+        radius: blockRadius,
+        elevation: {
+          sm: '0 0 0 1px rgb(52 211 153 / 0.18)',
+          md: '0 0 0 1px rgb(52 211 153 / 0.24), 0 18px 44px rgb(0 0 0 / 0.22)',
+          lg: '0 0 0 1px rgb(56 189 248 / 0.28), 0 28px 70px rgb(0 0 0 / 0.28)',
+          xl: '0 0 0 1px rgb(52 211 153 / 0.34), 0 42px 100px rgb(0 0 0 / 0.34)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            color: color('primaryForeground'),
+            border: `1px solid ${color('primary')}`,
+            hoverBackground: colorMix('primary', 'white 8%'),
+            hoverColor: color('primaryForeground'),
+            hoverBorder: `1px solid ${color('accent')}`,
+            radius: 'sm',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            transform: 'translateY(-1px)'
+          },
+          secondary: {
+            background: color('surface'),
+            color: color('text'),
+            border: `1px solid ${color('border')}`,
+            hoverBackground: color('surfaceAlt'),
+            hoverColor: color('primary'),
+            hoverBorder: `1px solid ${color('primary')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'sm'
+          },
+          ghost: {
+            color: color('primary'),
+            hoverBackground: colorMix('primary', 'transparent 88%'),
+            hoverColor: color('primary'),
+            radius: 'sm'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'sm',
+            shadow: 'none',
+            hoverShadow: 'sm',
+            mediaRadius: 'sm'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${colorMix('primary', 'transparent 92%')}, ${color('surfaceAlt')})`,
+            border: `1px solid ${colorMix('primary', 'transparent 52%')}`,
+            radius: 'md',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            mediaRadius: 'sm'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'sm'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'md',
+            shadow: 'md'
+          }
+        },
+        hero: {
+          layout: 'docs',
+          background: `linear-gradient(${colorMix('primary', 'transparent 91%')} 1px, transparent 1px), linear-gradient(90deg, ${colorMix('primary', 'transparent 91%')} 1px, transparent 1px), ${color('background')}`,
+          mediaShape: 'none',
+          minHeight: 'auto',
+          contentWidth: 'min(900px, 100%)',
+          gap: 'clamp(1.5rem, 3vw, 3.5rem)'
+        },
+        navigation: {
+          layout: 'sidebar',
+          background: color('surface'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '4rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'block'
+        },
+        footer: {
+          layout: 'simple',
+          background: color('surface'),
+          foreground: color('textMuted'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'compact',
+          divider: true,
+          socialIconStyle: 'plain'
+        },
+        pageTemplates: {
+          docs: {
+            maxWidth: 'full',
+            sidebarWidth: '18.5rem',
+            grid: 'minmax(16rem, 0.26fr) minmax(0, 1fr)'
+          },
+          article: {
+            maxWidth: 'prose'
+          }
+        },
+        forms: {
+          background: color('surface'),
+          fieldBackground: color('background'),
+          radius: 'sm',
+          shadow: 'none'
+        },
+        sections: {
+          services: {
+            background: color('background'),
+            cardVariant: 'standard'
+          },
+          proof: {
+            background: color('surfaceAlt'),
+            eyebrowColor: color('accent'),
+            alignment: 'start'
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('primary'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: color('surface')
+          },
+          content: {
+            container: 'prose'
+          }
+        },
+        icons: {
+          style: 'minimal',
+          size: '1.35rem',
+          strokeWidth: '1.8',
+          background: 'transparent',
+          foreground: color('primary'),
+          radius: 'none'
+        },
+        motion: lowMotion,
+        responsive: compactResponsive
+      }
+    )
+  }),
+  estatePrestige: defineTheme({
+    id: 'estatePrestige',
+    displayName: 'Estate Prestige',
+    description: 'Luxury real-estate theme with black, cream, and bronze tones, image-forward editorial layouts, and polished cards.',
+    defaultMode: 'dark',
+    supportedModes: ['dark', 'light', 'highContrast'],
+    tags: ['real-estate', 'luxury', 'property', 'editorial'],
+    tokens: brandTokens(
+      {
+        background: '#f8f3e8',
+        surface: '#fffaf0',
+        surfaceAlt: '#eadfc9',
+        text: '#1b1712',
+        textMuted: '#665c4f',
+        primary: '#8b6f3d',
+        primaryForeground: '#ffffff',
+        secondary: '#111111',
+        secondaryForeground: '#f8f3e8',
+        accent: '#c49a4a',
+        accentForeground: '#1b1712',
+        border: '#d8c7a8',
+        focus: '#8b6f3d',
+        link: '#755b2e'
+      },
+      {
+        background: '#050403',
+        surface: '#11100d',
+        surfaceAlt: '#1f1a13',
+        text: '#fbf3e3',
+        textMuted: '#cabb9f',
+        primary: '#d6aa5d',
+        primaryForeground: '#050403',
+        secondary: '#fbf3e3',
+        secondaryForeground: '#050403',
+        accent: '#b9853b',
+        accentForeground: '#050403',
+        border: '#4d3f2a',
+        link: '#f1d18b',
+        overlay: 'rgb(0 0 0 / 0.82)'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Playfair Display", Didot, Georgia, Cambria, serif',
+            fontSize: 'clamp(3.4rem, 8.5vw, 7.2rem)',
+            lineHeight: '0.86',
+            fontWeight: '700',
+            letterSpacing: '-0.06em'
+          },
+          heading: {
+            fontFamily: '"Playfair Display", Didot, Georgia, Cambria, serif',
+            fontSize: 'clamp(2rem, 4.2vw, 3.6rem)',
+            lineHeight: '0.98',
+            fontWeight: '700',
+            letterSpacing: '-0.035em'
+          },
+          body: {
+            fontFamily: '"Libre Baskerville", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.07rem',
+            lineHeight: '1.84',
+            fontWeight: '400'
+          },
+          caption: {
+            ...editorialTypography.caption,
+            letterSpacing: '0.18em'
+          },
+          button: {
+            ...serifTypography.button,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: crispRadius,
+        elevation: {
+          sm: '0 10px 32px rgb(0 0 0 / 0.18)',
+          md: '0 20px 60px rgb(0 0 0 / 0.28)',
+          lg: '0 36px 90px rgb(0 0 0 / 0.38)',
+          xl: '0 52px 130px rgb(0 0 0 / 0.46)'
+        },
+        buttons: luxuryButtons,
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${colorMix('primary', 'transparent 55%')}`,
+            radius: 'md',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            mediaRadius: 'md'
+          },
+          feature: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${colorMix('primary', 'transparent 44%')}`,
+            radius: 'lg',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            mediaRadius: 'lg'
+          },
+          testimonial: {
+            background: color('background'),
+            border: `1px solid ${color('border')}`,
+            radius: 'md'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `1px solid ${color('primary')}`,
+            radius: 'lg',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'media',
+          background: `linear-gradient(135deg, ${color('background')} 0%, ${color('surface')} 45%, ${colorMix('primary', 'transparent 86%')} 100%)`,
+          mediaShape: 'bleed',
+          minHeight: 'min(860px, calc(100vh - 5rem))',
+          contentWidth: 'min(760px, 100%)',
+          gap: 'clamp(3rem, 7vw, 7rem)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '5rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          ...richFooter,
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          socialIconStyle: 'plain'
+        },
+        sections: {
+          ...editorialSections,
+          services: {
+            background: color('surface'),
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: color('secondary'),
+            foreground: color('secondaryForeground'),
+            eyebrowColor: color('primary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent')
+          },
+          content: {
+            container: 'prose'
+          }
+        },
+        icons: {
+          ...minimalIcons,
+          foreground: color('primary'),
+          strokeWidth: '1.2'
+        },
+        motion: lowMotion,
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  festivalPoster: defineTheme({
+    id: 'festivalPoster',
+    displayName: 'Festival Poster',
+    description: 'Expressive event-poster theme with saturated gradients, oversized type, playful cards, and high-energy motion.',
+    tags: ['events', 'festival', 'poster', 'creative'],
+    tokens: brandTokens(
+      {
+        background: '#fff4d6',
+        surface: '#ffffff',
+        surfaceAlt: '#ffd7f0',
+        text: '#220f3a',
+        textMuted: '#684d78',
+        primary: '#c026d3',
+        primaryForeground: '#ffffff',
+        secondary: '#0369a1',
+        secondaryForeground: '#ffffff',
+        accent: '#facc15',
+        accentForeground: '#220f3a',
+        border: '#f0abfc',
+        focus: '#0ea5e9',
+        link: '#a21caf'
+      },
+      {
+        background: '#13051f',
+        surface: '#241033',
+        surfaceAlt: '#3a1452',
+        text: '#fff4d6',
+        textMuted: '#f3c8ea',
+        primary: '#f472b6',
+        primaryForeground: '#13051f',
+        secondary: '#67e8f9',
+        secondaryForeground: '#05131a',
+        accent: '#fde047',
+        accentForeground: '#13051f',
+        border: '#74328c',
+        link: '#f9a8d4'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Cooper Black", "Fredoka", "Arial Black", ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(3.4rem, 10vw, 8rem)',
+            lineHeight: '0.78',
+            fontWeight: '900',
+            letterSpacing: '-0.07em',
+            textTransform: 'uppercase'
+          },
+          heading: {
+            fontFamily: '"Space Grotesk", "Fredoka", Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: 'clamp(2rem, 4.6vw, 3.8rem)',
+            lineHeight: '0.92',
+            fontWeight: '800',
+            letterSpacing: '-0.05em'
+          },
+          body: {
+            ...friendlyTypography.body,
+            fontFamily: '"Space Grotesk", Nunito, Inter, ui-sans-serif, system-ui, sans-serif',
+            fontSize: '1.04rem',
+            lineHeight: '1.7'
+          },
+          caption: {
+            ...friendlyTypography.caption,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase'
+          },
+          button: {
+            ...friendlyTypography.button,
+            fontWeight: '900',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: spaciousSpacing,
+        radius: {
+          sm: '0.75rem',
+          md: '1.2rem',
+          lg: '1.75rem',
+          xl: '2.5rem',
+          '2xl': '3.5rem',
+          pill: '999px'
+        },
+        elevation: {
+          sm: '0 8px 0 rgb(34 15 58 / 0.16)',
+          md: '0 14px 0 rgb(250 204 21 / 0.32), 0 26px 52px rgb(192 38 211 / 0.18)',
+          lg: '0 18px 0 rgb(14 165 233 / 0.28), 0 36px 78px rgb(192 38 211 / 0.22)',
+          xl: '0 24px 0 rgb(250 204 21 / 0.28), 0 54px 120px rgb(14 165 233 / 0.24)'
+        },
+        buttons: {
+          primary: {
+            background: `linear-gradient(100deg, ${color('primary')}, ${color('secondary')})`,
+            hoverBackground: `linear-gradient(100deg, ${colorMix('primary', 'white 8%')}, ${colorMix('secondary', 'white 8%')})`,
+            border: `2px solid ${color('text')}`,
+            hoverBorder: `2px solid ${color('accent')}`,
+            radius: 'pill',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            transform: 'translateY(-5px) rotate(-1deg)'
+          },
+          secondary: {
+            background: color('accent'),
+            color: color('accentForeground'),
+            border: `2px solid ${color('text')}`,
+            hoverBackground: colorMix('accent', 'white 8%'),
+            hoverColor: color('accentForeground'),
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            transform: 'translateY(-4px) rotate(1deg)'
+          },
+          ghost: {
+            color: color('primary'),
+            hoverBackground: colorMix('primary', 'transparent 84%'),
+            hoverColor: color('primary'),
+            hoverBorder: `2px solid ${color('primary')}`,
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `2px solid ${color('text')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            mediaRadius: '2xl'
+          },
+          feature: {
+            background: `linear-gradient(135deg, ${colorMix('primary', 'transparent 78%')}, ${colorMix('secondary', 'transparent 80%')})`,
+            border: `2px solid ${color('text')}`,
+            radius: '2xl',
+            shadow: 'lg',
+            hoverShadow: 'xl',
+            mediaRadius: '2xl'
+          },
+          testimonial: {
+            background: colorMix('accent', 'transparent 18%'),
+            border: `2px solid ${color('text')}`,
+            radius: '2xl'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `3px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'xl'
+          }
+        },
+        hero: {
+          layout: 'centered',
+          background: `radial-gradient(circle at 12% 16%, ${colorMix('accent', 'transparent 40%')}, transparent 28%), radial-gradient(circle at 86% 14%, ${colorMix('secondary', 'transparent 62%')}, transparent 32%), radial-gradient(circle at 50% 90%, ${colorMix('primary', 'transparent 70%')}, transparent 38%), ${color('background')}`,
+          mediaShape: 'circle',
+          minHeight: 'min(840px, calc(100vh - 5rem))',
+          contentWidth: 'min(900px, 100%)'
+        },
+        navigation: {
+          layout: 'centered',
+          background: color('accent'),
+          foreground: color('accentForeground'),
+          linkHover: color('primary'),
+          border: color('text'),
+          height: '5rem',
+          blur: false,
+          shadow: 'md',
+          activeIndicator: 'pill'
+        },
+        footer: {
+          layout: 'centered',
+          background: `linear-gradient(135deg, ${color('primary')}, ${color('secondary')})`,
+          foreground: color('primaryForeground'),
+          link: color('accent'),
+          border: color('text'),
+          density: 'spacious',
+          divider: false,
+          socialIconStyle: 'filled'
+        },
+        sections: {
+          ...centeredSections,
+          services: {
+            alignment: 'center',
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('accent', 'transparent 40%'),
+            eyebrowColor: color('primary')
+          },
+          process: {
+            background: colorMix('secondary', 'transparent 84%'),
+            cardVariant: 'feature'
+          },
+          testimonials: {
+            background: colorMix('primary', 'transparent 90%')
+          },
+          faq: {
+            background: color('surfaceAlt')
+          }
+        },
+        icons: {
+          style: 'filled',
+          size: '1.75rem',
+          strokeWidth: '2',
+          background: color('primary'),
+          foreground: color('primaryForeground'),
+          radius: 'full'
+        },
+        animation: {
+          durationFast: '90ms',
+          durationBase: '170ms',
+          durationSlow: '520ms'
+        },
+        motion: {
+          subtle: {
+            duration: '190ms',
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            translateY: '0.45rem',
+            scale: '0.99'
+          },
+          standard: {
+            duration: '320ms',
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            translateY: '1rem',
+            scale: '0.98'
+          },
+          expressive: {
+            duration: '700ms',
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            translateY: '1.8rem',
+            scale: '0.94'
+          },
+          entrance: {
+            duration: '860ms',
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            translateY: '2.2rem',
+            scale: '0.92'
+          }
+        },
+        responsive: roomyResponsive
+      }
+    )
+  }),
+  artisanPaper: defineTheme({
+    id: 'artisanPaper',
+    displayName: 'Artisan Paper',
+    description: 'Handmade craft-paper theme with warm ink, tactile cards, gentle serif type, and calm handcrafted motion.',
+    tags: ['artisan', 'craft', 'paper', 'maker'],
+    tokens: brandTokens(
+      {
+        background: '#f8efd9',
+        surface: '#fff8e8',
+        surfaceAlt: '#ead8b8',
+        text: '#2a2017',
+        textMuted: '#6d5c49',
+        primary: '#7c4a2d',
+        primaryForeground: '#fff8e8',
+        secondary: '#2f4f3a',
+        secondaryForeground: '#fff8e8',
+        accent: '#c47a3a',
+        accentForeground: '#2a2017',
+        border: '#d8bd8f',
+        focus: '#7c4a2d',
+        link: '#6b3f27'
+      },
+      {
+        background: '#160f09',
+        surface: '#23180f',
+        surfaceAlt: '#332516',
+        text: '#f8efd9',
+        textMuted: '#d7c4a3',
+        primary: '#d8a46c',
+        primaryForeground: '#160f09',
+        secondary: '#a7c4a2',
+        secondaryForeground: '#160f09',
+        accent: '#e0a35e',
+        accentForeground: '#160f09',
+        border: '#5e4630',
+        link: '#edc38e'
+      },
+      {
+        typography: {
+          display: {
+            fontFamily: '"Fraunces", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(2.9rem, 6.8vw, 6rem)',
+            lineHeight: '0.98',
+            fontWeight: '700',
+            letterSpacing: '-0.045em'
+          },
+          heading: {
+            fontFamily: '"Fraunces", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: 'clamp(1.85rem, 3.8vw, 3.2rem)',
+            lineHeight: '1.12',
+            fontWeight: '700',
+            letterSpacing: '-0.025em'
+          },
+          body: {
+            fontFamily: '"Libre Baskerville", Georgia, Cambria, "Times New Roman", serif',
+            fontSize: '1.04rem',
+            lineHeight: '1.82',
+            fontWeight: '400'
+          },
+          caption: {
+            ...serifTypography.caption,
+            letterSpacing: '0.12em'
+          },
+          button: {
+            ...serifTypography.button,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          },
+          mono: baseTypography.mono
+        },
+        spacing: editorialSpacing,
+        radius: {
+          xs: '0.2rem',
+          sm: '0.4rem',
+          md: '0.8rem',
+          lg: '1.15rem',
+          xl: '1.7rem',
+          '2xl': '2.25rem',
+          pill: '999px'
+        },
+        elevation: {
+          sm: '0 4px 0 rgb(124 74 45 / 0.12), 0 10px 24px rgb(42 32 23 / 0.08)',
+          md: '0 6px 0 rgb(124 74 45 / 0.14), 0 18px 42px rgb(42 32 23 / 0.12)',
+          lg: '0 8px 0 rgb(124 74 45 / 0.16), 0 28px 70px rgb(42 32 23 / 0.16)',
+          xl: '0 10px 0 rgb(124 74 45 / 0.18), 0 42px 100px rgb(42 32 23 / 0.2)'
+        },
+        buttons: {
+          primary: {
+            background: color('primary'),
+            color: color('primaryForeground'),
+            border: `1px solid ${colorMix('primary', 'black 8%')}`,
+            hoverBackground: colorMix('primary', 'black 8%'),
+            hoverColor: color('primaryForeground'),
+            radius: 'pill',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            transform: 'translateY(-2px)'
+          },
+          secondary: {
+            background: color('surface'),
+            color: color('secondary'),
+            border: `1px dashed ${color('secondary')}`,
+            hoverBackground: colorMix('secondary', 'transparent 88%'),
+            hoverColor: color('secondary'),
+            hoverBorder: `1px dashed ${color('secondary')}`,
+            radius: 'pill',
+            shadow: 'none',
+            hoverShadow: 'sm'
+          },
+          ghost: {
+            hoverBackground: colorMix('accent', 'transparent 82%'),
+            radius: 'pill'
+          }
+        },
+        cards: {
+          standard: {
+            background: color('surface'),
+            border: `1px solid ${color('border')}`,
+            radius: 'xl',
+            shadow: 'sm',
+            hoverShadow: 'md',
+            mediaRadius: 'lg'
+          },
+          feature: {
+            background: `linear-gradient(145deg, ${color('surface')}, ${colorMix('accent', 'transparent 84%')})`,
+            border: `1px dashed ${colorMix('primary', 'transparent 28%')}`,
+            radius: '2xl',
+            shadow: 'md',
+            hoverShadow: 'lg',
+            mediaRadius: 'xl'
+          },
+          testimonial: {
+            background: color('surfaceAlt'),
+            border: `1px solid ${color('border')}`,
+            radius: 'xl',
+            mediaRadius: 'full'
+          },
+          pricing: {
+            background: color('surface'),
+            border: `2px solid ${color('primary')}`,
+            radius: '2xl',
+            shadow: 'lg'
+          }
+        },
+        hero: {
+          layout: 'editorial',
+          background: `radial-gradient(circle at 15% 18%, ${colorMix('accent', 'transparent 76%')}, transparent 32%), linear-gradient(135deg, ${color('background')} 0%, ${color('surface')} 100%)`,
+          mediaShape: 'rounded',
+          minHeight: 'min(780px, calc(100vh - 4.75rem))',
+          contentWidth: 'min(740px, 100%)',
+          gap: 'clamp(2.5rem, 6vw, 6rem)'
+        },
+        navigation: {
+          layout: 'split',
+          background: color('background'),
+          foreground: color('text'),
+          linkHover: color('primary'),
+          border: color('border'),
+          height: '4.75rem',
+          blur: false,
+          shadow: 'none',
+          activeIndicator: 'dot'
+        },
+        footer: {
+          layout: 'columns',
+          background: color('surfaceAlt'),
+          foreground: color('text'),
+          link: color('primary'),
+          border: color('border'),
+          density: 'comfortable',
+          divider: true,
+          socialIconStyle: 'soft'
+        },
+        sections: {
+          ...editorialSections,
+          services: {
+            background: color('surface'),
+            cardVariant: 'feature'
+          },
+          proof: {
+            background: colorMix('secondary', 'transparent 88%'),
+            eyebrowColor: color('secondary')
+          },
+          process: {
+            background: color('background'),
+            eyebrowColor: color('accent')
+          },
+          faq: {
+            background: color('surfaceAlt')
+          },
+          content: {
+            container: 'prose'
+          }
+        },
+        icons: {
+          style: 'line',
+          size: '1.5rem',
+          strokeWidth: '1.5',
+          background: colorMix('accent', 'transparent 78%'),
+          foreground: color('primary'),
+          radius: 'lg'
+        },
+        motion: {
+          subtle: {
+            duration: '180ms',
+            translateY: '0.25rem',
+            scale: '1'
+          },
+          standard: {
+            duration: '260ms',
+            translateY: '0.45rem',
+            scale: '0.995'
+          },
+          expressive: {
+            duration: '440ms',
+            translateY: '0.8rem',
+            scale: '0.985'
+          },
+          entrance: {
+            duration: '620ms',
+            translateY: '1.2rem',
+            scale: '0.98'
+          }
+        },
+        responsive: roomyResponsive
+      }
+    )
   })
 } satisfies Record<string, WebsiteTheme<string>>;
 

@@ -46,6 +46,7 @@ Website Factory is a private npm workspace for schema-first static website gener
 - Component additions must update `packages/components/src/marketplace.ts`, exported types, package exports, and any generator selection logic that should discover the component.
 - Template additions must update `packages/templates/src/templates.ts` and registry exports. If visible in the demo catalog, also update or verify `apps/website-builder/src/lib/templatePrototypes.ts` and `/templates/[id]`.
 - Theme additions must update `packages/themes/src/themes.ts` and preserve token completeness for colors, typography, spacing, radius, elevation, buttons, cards, navigation, footer, hero, responsive, motion, forms, icons, and page templates as applicable.
+- The catalog includes an expressive template/theme library. New template/theme additions must be registry-driven, visually and structurally distinct, and checked for duplicate IDs, routes, section rhythms, palettes, and near-duplicate visual systems before landing.
 - Generator changes should use existing helpers: `inferContentSignals`, `inferSectionCandidates`, `selectThemeForContent`, `createGenerationPlan`, plugin hooks, and plan validation. Avoid hardcoding vertical behavior when signal/theme/component metadata can drive the decision.
 - SEO changes should flow through schema adapters and metadata/JSON-LD/artifact helpers rather than duplicating schema interpretation in the builder.
 
@@ -56,6 +57,7 @@ Website Factory is a private npm workspace for schema-first static website gener
 - `UniversalLandingPage.astro` composes the app shell, header, hero, section renderer, and footer from validated `UniversalSite` data. Do not bypass it with one-off site-specific render paths.
 - Page `sections` arrays reference universal section IDs. Empty page section arrays intentionally fall back to all site sections; missing referenced IDs should remain hard failures.
 - Theme and presentation changes should stay token/data driven. Prefer theme classes, CSS variables, and existing app/theme helpers over hardcoded vertical-specific styles.
+- Preserve catalog discernibility in rendered previews: data-only templates should demonstrate meaningfully different structures, and token-driven themes should avoid duplicating existing rhythms or palettes.
 - Keep React/Astro output semantic and accessible: headings, landmarks, lists, alt text, aria labels, focus-visible behavior, reduced-motion safety, and safe external links.
 
 ## AI, deployment, and operational boundaries

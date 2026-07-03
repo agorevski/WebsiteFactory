@@ -1,18 +1,12 @@
 # Templates and Themes
 
-Templates should stay vertical-aware but not vertical-specific. YAML `pages[].template` currently accepts `landing` and `service-index`; composition templates in `packages/templates/src/templates.ts` and `registry.ts` are data-only planning helpers, not additional YAML page template names.
+Templates should stay vertical-aware but not vertical-specific. Keep the template surfaces distinct:
 
-The builder app uses schema-defined pages with reusable React components for:
+- YAML `pages[].template` currently accepts only `landing` and `service-index`; app routing lives in `apps/website-builder/src/lib/pages.ts`.
+- `packages/templates/src/templates.ts` and `registry.ts` are the source of truth for composition template IDs, descriptions, section rhythms, and default themes. They feed generator planning and the builder template catalog/prototype routes (`/#templates` and `/templates/<id>/`); do not duplicate that registry in docs.
+- Validated example sites still render through `UniversalLandingPage.astro`, the site header/footer, and the schema section renderer. YAML supplies content and page section order, not component variants.
 
-- hero
-- navigation
-- service or menu cards
-- proof statistics
-- process steps
-- testimonials
-- FAQ
-- final CTA
-- footer business details
+The catalog includes an expressive template/theme library. New entries should preserve discernibility: use data-only templates with meaningfully different section rhythms, match them with token-complete themes, and check for duplicate IDs, routes, palettes, or near-duplicate visual systems before adding another variant.
 
 Themes are token-based. YAML keeps a compatibility palette such as `clinic`, `trade`, `hospitality`, or `professional`; `theme.name` can target a registered theme such as `dentalClinic` when available. CSS variables from `@website-factory/themes` drive accent colors, typography, surfaces, shadows, navigation, hero treatments, thumbnails, cards, and footer treatments.
 

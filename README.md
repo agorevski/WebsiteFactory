@@ -2,7 +2,7 @@
 
 Website Factory is a schema-first static website generation workspace. It turns a portable YAML description of a local business into static Astro pages rendered with reusable React sections, token-driven themes, generator-selected component plans, SEO/static artifact helpers, validation utilities, and provider-agnostic deployment contracts.
 
-The current repository is a private npm workspace and demonstration platform. It includes example verticals, researched local-business templates, a static builder app, and supporting packages that define the boundaries for schema validation, normalized v2 content, templates, expanded themes, component marketplace selection, generation planning, SEO, AI-assisted content generation, quality checks, and deployment planning.
+The current repository is a private npm workspace and demonstration platform. It includes example verticals, researched local-business examples, a static builder app, and supporting packages that define the boundaries for schema validation, normalized v2 content, templates, expanded themes, component marketplace selection, generation planning, SEO, AI-assisted content generation, quality checks, and deployment planning.
 
 ## Architecture pipeline
 
@@ -11,7 +11,7 @@ The current repository is a private npm workspace and demonstration platform. It
 3. **Generator APIs infer presentation plans**. `@website-factory/generator` reads schema data, infers content signals and section candidates, resolves themes, selects marketplace components, and validates a static generation plan without putting component variants in YAML.
 4. **The builder app discovers examples at build time** from `apps/website-builder/src/lib/examples.ts`, sorts them by business name, and exposes them to Astro pages.
 5. **Astro generates static routes**. `src/pages/index.astro` renders the example gallery, and `src/pages/[slug].astro` uses `getStaticPaths()` to generate one route for each example slug.
-6. **Templates and React components render sections**. `UniversalLandingPage.astro` composes the site shell, header, hero, section renderer, and footer from structured data.
+6. **Astro templates and React components render sections**. `UniversalLandingPage.astro` composes the site shell, header, hero, section renderer, and footer from structured data.
 7. **Theme tokens control presentation**. Example YAML keeps `theme.palette`, `mode`, and `radius` compatibility; `theme.name` can target a registered theme such as `dentalClinic`.
 8. **Quality, SEO, AI, and deployment packages stay provider-neutral**. Supporting packages expose contracts and helpers rather than host-specific runtime code.
 
@@ -62,8 +62,8 @@ The static output for the demo app is written to `apps/website-builder/dist`.
 | `@website-factory/schema` | Universal Zod schema, YAML parsing, exported TypeScript types, and AI-friendly validation errors. |
 | `@website-factory/components` | Semantic React UI sections and a component marketplace with 41 categories, 123 implementation descriptors, content signals, theme traits, data requirements, and accessibility expectations. |
 | `@website-factory/generator` | Schema-driven generation planning, content signal inference, theme selection, component marketplace matching, plugin hooks, custom content types, validators, and plan validation. |
-| `@website-factory/templates` | Data-only template definitions and composition helpers that map schema sections to component variants. |
-| `@website-factory/themes` | Expanded 42-theme token catalog and helpers for palettes, modes, typography, spacing, radius, elevation, navigation, and footer styling. |
+| `@website-factory/templates` | Data-only composition template registry used by generator planning and the builder template catalog/prototypes. |
+| `@website-factory/themes` | Expanded 62-theme token catalog and helpers for palettes, modes, typography, spacing, radius, elevation, navigation, and footer styling. |
 | `@website-factory/seo` | Metadata, JSON-LD, sitemap, image sitemap, robots.txt, RSS, and SEO normalization helpers. |
 | `@website-factory/validation` | Schema, SEO, accessibility, responsive, performance, contrast, checklist, and CLI validation primitives. |
 | `@website-factory/ai` | Provider-agnostic AI research/content/feedback/prompt/task orchestration contracts. |

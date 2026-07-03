@@ -7,9 +7,9 @@ Use this reference when deciding what YAML, theme, template, component, and gene
 | Need | Source/API |
 | --- | --- |
 | Universal YAML contract | `packages/schema/src/index.ts` exports `universalSiteSchema`, `UniversalSiteSchema`, `parseUniversalSite`, `UniversalSite`, and optional `universalContentV2Schema` / `UniversalContentV2`. |
-| Theme catalog | `packages/themes/src/themes.ts` and `packages/themes/src/index.ts` export the 42-theme catalog, `ThemeName`, `listThemes`, and `resolveTheme`, including `dentalClinic` and palette-compatible aliases. |
+| Theme catalog | `packages/themes/src/themes.ts` and `packages/themes/src/index.ts` export the 62-theme catalog, `ThemeName`, `listThemes`, and `resolveTheme`, including `dentalClinic` and palette-compatible aliases. |
 | Template/page contract | `packages/schema/src/index.ts` limits YAML `pages[].template` to `landing` and `service-index`; `apps/website-builder/src/lib/pages.ts` maps pages to generated routes. |
-| Composition templates | `packages/templates/src/templates.ts` and `packages/templates/src/registry.ts` describe data-only composition templates for future planning; they are not YAML page template names. |
+| Composition templates | `packages/templates/src/templates.ts` and `packages/templates/src/registry.ts` describe data-only composition templates used by generator planning and builder prototype routes (`/#templates`, `/templates/<id>/`); they are not YAML page template names. |
 | Component marketplace | `packages/components/src/marketplace.ts` and package exports list 41 categories, 123 implementation descriptors, content signals, theme traits, and data requirements. |
 | Generator heuristics/plugins | `packages/generator/src/index.ts` exports `createGenerationPlan`, `inferContentSignals`, `inferSectionCandidates`, `selectThemeForContent`, `createGeneratorPlugin`, `runGeneratorHooks`, lifecycle events, and `validateGenerationPlan`. |
 | SEO/quality | `packages/seo/src/index.ts` and `packages/validation/src/index.ts` export metadata, structured data, artifact, checklist, contrast, HTML, and rule validation helpers. |
