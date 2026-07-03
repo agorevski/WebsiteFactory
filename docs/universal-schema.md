@@ -10,6 +10,6 @@ The examples in `examples/**/website.yaml` use one portable contract:
 - `hero` defines above-the-fold copy and primary actions.
 - `sections` is an ordered array of typed content blocks.
 - `ctas.final` supplies the closing conversion block.
-- `pages` maps templates to section IDs.
+- `pages` maps the root page and optional subpages to template names and ordered section IDs.
 
 The shared Zod schema in `@website-factory/schema` validates examples and exports the `UniversalSite` types consumed by the builder app.

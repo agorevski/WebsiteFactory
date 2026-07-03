@@ -17,6 +17,8 @@ build/
 .eslintcache
 playwright-report/
 test-results/
+.lighthouseci/
+qa-reports/
 
 # Local deployment state
 .netlify/

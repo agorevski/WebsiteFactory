@@ -9,6 +9,15 @@ type Props = {
   } | undefined;
 };
 
+type AnchorAttributes = {
+  rel?: 'noreferrer';
+  target?: '_blank';
+};
+
+function externalAttributes(href: string): AnchorAttributes {
+  return href.startsWith('http') ? { rel: 'noreferrer', target: '_blank' } : {};
+}
+
 function Actions({ actions }: { actions: UniversalAction[] }) {
   if (actions.length === 0) {
     return null;
@@ -17,7 +26,7 @@ function Actions({ actions }: { actions: UniversalAction[] }) {
   return (
     <div className="button-row">
       {actions.map((action) => (
-        <a className={`button button-${action.variant}`} href={action.href} key={action.label}>
+        <a className={`button button-${action.variant}`} href={action.href} key={action.label} {...externalAttributes(action.href)}>
           {action.label}
         </a>
       ))}
@@ -35,72 +44,112 @@ function SectionIntro({ section }: { section: UniversalSection }) {
   );
 }
 
+function ContentItems({ section }: { section: UniversalSection }) {
+  if (section.items.length === 0) {
+    return null;
+  }
+
+  const gridClassName = section.type === 'content' ? 'content-grid' : 'card-grid';
+
+  return (
+    <div className={gridClassName}>
+      {section.items.map((item) => (
+        <article className={`card ${section.type === 'services' ? 'service-card' : ''}`} key={item.title}>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function ProofStats({ section }: { section: UniversalSection }) {
+  if (section.stats.length === 0) {
+    return null;
+  }
+
+  return (
+    <dl className="stat-grid" aria-label={`${section.title} details`}>
+      {section.stats.map((stat) => (
+        <div className="stat-card" key={stat.label}>
+          <dt>{stat.label}</dt>
+          <dd>{stat.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function ProcessSteps({ section }: { section: UniversalSection }) {
+  if (section.steps.length === 0) {
+    return null;
+  }
+
+  return (
+    <ol className="steps">
+      {section.steps.map((step, index) => (
+        <li key={step.title}>
+          <span className="step-count" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function Testimonials({ section }: { section: UniversalSection }) {
+  if (section.testimonials.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="quote-grid">
+      {section.testimonials.map((testimonial) => (
+        <figure className="quote-card" key={testimonial.name}>
+          <blockquote>{testimonial.quote}</blockquote>
+          <figcaption>
+            {testimonial.name}
+            {testimonial.context ? <span>{testimonial.context}</span> : null}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
+function FaqList({ section }: { section: UniversalSection }) {
+  if (section.questions.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="faq-list">
+      {section.questions.map((item) => (
+        <details key={item.question}>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  );
+}
+
 export default function SectionRenderer({ sections, cta }: Props) {
   return (
     <>
-      {sections.map((section) => (
-        <section className={`section-pad section-${section.type}`} id={section.id} key={section.id}>
+      {sections.map((section, index) => (
+        <section className={`section-pad page-section section-${section.type} ${index % 2 === 1 ? 'section-alt' : ''}`} id={section.id} key={section.id}>
           <div className="container">
             <SectionIntro section={section} />
 
-            {section.items.length > 0 ? (
-              <div className="card-grid">
-                {section.items.map((item) => (
-                  <article className="card" key={item.title}>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                  </article>
-                ))}
-              </div>
-            ) : null}
-
-            {section.stats.length > 0 ? (
-              <dl className="stat-grid">
-                {section.stats.map((stat) => (
-                  <div className="stat-card" key={stat.label}>
-                    <dt>{stat.label}</dt>
-                    <dd>{stat.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            ) : null}
-
-            {section.steps.length > 0 ? (
-              <ol className="steps">
-                {section.steps.map((step) => (
-                  <li key={step.title}>
-                    <h3>{step.title}</h3>
-                    <p>{step.description}</p>
-                  </li>
-                ))}
-              </ol>
-            ) : null}
-
-            {section.testimonials.length > 0 ? (
-              <div className="quote-grid">
-                {section.testimonials.map((testimonial) => (
-                  <figure className="quote-card" key={testimonial.name}>
-                    <blockquote>{testimonial.quote}</blockquote>
-                    <figcaption>
-                      {testimonial.name}
-                      {testimonial.context ? <span>{testimonial.context}</span> : null}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            ) : null}
-
-            {section.questions.length > 0 ? (
-              <div className="faq-list">
-                {section.questions.map((item) => (
-                  <details key={item.question}>
-                    <summary>{item.question}</summary>
-                    <p>{item.answer}</p>
-                  </details>
-                ))}
-              </div>
-            ) : null}
-
+            <ContentItems section={section} />
+            <ProofStats section={section} />
+            <ProcessSteps section={section} />
+            <Testimonials section={section} />
+            <FaqList section={section} />
             <Actions actions={section.actions} />
           </div>
         </section>
@@ -110,7 +159,7 @@ export default function SectionRenderer({ sections, cta }: Props) {
         <section className="section-pad final-cta">
           <div className="container cta-card">
             <div>
-              <p className="eyebrow">Ready to publish</p>
+              <p className="eyebrow">Next step</p>
               <h2>{cta.title}</h2>
               <p>{cta.summary}</p>
             </div>

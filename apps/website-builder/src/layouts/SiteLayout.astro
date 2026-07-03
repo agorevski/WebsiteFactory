@@ -6,10 +6,11 @@ interface Props {
   title: string;
   description: string;
   site?: UniversalSite;
+  canonicalPath?: string;
 }
 
-const { title, description, site } = Astro.props;
-const canonicalPath = site?.seo.canonicalPath ?? Astro.url.pathname;
+const { title, description, site, canonicalPath: canonicalPathProp } = Astro.props;
+const canonicalPath = canonicalPathProp ?? site?.seo.canonicalPath ?? Astro.url.pathname;
 const themeClass = `theme-${site?.theme.palette ?? 'professional'}`;
 const jsonLd = site ? {
   '@context': 'https://schema.org',

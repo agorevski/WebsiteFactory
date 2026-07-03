@@ -28,6 +28,7 @@ const requiredFiles = [
   'apps/website-builder/tsconfig.json',
   'apps/website-builder/src/pages/index.astro',
   'apps/website-builder/src/pages/[slug].astro',
+  'apps/website-builder/src/pages/[slug]/[...page].astro',
   'apps/website-builder/src/lib/schema.ts',
   'docs/architecture.md',
   'docs/universal-schema.md',
@@ -94,6 +95,25 @@ for (const { absoluteFile, relativeFile } of exampleFiles) {
   if (vertical) {
     verticals.add(vertical);
   }
+
+  const sectionIds = new Set(site.sections.map((section) => section.id));
+  const pagePaths = new Set();
+
+  for (const page of site.pages) {
+    const pagePath = normalizePagePath(page.path);
+
+    if (pagePaths.has(pagePath)) {
+      failures.push(`${relativeFile} duplicates page path ${pagePath}`);
+    } else {
+      pagePaths.add(pagePath);
+    }
+
+    for (const sectionId of page.sections) {
+      if (!sectionIds.has(sectionId)) {
+        failures.push(`${relativeFile} page ${pagePath} references missing section ${sectionId}`);
+      }
+    }
+  }
 }
 
 for (const expected of ['medical', 'home-services', 'food', 'professional']) {
@@ -142,4 +162,15 @@ async function getWebsiteYamlFiles(directory, relativeDirectory) {
   }));
 
   return files.flat().sort((left, right) => left.relativeFile.localeCompare(right.relativeFile));
+}
+
+function normalizePagePath(path) {
+  const collapsedPath = path.trim().replace(/\/+/g, '/');
+
+  if (collapsedPath === '' || collapsedPath === '/') {
+    return '/';
+  }
+
+  const withLeadingSlash = collapsedPath.startsWith('/') ? collapsedPath : `/${collapsedPath}`;
+  return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`;
 }

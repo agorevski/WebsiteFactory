@@ -1,21 +1,21 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import { getExampleSites } from '../lib/examples';
-import { formatPageTitle, getPageSections, getRootPage, pageDescription, pageHref, type UniversalPage } from '../lib/pages';
-import type { UniversalSite } from '../lib/schema';
-import UniversalLandingPage from '../templates/UniversalLandingPage.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getExampleSites } from '../../lib/examples';
+import { formatPageTitle, getNestedPages, getPageSections, pageDescription, pageHref, pagePathToRouteParam, type UniversalPage } from '../../lib/pages';
+import type { UniversalSite } from '../../lib/schema';
+import UniversalLandingPage from '../../templates/UniversalLandingPage.astro';
 
 export async function getStaticPaths() {
   const sites = await getExampleSites();
-  return sites.map((site) => {
-    const page = getRootPage(site);
+
+  return sites.flatMap((site) => getNestedPages(site).map((page) => {
     const sections = getPageSections(site, page);
 
     return {
-      params: { slug: site.slug },
+      params: { slug: site.slug, page: pagePathToRouteParam(page.path) },
       props: { site, page, sections },
     };
-  });
+  }));
 }
 
 interface Props {

@@ -1,6 +1,6 @@
 # Templates and Themes
 
-Templates should stay vertical-aware but not vertical-specific. The builder app uses a single landing template with reusable React components for:
+Templates should stay vertical-aware but not vertical-specific. The builder app uses a single landing template for root pages and schema-defined subpages with reusable React components for:
 
 - hero
 - navigation

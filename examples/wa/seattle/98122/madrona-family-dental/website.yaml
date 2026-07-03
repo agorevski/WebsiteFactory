@@ -8,13 +8,13 @@ theme:
   radius: soft
 seo:
   title: Madrona Family Dental | Seattle Family Dentist
-  description: Comfort-focused family, cosmetic, and restorative dentistry in Seattle's Madrona neighborhood.
+  description: Comfortable general, cosmetic, and family dental care in Seattle's Madrona neighborhood.
   canonicalPath: /madrona-family-dental/
 business:
   name: Madrona Family Dental
   type: Dentist
-  tagline: Neighborhood dental care for families in Seattle's Madrona area.
-  description: A Seattle dental office focused on supportive family care, preventive visits, cosmetic options, and restorative treatment planning.
+  tagline: Comfortable neighborhood dentistry in Seattle's Madrona area.
+  description: A community-focused Seattle dental office offering general dentistry, whitening, clear aligner conversations, and supportive long-term family care.
   phone: (206) 324-5400
   address:
     street: 3306 East Spring Street
@@ -33,95 +33,153 @@ business:
     - label: Fri-Sun
       value: Closed
   credentials:
-    - Led by Dr. Loren A. Tarr, DDS
-    - Digital x-rays and 3D scanning listed in public service information
+    - General dentistry, whitening, and orthodontic aligners listed on the official site
+    - New patients accepted by current-patient referral per the contact page
     - Family dental office in Seattle's Madrona neighborhood
   social:
     - label: Website
       href: https://www.madronafamilydental.com/
       variant: text
 navigation:
-  - label: Services
-    href: "#services"
+  - label: Home
+    href: /madrona-family-dental/
     variant: text
-  - label: Visit flow
-    href: "#process"
+  - label: Services
+    href: /madrona-family-dental/services/
+    variant: text
+  - label: Patient info
+    href: /madrona-family-dental/patient-info/
+    variant: text
+  - label: Location
+    href: /madrona-family-dental/location/
     variant: text
   - label: FAQ
-    href: "#faq"
+    href: /madrona-family-dental/#faq
     variant: text
 hero:
   eyebrow: Madrona family dentist
-  title: Comfort-focused dental care for Seattle families close to home.
-  summary: Madrona Family Dental helps neighborhood patients plan routine visits, cosmetic smile goals, and restorative care from a supportive office on East Spring Street.
+  title: Calm, personal dental care right in the neighborhood.
+  summary: Madrona Family Dental helps Seattle patients plan routine checkups, whitening or aligner conversations, and long-term care from an office on East Spring Street.
   primaryCta:
     label: Call the office
     href: "tel:+12063245400"
     variant: primary
   secondaryCta:
-    label: View dental services
-    href: "#services"
+    label: Explore services
+    href: /madrona-family-dental/services/
     variant: secondary
 sections:
-  - id: services
-    type: services
-    eyebrow: Dental services
-    title: Family, cosmetic, and restorative care
-    summary: Public service information lists preventive dentistry, cosmetic treatments, implant-related care, veneers, whitening, aligners, and digital imaging.
-    items:
-      - title: Preventive family dentistry
-        description: Routine exams, cleanings, digital x-rays, and personalized home-care guidance for ongoing oral health.
-      - title: Cosmetic smile updates
-        description: Teeth whitening and veneers for patients who want a brighter or more even smile.
-      - title: Restorative treatment planning
-        description: Implant-related consultations and restorative options for missing, damaged, or worn teeth.
-      - title: Clear aligner guidance
-        description: Orthodontic aligner conversations supported by digital scanning and practical treatment planning.
-  - id: proof
+  - id: visit-details
     type: proof
-    eyebrow: Local details
-    title: Useful facts for patients comparing Seattle dentists
+    eyebrow: Quick details
+    title: What patients need before they call
+    summary: The essentials are visible up front, so the page feels like a practical local dental site instead of a long brochure.
     stats:
       - label: Neighborhood
         value: Madrona
-      - label: Office schedule
+      - label: Schedule
         value: Mon-Thu
-      - label: Appointment path
+      - label: New patients
+        value: Referral-based
+      - label: Contact
         value: Call office
+  - id: services
+    type: services
+    eyebrow: Care paths
+    title: Start with the visit you need
+    summary: Official site content supports general dentistry, teeth whitening, orthodontic aligners, and family-focused ongoing care.
+    items:
+      - title: General dentistry
+        description: Routine exams, cleanings, dental care planning, and prevention-focused guidance for long-term oral health.
+      - title: Whitening conversations
+        description: Teeth whitening information for patients with stained, dull, or discolored teeth who want a brighter smile.
+      - title: Orthodontic aligners
+        description: Clear aligner conversations for patients exploring removable trays that gradually shift teeth into alignment.
+      - title: Family dental care
+        description: Supportive visits for neighborhood patients who want comfortable, personal care and clear next steps.
+    actions:
+      - label: Call about services
+        href: "tel:+12063245400"
+        variant: primary
+  - id: cosmetic-restorative
+    type: services
+    eyebrow: Smile goals
+    title: Cosmetic and restorative topics to discuss
+    summary: The official metadata and public service information mention cosmetic dentistry, whitening, implants, veneers, and dental care.
+    items:
+      - title: Cosmetic dentistry
+        description: A place to discuss whitening, veneers, and smile goals with the office before deciding on a treatment path.
+      - title: Implant-related care
+        description: Public service information references dental implants; call the office to confirm the right consultation or referral path.
+      - title: Veneers
+        description: Veneers are listed in public practice information for patients considering cosmetic changes to visible teeth.
+      - title: Digital planning questions
+        description: Ask the office which imaging or scanning tools are used for your visit type and treatment conversation.
   - id: process
     type: process
-    title: A simple path to the right next visit
+    eyebrow: Appointment flow
+    title: A simpler path from question to visit
+    summary: The call-to-action is intentionally phone-first because the official contact page asks patients to call for appointments.
     steps:
-      - title: Call with your dental goal
-        description: Share whether you need a cleaning, cosmetic consultation, restorative care, or help deciding what to book.
-      - title: Confirm fit and timing
-        description: The office can confirm availability, referral requirements, records, insurance questions, and visit timing.
-      - title: Review a clear care plan
-        description: Your dental team can explain findings, options, and follow-up steps before treatment moves forward.
-  - id: reputation
+      - title: Call with your visit goal
+        description: Share whether you need a checkup, whitening information, aligner guidance, restorative discussion, or help choosing a visit type.
+      - title: Confirm availability and fit
+        description: The office can confirm current appointment timing, referral requirements for new patients, records, and insurance questions.
+      - title: Review options before treatment
+        description: The dental team can explain findings, choices, and follow-up steps before a treatment plan moves forward.
+  - id: comfort
     type: content
-    eyebrow: Patient experience themes
-    title: Warm, professional neighborhood care
-    summary: Public review summaries commonly describe the office as friendly, professional, supportive, and attentive to patient comfort.
+    eyebrow: Patient experience
+    title: Make the page feel calm, not crowded
+    summary: The content is grouped around patient decisions so the UX supports scanning, comparison, and a confident phone call.
     items:
-      - title: Comfort-first tone
-        description: Page copy should emphasize calm visits, clear explanations, and practical care guidance without promising outcomes.
-      - title: Community trust
-        description: The template positions the office as a familiar Madrona-area care option for routine and goal-based dental visits.
+      - title: Friendly neighborhood framing
+        description: Copy should describe the office as personal and community-focused without making unsupported guarantees.
+      - title: Clear expectations
+        description: Appointment, referral, services, location, and hours details should be visible before patients reach the footer.
+      - title: Review-safe trust language
+        description: Public reviews reference comfort and professionalism, but the template summarizes themes instead of copying testimonials.
+  - id: patient-info
+    type: content
+    eyebrow: Before you schedule
+    title: Helpful questions for patient intake
+    summary: Keep patient information practical and conservative so the page does not overpromise access, insurance participation, or clinical outcomes.
+    items:
+      - title: New-patient referrals
+        description: The official contact page says new patients are accepted when referred by a current patient; call to confirm current policy.
+      - title: Records and timing
+        description: Ask what records, prior x-rays, medication details, or timing notes the office wants before the visit.
+      - title: Insurance and billing
+        description: The location page references insurance and billing policies; patients should confirm coverage details directly with the office.
+  - id: location
+    type: content
+    eyebrow: Office location
+    title: Visit the East Spring Street office
+    summary: Madrona Family Dental is listed at 3306 East Spring Street in Seattle, WA 98122.
+    items:
+      - title: Address
+        description: The office is located at 3306 East Spring Street, Seattle, WA 98122.
+      - title: Office hours
+        description: Official location information lists Monday through Thursday, 8:00 AM to 5:00 PM, with Friday through Sunday closed.
+      - title: Contact path
+        description: Call (206) 324-5400 to confirm appointments, directions, and current practice details.
   - id: faq
     type: faq
-    title: Madrona dental FAQ
+    eyebrow: FAQ
+    title: Madrona dental questions
     questions:
       - question: Where is Madrona Family Dental located?
         answer: The office is listed at 3306 East Spring Street in Seattle, WA 98122.
-      - question: How do I request an appointment?
-        answer: Call (206) 324-5400 to confirm availability, referral requirements, and the right visit type.
-      - question: What dental services should the website highlight?
-        answer: Public service information supports preventive family dentistry, whitening, veneers, implant-related care, aligners, digital x-rays, and 3D scanning.
+      - question: What are the listed office hours?
+        answer: Official location information lists Monday through Thursday from 8:00 AM to 5:00 PM, with Friday, Saturday, and Sunday closed.
+      - question: How do new patients request an appointment?
+        answer: The official contact page says new patients are accepted when referred by a current patient. Call (206) 324-5400 to confirm current availability.
+      - question: Which services should this template highlight?
+        answer: Official content supports general dentistry, teeth whitening, orthodontic aligners, and family-focused dental care. Public service information also references cosmetic dentistry, veneers, and implant-related care.
 ctas:
   final:
-    title: Ready to plan your next dental visit?
-    summary: Call Madrona Family Dental to confirm current availability, services, and appointment details.
+    title: Ready to plan the right dental visit?
+    summary: Call Madrona Family Dental to confirm current availability, referral requirements, and the best visit type for your needs.
     actions:
       - label: Call Madrona Family Dental
         href: "tel:+12063245400"
@@ -133,8 +191,26 @@ pages:
   - path: /
     template: landing
     sections:
+      - visit-details
       - services
-      - proof
       - process
-      - reputation
+      - comfort
+      - faq
+  - path: /services/
+    template: service-index
+    sections:
+      - services
+      - cosmetic-restorative
+      - faq
+  - path: /patient-info/
+    template: landing
+    sections:
+      - process
+      - patient-info
+      - faq
+  - path: /location/
+    template: landing
+    sections:
+      - visit-details
+      - location
       - faq

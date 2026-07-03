@@ -3,19 +3,35 @@ import Hero from '../components/Hero';
 import SectionRenderer from '../components/SectionRenderer';
 import SiteFooter from '../components/SiteFooter';
 import SiteHeader from '../components/SiteHeader';
-import type { UniversalSite } from '../lib/schema';
+import { formatPageLabel, normalizePagePath, type UniversalPage } from '../lib/pages';
+import type { UniversalSection, UniversalSite } from '../lib/schema';
 
 interface Props {
   site: UniversalSite;
+  page?: UniversalPage;
+  sections?: UniversalSection[];
 }
 
-const { site } = Astro.props;
+const { site, page } = Astro.props;
+const sections = Astro.props.sections ?? site.sections;
+const isRootPage = !page || normalizePagePath(page.path) === '/';
+const pageHero = isRootPage ? site.hero : {
+  eyebrow: site.business.name,
+  title: page ? formatPageLabel(page) : site.hero.title,
+  summary: sections[0]?.summary ?? site.business.description,
+  primaryCta: site.hero.primaryCta,
+  secondaryCta: {
+    label: 'Back to home',
+    href: `/${site.slug}/`,
+    variant: 'secondary' as const,
+  },
+};
 ---
 <div class={`site-shell radius-${site.theme.radius}`}>
   <SiteHeader site={site} />
   <main>
-    <Hero business={site.business} hero={site.hero} theme={site.theme} />
-    <SectionRenderer cta={site.ctas?.final} sections={site.sections} />
+    <Hero business={site.business} hero={pageHero} theme={site.theme} variant={isRootPage ? 'landing' : 'page'} />
+    <SectionRenderer cta={site.ctas?.final} sections={sections} />
   </main>
   <SiteFooter site={site} />
 </div>

@@ -9,20 +9,28 @@ Work from the repository root.
 ```sh
 node --version
 npm --version
-npm install
+npm install --no-package-lock
 ```
 
 The project is an npm workspace with packages under `packages/*` and the Astro builder app under `apps/website-builder`.
 
-## 2. Install or refresh dependencies
-
-Use the standard npm install flow from the root:
+Use regular `npm install` instead if the repo adopts a lockfile. Generated-site QA also needs Playwright's Chromium browser, which LHCI uses through `scripts/run-lhci.mjs`:
 
 ```sh
-npm install
+npx playwright install chromium
 ```
 
-If dependencies appear stale, reinstall before debugging TypeScript or Astro errors. Do not commit provider credentials, deployment tokens, or local environment files.
+If Chromium system libraries are missing, run `npx playwright install --with-deps chromium`; it may require sudo. Local LHCI filesystem reports do not need a GitHub token, so that warning is safe to ignore. HTML validation uses an optional local Nu checker at `http://127.0.0.1:8888/nu/`; absent Nu is recorded as skipped.
+
+## 2. Install or refresh dependencies
+
+Use the current npm install flow from the root:
+
+```sh
+npm install --no-package-lock
+```
+
+If dependencies appear stale, reinstall before debugging TypeScript or Astro errors. Use regular `npm install` instead if lockfile policy changes. Do not commit provider credentials, deployment tokens, or local environment files.
 
 ## 3. Validate the repository
 
@@ -41,6 +49,14 @@ npm run validate:examples
 The example validator builds `@website-factory/schema` when needed, checks required app/doc files, verifies required YAML tokens, parses each `examples/**/website.yaml`, and checks for unique slugs and required vertical coverage.
 
 ## 4. Build the static app
+
+To clean generated outputs and regenerate every website from scratch:
+
+```sh
+npm run regenerate:websites
+```
+
+This runs `npm run clean`, a dependency-ordered `npm run build`, and `npm run validate:examples`. The regenerated static websites are written to `apps/website-builder/dist`.
 
 For a complete dependency-ordered build:
 
@@ -197,9 +213,12 @@ Before handing off a generated site or publishing artifacts:
 
 ```sh
 npm run validate
-npm run build --workspace @website-factory/website-builder
-npm run preview --workspace @website-factory/website-builder
+./scripts/run-generated-qa.sh
 ```
+
+The QA report runner builds and serves the generated site, runs LHCI, Playwright/axe, linkinator/static checks, and HTML validation when the local Nu checker is available, then writes artifacts under `qa-reports/generated-site/<timestamp>/`.
+
+Treat failed layers as blockers before handoff. Attach or summarize the timestamped report directory with the static artifact; call out any skipped HTML validation explicitly. HTML validation needs a local Nu checker at `http://127.0.0.1:8888/nu/`: the report script records HTML as skipped when it is absent, while `npm run qa:generated:html` requires it. If Playwright Chromium is missing, return to the local setup prerequisite.
 
 Review `apps/website-builder/dist` as the deployable static artifact. Ensure generated routes, canonical paths, static assets, headings, CTAs, and contact links match the YAML source.
 

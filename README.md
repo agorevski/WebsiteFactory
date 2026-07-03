@@ -78,7 +78,16 @@ Run commands from the repository root unless noted.
 | `npm run lint` | Placeholder command that currently prints `No linting configured yet.` |
 | `npm run validate` | Runs typecheck, lint, full build, and example schema validation. |
 | `npm run validate:examples` | Runs `scripts/validate-website-builder.mjs` through the builder workspace. |
+| `./scripts/run-generated-qa.sh` | Runs generated-site QA and writes a timestamped report under `qa-reports/generated-site/`. |
+| `npm run qa:generated` | Builds, serves the Astro preview at `127.0.0.1:4173`, then runs LHCI, Playwright/axe, and link/static checks. |
+| `npm run qa:generated:build` | Runs the full workspace build used by generated-site QA. |
+| `npm run qa:generated:serve` | Serves the built Astro site at `http://127.0.0.1:4173`. |
+| `npm run qa:generated:lhci` | Runs Lighthouse CI with `lighthouserc.cjs`. |
+| `npm run qa:generated:playwright` | Runs the Playwright browser smoke crawl with axe accessibility checks. |
+| `npm run qa:generated:static` | Runs linkinator local link/static resource checks; skips HTML validation. |
+| `npm run qa:generated:html` | Runs `html-validator-cli` against a local Nu HTML checker; skips linkinator. |
 | `npm run clean` | Removes common generated outputs such as `dist`, `.astro`, and TypeScript build info files. |
+| `npm run regenerate:websites` | Cleans generated outputs, rebuilds all packages and websites, then validates example YAML. |
 | `npm run dev --workspace @website-factory/website-builder` | Starts the Astro dev server for the demo app. |
 | `npm run build --workspace @website-factory/website-builder` | Builds only the Astro demo app. |
 | `npm run preview --workspace @website-factory/website-builder` | Serves the last builder app build locally with Astro preview. |
@@ -117,6 +126,19 @@ For AI-assisted content, keep the model output schema-first: generate YAML, vali
 `npm run validate` is the broad repo check. It runs workspace type checks, the placeholder lint command, the full package/app build, and example validation.
 
 The validation package also exposes reusable library and CLI primitives for page-level SEO, accessibility, responsive, performance, contrast, and checklist checks. Its CLI expects a JSON validation config (`website-factory-validate <config.json>`); it is separate from the example YAML validation script.
+
+## Generated-site QA tooling
+
+Use `./scripts/run-generated-qa.sh` for a handoff-ready local QA report. It writes artifacts under `qa-reports/generated-site/<timestamp>/`; if the local Nu HTML checker is not reachable at `http://127.0.0.1:8888/nu/`, HTML validation is recorded as skipped. The direct `npm run qa:generated:html` command requires that checker to be running.
+
+The QA layers are intentionally complementary:
+
+- LHCI checks generated routes for performance, accessibility, best-practices, and SEO thresholds.
+- Playwright/axe crawls the local site in a browser and catches rendering, navigation, and axe accessibility issues.
+- linkinator/static checks local links, fragments, CSS, and static resources without following external/contact protocols.
+- `html-validator-cli` validates generated HTML through the local Nu checker.
+
+If Playwright browsers or Chrome are missing locally, install Chromium with `npx playwright install --with-deps chromium`.
 
 ## Deployment stance
 
