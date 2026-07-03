@@ -1,0 +1,48 @@
+business: madrona-family-dental
+source: website.yaml
+variations:
+  - id: recommended
+    label: Recommended clinic
+    template: appointmentClinic
+    theme:
+      name: dentalClinic
+      palette: clinic
+      mode: light
+      radius: soft
+    rationale: Patient-friendly clinic styling that keeps appointment and service information calm and clear.
+  - id: professional-trust
+    label: Professional trust
+    template: medical
+    theme:
+      name: healthcare
+      palette: clinic
+      mode: light
+      radius: crisp
+    rationale: A more clinical, credential-forward direction for visitors comparing dental care options.
+  - id: warm-neighborhood
+    label: Warm neighborhood
+    template: localBusiness
+    theme:
+      name: elegant
+      palette: professional
+      mode: light
+      radius: rounded
+    rationale: Softer local-business styling for a neighborhood dental office with community-oriented copy.
+  - id: premium-editorial
+    label: Premium editorial
+    template: luxuryService
+    theme:
+      name: clinic-showcase
+      palette: clinic
+      mode: light
+      radius: soft
+    rationale: Editorial spacing and polished clinic visuals for a more premium presentation of the same facts.
+  - id: bold-dark
+    label: Bold dark
+    template: authorityPractice
+    theme:
+      name: modern
+      palette: professional
+      mode: dark
+      radius: crisp
+    rationale: High-contrast dark preview for evaluating a bolder conversion-focused design direction.

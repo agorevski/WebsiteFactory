@@ -7,7 +7,7 @@ import {
   type ThemeName,
   type WebsiteTheme,
 } from '@website-factory/themes';
-import type { UniversalSite } from './schema';
+import type { UniversalSite } from './schema.ts';
 
 const templateThemeByPalette = {
   clinic: 'clinic-showcase',
@@ -32,7 +32,13 @@ function normalizeThemeName(value: string): string {
 }
 
 function resolveThemeName(site: UniversalSite): ThemeName {
-  const normalizedName = normalizeThemeName(site.theme.name);
+  const themeName = site.theme.name.trim();
+
+  if (isThemeName(themeName)) {
+    return themeName;
+  }
+
+  const normalizedName = normalizeThemeName(themeName);
   return isThemeName(normalizedName) ? normalizedName : templateThemeByPalette[site.theme.palette];
 }
 

@@ -1,0 +1,50 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import { applyThemeVariation, getExampleThemeVariationGroups, type ThemeVariation } from '../../../../lib/themeVariations';
+import { formatPageTitle, getNestedPages, getPageSections, pagePathToRouteParam, type UniversalPage } from '../../../../lib/pages';
+import type { UniversalSection, UniversalSite } from '../../../../lib/schema';
+import UniversalLandingPage from '../../../../templates/UniversalLandingPage.astro';
+
+export async function getStaticPaths() {
+  const groups = await getExampleThemeVariationGroups();
+
+  return groups.flatMap((group) => getNestedPages(group.site).flatMap((page) => {
+    const sections = getPageSections(group.site, page);
+    const routeParam = pagePathToRouteParam(page.path);
+
+    return group.variations.map((variation) => ({
+      params: { slug: group.site.slug, variation: variation.id, page: routeParam },
+      props: {
+        site: applyThemeVariation(group.site, variation),
+        page,
+        sections,
+        variation,
+        canonicalPath: `/${group.site.slug}/variations/${variation.id}/${routeParam}/`,
+      },
+    }));
+  }));
+}
+
+interface Props {
+  site: UniversalSite;
+  page: UniversalPage;
+  sections: UniversalSection[];
+  variation: ThemeVariation;
+  canonicalPath: string;
+}
+
+const { site, page, sections, variation, canonicalPath } = Astro.props;
+const title = `${variation.label} preview | ${formatPageTitle(site, page)}`;
+const description = `${variation.label} preview using the ${variation.template.name} template direction and ${variation.theme.name} theme. ${variation.rationale}`;
+---
+<SiteLayout title={title} description={description} site={site} canonicalPath={canonicalPath} noIndex>
+  <aside class="variation-preview-bar" aria-label="Theme variation preview">
+    <div>
+      <p class="eyebrow">Preview variation</p>
+      <strong>{variation.label}</strong>
+      <span>{variation.template.name} · {variation.theme.name} · {variation.theme.mode}</span>
+    </div>
+    <a class="button button-secondary" href={`/${site.slug}/variations/${variation.id}/`}>Variation home</a>
+  </aside>
+  <UniversalLandingPage site={site} page={page} sections={sections} />
+</SiteLayout>
