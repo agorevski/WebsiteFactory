@@ -1,53 +1,119 @@
 ---
+import { listThemes, themeCssText } from '@website-factory/themes';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getExampleSites } from '../lib/examples';
 
 const sites = await getExampleSites();
+const styleCards = listThemes()
+  .map((theme) => ({
+    id: theme.id,
+    displayName: theme.displayName,
+    description: theme.description,
+    defaultMode: theme.defaultMode,
+    tags: theme.tags,
+    cssText: themeCssText(theme, theme.defaultMode),
+  }))
+  .sort((left, right) => left.displayName.localeCompare(right.displayName));
 ---
 <SiteLayout
-  title="Website Factory Builder Demo"
-  description="Static Astro demo rendering vertical website examples from a universal YAML schema."
+  title="Website Factory Tailnet Preview"
+  description="Phone-friendly catalog of generated websites and registered Website Factory styles."
 >
   <main class="builder-index">
-    <section class="section-pad hero">
+    <section class="section-pad hero builder-hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">Schema-driven static websites</p>
-          <h1>Universal YAML in, provider-agnostic Astro sites out.</h1>
+          <p class="eyebrow">Tailnet preview hub</p>
+          <h1>View every published site and style from your phone.</h1>
           <p class="lede">
-            Browse example verticals generated from the same schema and rendered through reusable React components,
-            Astro templates, and theme tokens.
+            Browse the generated website catalog and registered style tokens from any device on your tailnet.
+            The builder server is configured for port 3434 and binds to your machine's Tailscale address.
           </p>
           <div class="button-row">
-            <a class="button button-primary" href="#examples">View examples</a>
-            <a class="button button-secondary" href="#examples">Compare verticals</a>
+            <a class="button button-primary" href="#websites">Open websites</a>
+            <a class="button button-secondary" href="#styles">Browse styles</a>
           </div>
         </div>
-        <aside class="hero-card">
-          <span class="theme-pill">Builder app</span>
-          <h2>Final integration shape</h2>
+        <aside class="hero-card preview-card">
+          <span class="theme-pill">Phone preview</span>
+          <h2>Port 3434</h2>
           <p>
-            Local schema adapters mirror future shared packages so the app can switch to platform modules
-            without changing page templates.
+            Start the builder, then open this machine's Tailscale hostname or tailnet IP with port 3434 on your phone.
           </p>
+          <dl class="hub-metrics">
+            <div>
+              <dt>Websites</dt>
+              <dd>{sites.length}</dd>
+            </div>
+            <div>
+              <dt>Styles</dt>
+              <dd>{styleCards.length}</dd>
+            </div>
+          </dl>
         </aside>
       </div>
     </section>
 
-    <section class="section-pad" id="examples">
+    <section class="section-pad" id="websites">
       <div class="container">
         <div class="section-intro">
-          <p class="eyebrow">Examples</p>
-          <h2>Four verticals, one data contract</h2>
+          <p class="eyebrow">Published websites</p>
+          <h2>Every validated YAML site in one phone-friendly list</h2>
           <p>Each card links to a static page generated from `examples/**/website.yaml`.</p>
         </div>
-        <div class="card-grid">
+        <div class="catalog-grid">
           {sites.map((site) => (
-            <article class="card">
+            <article class="card catalog-card">
               <p class="eyebrow">{site.vertical}</p>
               <h3>{site.business.name}</h3>
               <p>{site.business.tagline}</p>
-              <a class="text-link" href={`/${site.slug}/`}>Open generated site</a>
+              <dl class="compact-meta">
+                <div>
+                  <dt>Slug</dt>
+                  <dd>{site.slug}</dd>
+                </div>
+                <div>
+                  <dt>Theme</dt>
+                  <dd>{site.theme.name}</dd>
+                </div>
+              </dl>
+              <div class="button-row card-actions">
+                <a class="button button-primary" href={`/${site.slug}/`}>Open site</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad section-alt" id="styles">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Style catalog</p>
+          <h2>All registered Website Factory styles</h2>
+          <p>These cards render with each theme's own default color tokens so you can compare palettes on mobile.</p>
+        </div>
+        <div class="style-grid">
+          {styleCards.map((styleCard) => (
+            <article id={`style-${styleCard.id}`} class="card style-card" style={styleCard.cssText}>
+              <div class="style-preview" aria-hidden="true">
+                <span class="style-swatch style-swatch-primary"></span>
+                <span class="style-swatch style-swatch-secondary"></span>
+                <span class="style-swatch style-swatch-accent"></span>
+                <span class="style-swatch style-swatch-surface"></span>
+              </div>
+              <p class="eyebrow">{styleCard.id}</p>
+              <h3>{styleCard.displayName}</h3>
+              <p>{styleCard.description}</p>
+              <dl class="compact-meta">
+                <div>
+                  <dt>Default mode</dt>
+                  <dd>{styleCard.defaultMode}</dd>
+                </div>
+              </dl>
+              <ul class="tag-list" aria-label={`${styleCard.displayName} tags`}>
+                {styleCard.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+              </ul>
             </article>
           ))}
         </div>
