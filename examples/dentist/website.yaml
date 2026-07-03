@@ -1,0 +1,125 @@
+schemaVersion: 1
+slug: bright-smiles-dental
+vertical: medical
+theme:
+  name: Calm Clinic
+  palette: clinic
+  mode: light
+  radius: soft
+seo:
+  title: Bright Smiles Dental | Gentle Family Dentist in Portland
+  description: Preventive, cosmetic, and emergency dental care for Portland families from a calm neighborhood clinic.
+  canonicalPath: /bright-smiles-dental/
+business:
+  name: Bright Smiles Dental
+  type: Dentist
+  tagline: Gentle family dentistry with clear plans and same-week appointments.
+  description: A patient-first dental studio focused on prevention, cosmetic confidence, and urgent care without pressure.
+  phone: (555) 010-1010
+  email: hello@brightsmiles.example
+  address:
+    street: 1420 North Maple Avenue
+    city: Portland
+    region: OR
+    postalCode: "97205"
+    country: US
+  areaServed:
+    - Portland
+    - Pearl District
+    - Northwest District
+  hours:
+    - label: Mon-Thu
+      value: "8:00 AM - 5:00 PM"
+    - label: Friday
+      value: "8:00 AM - 2:00 PM"
+  credentials:
+    - ADA member
+    - Invisalign provider
+navigation:
+  - label: Services
+    href: "#services"
+    variant: text
+  - label: Reviews
+    href: "#reviews"
+    variant: text
+  - label: FAQ
+    href: "#faq"
+    variant: text
+hero:
+  eyebrow: Portland family dentist
+  title: Dental visits designed to feel calm, clear, and on schedule.
+  summary: Bright Smiles turns one universal business schema into a complete local service website with care pathways, proof points, FAQs, and conversion-ready calls to action.
+  primaryCta:
+    label: Request an appointment
+    href: "tel:+15550101010"
+    variant: primary
+  secondaryCta:
+    label: View services
+    href: "#services"
+    variant: secondary
+sections:
+  - id: services
+    type: services
+    eyebrow: Care menu
+    title: Preventive, cosmetic, and urgent dental care
+    summary: Service cards are reusable content blocks that work for any local vertical.
+    items:
+      - title: Preventive cleanings
+        description: Exams, cleanings, digital x-rays, fluoride, and personalized home care plans.
+      - title: Cosmetic dentistry
+        description: Whitening, bonding, veneers, and clear aligner consults for confident smiles.
+      - title: Same-week emergencies
+        description: Tooth pain, broken crowns, and urgent evaluations with transparent next steps.
+  - id: proof
+    type: proof
+    eyebrow: Trust signals
+    title: Local proof generated from structured fields
+    stats:
+      - label: Google rating
+        value: 4.9/5
+      - label: Years serving Portland
+        value: "18"
+      - label: New patient slots
+        value: Same week
+  - id: process
+    type: process
+    title: A simple visit flow
+    steps:
+      - title: Share your goals
+        description: Start with symptoms, smile goals, coverage, and scheduling preferences.
+      - title: Get a clear plan
+        description: The team explains findings, costs, and timelines before treatment begins.
+      - title: Leave with next steps
+        description: Every visit ends with prevention guidance and an easy follow-up path.
+  - id: reviews
+    type: testimonials
+    title: Patient-ready testimonial blocks
+    testimonials:
+      - quote: The site can surface reviews, credentials, and appointment paths without custom template work.
+        name: Example patient
+        context: Family dentistry
+  - id: faq
+    type: faq
+    title: Dental FAQ
+    questions:
+      - question: Do you accept dental insurance?
+        answer: The schema supports insurance notes, payment options, and calls to confirm coverage.
+      - question: Can I book emergency dental care?
+        answer: Urgent appointment messaging can be generated from availability and service fields.
+ctas:
+  final:
+    title: Turn medical YAML into a fast static clinic site.
+    summary: This final CTA is populated from the same universal schema as every other vertical.
+    actions:
+      - label: Call Bright Smiles
+        href: "tel:+15550101010"
+        variant: primary
+pages:
+  - path: /
+    template: landing
+    sections:
+      - services
+      - proof
+      - process
+      - reviews
+      - faq

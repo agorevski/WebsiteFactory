@@ -1,0 +1,32 @@
+{
+  "name": "website-factory",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "_workspaces:present": "test -n \"$(find apps packages -mindepth 2 -maxdepth 2 -name package.json -print -quit 2>/dev/null)\"",
+    "build": "npm run build --workspace @website-factory/schema && npm run build --workspace @website-factory/themes && npm run build --workspace @website-factory/components && npm run build --workspace @website-factory/templates && npm run build --workspace @website-factory/seo && npm run build --workspace @website-factory/validation && npm run build --workspace @website-factory/ai && npm run build --workspace @website-factory/deployment && npm run build --workspace @website-factory/website-builder",
+    "typecheck": "if npm run _workspaces:present --silent; then npm run typecheck --workspaces --if-present; else echo \"No workspace type checks configured yet.\"; fi",
+    "lint": "echo \"No linting configured yet.\"",
+    "validate": "npm run typecheck && npm run lint && npm run build && npm run validate:examples",
+    "validate:examples": "npm run validate:examples --workspace @website-factory/website-builder",
+    "clean": "rm -rf dist .astro apps/*/dist apps/*/.astro packages/*/dist packages/*/*.tsbuildinfo"
+  },
+  "devDependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^7.0.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  }
+}

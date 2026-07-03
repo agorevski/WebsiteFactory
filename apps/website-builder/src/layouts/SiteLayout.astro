@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import type { UniversalSite } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  site?: UniversalSite;
+}
+
+const { title, description, site } = Astro.props;
+const canonicalPath = site?.seo.canonicalPath ?? Astro.url.pathname;
+const themeClass = `theme-${site?.theme.palette ?? 'professional'}`;
+const jsonLd = site ? {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.business.name,
+  description: site.business.description,
+  telephone: site.business.phone,
+  email: site.business.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.business.address.street,
+    addressLocality: site.business.address.city,
+    addressRegion: site.business.address.region,
+    postalCode: site.business.address.postalCode,
+    addressCountry: site.business.address.country,
+  },
+  areaServed: site.business.areaServed,
+} : undefined;
+---
+<!doctype html>
+<html lang="en" class={themeClass}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={canonicalPath} />
+    <title>{title}</title>
+    {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

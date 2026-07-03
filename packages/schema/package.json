@@ -1,0 +1,28 @@
+{
+  "name": "@website-factory/schema",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Universal Zod schema and YAML validation helpers for Website Factory websites.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "fixtures"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "validate": "npm run build && node scripts/validate-fixture.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  }
+}

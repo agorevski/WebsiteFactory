@@ -1,0 +1,195 @@
+schemaVersion: "1.0"
+business:
+  name: "Evergreen Family Dental"
+  legalName: "Evergreen Family Dental PLLC"
+  tagline: "Gentle dental care for every smile."
+  description: "A neighborhood dental clinic offering preventive, cosmetic, and restorative care."
+  industry: "Dental clinic"
+  languages:
+    - English
+    - Spanish
+  timezone: "America/Los_Angeles"
+brand:
+  colors:
+    primary: "#0f766e"
+    secondary: "#134e4a"
+    accent: "#f59e0b"
+  voice:
+    tone: "Warm, reassuring, professional"
+    personality:
+      - Friendly
+      - Clear
+      - Trustworthy
+contact:
+  email: "hello@evergreen.example"
+  phone: "+1 555 010 2000"
+  website: "https://evergreen.example"
+  address:
+    street1: "1200 Cedar Avenue"
+    city: "Portland"
+    region: "OR"
+    postalCode: "97201"
+    country: "US"
+locations:
+  - id: "downtown"
+    name: "Downtown Portland"
+    address:
+      street1: "1200 Cedar Avenue"
+      city: "Portland"
+      region: "OR"
+      postalCode: "97201"
+      country: "US"
+    contact:
+      phone: "+1 555 010 2000"
+    amenities:
+      - "Wheelchair accessible"
+      - "Free parking"
+hours:
+  timezone: "America/Los_Angeles"
+  weekly:
+    monday:
+      ranges:
+        - opens: "08:00"
+          closes: "17:00"
+    tuesday:
+      ranges:
+        - opens: "08:00"
+          closes: "17:00"
+    saturday:
+      isClosed: true
+hero:
+  eyebrow: "Portland family dentist"
+  headline: "Confident, comfortable dental care"
+  subheadline: "Preventive and cosmetic dentistry for families across Portland."
+  primaryCta:
+    label: "Book an appointment"
+    url: "/appointments"
+    variant: "primary"
+  secondaryCta:
+    label: "Call the office"
+    url: "tel:+15550102000"
+about:
+  title: "About Evergreen Family Dental"
+  body: "Our team combines modern technology with a calm, patient-first experience."
+mission:
+  body: "Help every patient feel informed, comfortable, and proud of their smile."
+services:
+  - name: "Preventive cleanings"
+    description: "Routine exams, cleanings, and personalized oral health guidance."
+    features:
+      - "Digital x-rays"
+      - "Fluoride treatments"
+  - name: "Cosmetic dentistry"
+    description: "Whitening, bonding, veneers, and smile design consultations."
+products:
+  - name: "Electric toothbrush kit"
+    description: "A dentist-recommended home care kit."
+    price: "$79"
+pricing:
+  currency: "USD"
+  plans:
+    - name: "New patient exam"
+      price: "$149"
+      features:
+        - "Comprehensive exam"
+        - "Digital x-rays"
+faq:
+  - question: "Do you accept new patients?"
+    answer: "Yes, new patients can book online or by phone."
+reviews:
+  - author: "Maya R."
+    quote: "The team explained every step and made my visit easy."
+    rating: 5
+testimonials:
+  - author: "Jordan P."
+    quote: "Friendly, professional, and great with kids."
+gallery:
+  - src: "/images/office-front.jpg"
+    alt: "Evergreen Family Dental office exterior"
+videos:
+  - title: "What to expect at your first visit"
+    url: "https://video.example/first-visit"
+team:
+  intro: "Meet your care team."
+  members:
+    - name: "Dr. Avery Chen"
+      role: "Lead dentist"
+      credentials:
+        - "DDS"
+careers:
+  intro: "Join a patient-centered dental team."
+  benefits:
+    - "Flexible schedules"
+forms:
+  - id: "contact"
+    title: "Contact us"
+    fields:
+      - name: "name"
+        label: "Name"
+        required: true
+      - name: "email"
+        label: "Email"
+        type: "email"
+        required: true
+appointments:
+  enabled: true
+  bookingUrl: "/appointments"
+  appointmentTypes:
+    - "Cleaning"
+    - "Consultation"
+reservations:
+  enabled: false
+menus: []
+insurance:
+  accepted:
+    - "Delta Dental"
+    - "Cigna"
+specialties:
+  - "Family dentistry"
+  - "Cosmetic dentistry"
+amenities:
+  - "Accessible entrance"
+  - "Online forms"
+events:
+  - title: "Free oral health workshop"
+    date: "2026-08-15"
+    summary: "A community session on preventive dental care."
+news:
+  - title: "Extended weekday hours"
+    date: "2026-07-01"
+blog:
+  - title: "How often should I replace my toothbrush?"
+    summary: "Simple tips for better home care."
+promotions:
+  - title: "New patient welcome offer"
+    summary: "Limited-time savings for first visits."
+    endsAt: "2026-12-31"
+socialLinks:
+  - platform: "Instagram"
+    url: "https://instagram.example/evergreendental"
+seo:
+  title: "Evergreen Family Dental | Portland Dentist"
+  description: "Gentle family dental care in Portland, Oregon."
+  keywords:
+    - "Portland dentist"
+    - "family dentist"
+analytics:
+  googleAnalyticsId: "G-EXAMPLE"
+  consentRequired: true
+legal:
+  privacyPolicyUrl: "/privacy"
+  termsUrl: "/terms"
+accessibility:
+  contactEmail: "accessibility@evergreen.example"
+template:
+  id: "local-service"
+  hiddenSections:
+    - "menus"
+theme:
+  mode: "light"
+  radius: "1rem"
+customSections:
+  patientResources:
+    title: "Patient resources"
+    links:
+      - "/forms/new-patient"

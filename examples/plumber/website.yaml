@@ -1,0 +1,123 @@
+schemaVersion: 1
+slug: summit-plumbing
+vertical: home-services
+theme:
+  name: Reliable Trade
+  palette: trade
+  mode: light
+  radius: rounded
+seo:
+  title: Summit Plumbing | 24/7 Plumber in Denver
+  description: Licensed Denver plumbers for emergency repairs, drain cleaning, water heaters, and whole-home repipes.
+  canonicalPath: /summit-plumbing/
+business:
+  name: Summit Plumbing
+  type: Plumbing contractor
+  tagline: Licensed plumbers for fast repairs and clean job sites.
+  description: A home-services team that handles urgent leaks, fixtures, drains, water heaters, and planned upgrades.
+  phone: (555) 020-2020
+  email: dispatch@summitplumbing.example
+  address:
+    street: 8800 West Cedar Street
+    city: Denver
+    region: CO
+    postalCode: "80202"
+    country: US
+  areaServed:
+    - Denver
+    - Lakewood
+    - Aurora
+  hours:
+    - label: Emergency service
+      value: 24/7
+    - label: Office
+      value: "Mon-Fri, 7:00 AM - 6:00 PM"
+  credentials:
+    - Licensed and insured
+    - Background-checked technicians
+navigation:
+  - label: Services
+    href: "#services"
+    variant: text
+  - label: Process
+    href: "#process"
+    variant: text
+  - label: FAQ
+    href: "#faq"
+    variant: text
+hero:
+  eyebrow: Denver emergency plumber
+  title: Fast plumbing help with upfront options before work starts.
+  summary: The same universal schema models emergency messaging, service areas, technician trust, and estimate calls to action for a home-services website.
+  primaryCta:
+    label: Call for dispatch
+    href: "tel:+15550202020"
+    variant: primary
+  secondaryCta:
+    label: See repair options
+    href: "#services"
+    variant: secondary
+sections:
+  - id: services
+    type: services
+    eyebrow: What we fix
+    title: Plumbing services mapped from reusable cards
+    items:
+      - title: Leak detection and repair
+        description: Locate hidden leaks, stabilize damage, and repair supply or drain lines.
+      - title: Drain cleaning
+        description: Clear clogs with clean equipment, camera inspections, and prevention guidance.
+      - title: Water heaters
+        description: Repair, replace, and maintain tank and tankless systems with code-compliant installs.
+  - id: proof
+    type: proof
+    title: Proof points for service-area SEO
+    stats:
+      - label: Emergency response
+        value: 24/7
+      - label: Trucks stocked
+        value: "12"
+      - label: Warranty
+        value: 1 year
+  - id: process
+    type: process
+    title: A repair workflow customers understand
+    steps:
+      - title: Triage the issue
+        description: The dispatcher captures location, symptoms, urgency, and access details.
+      - title: Inspect and quote
+        description: A technician explains findings and presents clear repair or replacement options.
+      - title: Complete and clean up
+        description: Work is completed with photos, warranty details, and prevention tips.
+  - id: reviews
+    type: testimonials
+    title: Trust for high-intent searches
+    testimonials:
+      - quote: Home-services templates can emphasize speed, licensing, warranties, and local coverage.
+        name: Example homeowner
+        context: Emergency leak repair
+  - id: faq
+    type: faq
+    title: Plumbing FAQ
+    questions:
+      - question: Do you charge a dispatch fee?
+        answer: Pricing notes can be represented as reusable FAQ content and surfaced near CTAs.
+      - question: Can the website show service areas?
+        answer: Area-served fields feed page copy, structured data, and local search sections.
+ctas:
+  final:
+    title: Generate a provider-agnostic contractor website.
+    summary: The static output can be hosted anywhere while the schema remains reusable.
+    actions:
+      - label: Dispatch a plumber
+        href: "tel:+15550202020"
+        variant: primary
+pages:
+  - path: /
+    template: landing
+    sections:
+      - services
+      - proof
+      - process
+      - reviews
+      - faq

@@ -1,0 +1,23 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getExampleSites } from '../lib/examples';
+import type { UniversalSite } from '../lib/schema';
+import UniversalLandingPage from '../templates/UniversalLandingPage.astro';
+
+export async function getStaticPaths() {
+  const sites = await getExampleSites();
+  return sites.map((site) => ({
+    params: { slug: site.slug },
+    props: { site },
+  }));
+}
+
+interface Props {
+  site: UniversalSite;
+}
+
+const { site } = Astro.props;
+---
+<SiteLayout title={site.seo.title} description={site.seo.description} site={site}>
+  <UniversalLandingPage site={site} />
+</SiteLayout>

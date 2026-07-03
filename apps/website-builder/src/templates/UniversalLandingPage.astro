@@ -1,0 +1,21 @@
+---
+import Hero from '../components/Hero';
+import SectionRenderer from '../components/SectionRenderer';
+import SiteFooter from '../components/SiteFooter';
+import SiteHeader from '../components/SiteHeader';
+import type { UniversalSite } from '../lib/schema';
+
+interface Props {
+  site: UniversalSite;
+}
+
+const { site } = Astro.props;
+---
+<div class={`site-shell radius-${site.theme.radius}`}>
+  <SiteHeader site={site} />
+  <main>
+    <Hero business={site.business} hero={site.hero} theme={site.theme} />
+    <SectionRenderer cta={site.ctas?.final} sections={site.sections} />
+  </main>
+  <SiteFooter site={site} />
+</div>

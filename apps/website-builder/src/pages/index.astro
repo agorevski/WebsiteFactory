@@ -1,0 +1,57 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getExampleSites } from '../lib/examples';
+
+const sites = await getExampleSites();
+---
+<SiteLayout
+  title="Website Factory Builder Demo"
+  description="Static Astro demo rendering vertical website examples from a universal YAML schema."
+>
+  <main class="builder-index">
+    <section class="section-pad hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Schema-driven static websites</p>
+          <h1>Universal YAML in, provider-agnostic Astro sites out.</h1>
+          <p class="lede">
+            Browse example verticals generated from the same schema and rendered through reusable React components,
+            Astro templates, and theme tokens.
+          </p>
+          <div class="button-row">
+            <a class="button button-primary" href="#examples">View examples</a>
+            <a class="button button-secondary" href="#examples">Compare verticals</a>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <span class="theme-pill">Builder app</span>
+          <h2>Final integration shape</h2>
+          <p>
+            Local schema adapters mirror future shared packages so the app can switch to platform modules
+            without changing page templates.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-pad" id="examples">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Examples</p>
+          <h2>Four verticals, one data contract</h2>
+          <p>Each card links to a static page generated from `examples/*/website.yaml`.</p>
+        </div>
+        <div class="card-grid">
+          {sites.map((site) => (
+            <article class="card">
+              <p class="eyebrow">{site.vertical}</p>
+              <h3>{site.business.name}</h3>
+              <p>{site.business.tagline}</p>
+              <a class="text-link" href={`/${site.slug}/`}>Open generated site</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteLayout>

@@ -1,0 +1,121 @@
+schemaVersion: 1
+slug: northstar-legal
+vertical: professional
+theme:
+  name: Professional Trust
+  palette: professional
+  mode: light
+  radius: crisp
+seo:
+  title: Northstar Legal | Small Business Attorney in Chicago
+  description: Chicago business lawyers for contracts, formation, employment policies, and outside general counsel.
+  canonicalPath: /northstar-legal/
+business:
+  name: Northstar Legal
+  type: Business law firm
+  tagline: Practical legal guidance for growing companies and founders.
+  description: A professional-services firm focused on contracts, entity formation, outside counsel, and risk-aware growth.
+  phone: (555) 040-4040
+  email: intake@northstarlegal.example
+  address:
+    street: 200 West Adams Street
+    city: Chicago
+    region: IL
+    postalCode: "60606"
+    country: US
+  areaServed:
+    - Chicago
+    - Evanston
+    - Oak Park
+  hours:
+    - label: Mon-Fri
+      value: "9:00 AM - 6:00 PM"
+  credentials:
+    - Illinois Bar
+    - Outside general counsel
+navigation:
+  - label: Services
+    href: "#services"
+    variant: text
+  - label: Approach
+    href: "#process"
+    variant: text
+  - label: FAQ
+    href: "#faq"
+    variant: text
+hero:
+  eyebrow: Chicago business attorney
+  title: Professional-services websites with trust, clarity, and compliant calls to action.
+  summary: Legal and consulting sites can use the universal schema for practice areas, credentials, intake flows, FAQs, and structured organization details.
+  primaryCta:
+    label: Request a consultation
+    href: "mailto:intake@northstarlegal.example"
+    variant: primary
+  secondaryCta:
+    label: Review practice areas
+    href: "#services"
+    variant: secondary
+sections:
+  - id: services
+    type: services
+    eyebrow: Practice areas
+    title: Legal services as reusable offerings
+    items:
+      - title: Contract drafting and review
+        description: Commercial agreements, vendor terms, MSAs, NDAs, and negotiation support.
+      - title: Business formation
+        description: Entity setup, founder agreements, governance documents, and operating agreements.
+      - title: Outside general counsel
+        description: Ongoing guidance for employment policies, risk reviews, and growth decisions.
+  - id: proof
+    type: proof
+    title: Credibility signals without template forks
+    stats:
+      - label: Founder clients advised
+        value: 240+
+      - label: Average response
+        value: 1 business day
+      - label: Counsel model
+        value: Flat-fee options
+  - id: process
+    type: process
+    title: Intake workflow
+    steps:
+      - title: Submit context
+        description: The intake call to action gathers matter type, timeline, and business goals.
+      - title: Conflict and scope check
+        description: The firm confirms fit, constraints, and recommended next steps.
+      - title: Start with a plan
+        description: Engagement details, deliverables, and communication cadence are documented.
+  - id: reviews
+    type: testimonials
+    title: Professional proof
+    testimonials:
+      - quote: Professional templates can highlight trust, credentials, scope, and careful intake language.
+        name: Example founder
+        context: Outside counsel
+  - id: faq
+    type: faq
+    title: Legal FAQ
+    questions:
+      - question: Can the schema include compliance notes?
+        answer: Yes. Future shared schema packages can add disclaimers, licensing regions, and regulated-content controls.
+      - question: Does this create legal advice?
+        answer: No. AI workflow docs should require review before publishing regulated professional content.
+ctas:
+  final:
+    title: Generate a polished professional-services website.
+    summary: Keep the content structured, reviewable, and portable while templates handle presentation.
+    actions:
+      - label: Email intake
+        href: "mailto:intake@northstarlegal.example"
+        variant: primary
+pages:
+  - path: /
+    template: landing
+    sections:
+      - services
+      - proof
+      - process
+      - reviews
+      - faq

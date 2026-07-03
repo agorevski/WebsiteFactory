@@ -1,0 +1,123 @@
+schemaVersion: 1
+slug: ember-and-olive
+vertical: food
+theme:
+  name: Warm Hospitality
+  palette: hospitality
+  mode: light
+  radius: soft
+seo:
+  title: Ember & Olive | Seasonal Restaurant in Austin
+  description: A neighborhood Austin restaurant serving seasonal plates, private dining, weekend brunch, and local wines.
+  canonicalPath: /ember-and-olive/
+business:
+  name: Ember & Olive
+  type: Restaurant
+  tagline: Seasonal plates, live-fire cooking, and relaxed neighborhood hospitality.
+  description: A hospitality concept with dinner, brunch, private events, and a menu that changes with local farms.
+  phone: (555) 030-3030
+  email: reservations@emberandolive.example
+  address:
+    street: 44 East River Walk
+    city: Austin
+    region: TX
+    postalCode: "78701"
+    country: US
+  areaServed:
+    - Downtown Austin
+    - East Austin
+    - Rainey Street
+  hours:
+    - label: Dinner
+      value: "Tue-Sun, 5:00 PM - 10:00 PM"
+    - label: Brunch
+      value: "Sat-Sun, 10:00 AM - 2:00 PM"
+  credentials:
+    - Local farm partners
+    - Private dining available
+navigation:
+  - label: Menu
+    href: "#services"
+    variant: text
+  - label: Events
+    href: "#process"
+    variant: text
+  - label: FAQ
+    href: "#faq"
+    variant: text
+hero:
+  eyebrow: Austin seasonal restaurant
+  title: A restaurant website generated from the same fields as any local service brand.
+  summary: Hospitality pages can reuse service cards for menus, process blocks for events, and structured data for location, hours, reservations, and search snippets.
+  primaryCta:
+    label: Reserve a table
+    href: "mailto:reservations@emberandolive.example"
+    variant: primary
+  secondaryCta:
+    label: Explore menus
+    href: "#services"
+    variant: secondary
+sections:
+  - id: services
+    type: services
+    eyebrow: Menus
+    title: Menu experiences as universal offerings
+    items:
+      - title: Seasonal dinner
+        description: Live-fire mains, shareable vegetables, and desserts built around regional farms.
+      - title: Weekend brunch
+        description: Bright brunch plates, zero-proof drinks, and patio seating for small groups.
+      - title: Private dining
+        description: Semi-private spaces, set menus, and event coordination for celebrations.
+  - id: proof
+    type: proof
+    title: Hospitality proof points
+    stats:
+      - label: Local farms
+        value: "9"
+      - label: Private dining capacity
+        value: "36"
+      - label: Reservation window
+        value: 30 days
+  - id: process
+    type: process
+    title: Event inquiry flow
+    steps:
+      - title: Choose the occasion
+        description: Capture date, party size, dietary notes, and preferred room setup.
+      - title: Match menu options
+        description: Map guest needs to seasonal menu packages and beverage pairings.
+      - title: Confirm the experience
+        description: Send reservation details, deposit notes, and day-of contact information.
+  - id: reviews
+    type: testimonials
+    title: Social proof modules
+    testimonials:
+      - quote: Food verticals can prioritize atmosphere, menus, reservations, and local press mentions.
+        name: Example diner
+        context: Private dinner
+  - id: faq
+    type: faq
+    title: Restaurant FAQ
+    questions:
+      - question: Can the schema represent menus?
+        answer: Menu highlights fit the same offering cards used by services, with optional future menu-specific fields.
+      - question: Is this tied to one reservation provider?
+        answer: No. Calls to action can point to phone, email, static forms, or any future integration.
+ctas:
+  final:
+    title: Publish a static hospitality website from structured data.
+    summary: The generated site remains fast, accessible, and portable across hosting providers.
+    actions:
+      - label: Request a reservation
+        href: "mailto:reservations@emberandolive.example"
+        variant: primary
+pages:
+  - path: /
+    template: landing
+    sections:
+      - services
+      - proof
+      - process
+      - reviews
+      - faq

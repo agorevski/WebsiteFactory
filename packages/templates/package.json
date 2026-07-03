@@ -1,0 +1,28 @@
+{
+  "name": "@website-factory/templates",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Data-only website template composition definitions for Website Factory.",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@website-factory/components": "0.1.0",
+    "@website-factory/schema": "0.1.0",
+    "@website-factory/themes": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

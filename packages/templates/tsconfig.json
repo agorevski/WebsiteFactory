@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@website-factory/components": [
+        "../components/src/types.ts"
+      ],
+      "@website-factory/schema": [
+        "../schema/src/index.ts"
+      ],
+      "@website-factory/themes": [
+        "../themes/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
