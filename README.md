@@ -91,7 +91,7 @@ Run commands from the repository root unless noted.
 | `npm run clean` | Removes common generated outputs such as `dist`, `.astro`, and TypeScript build info files. |
 | `npm run regenerate:websites` | Cleans generated outputs, rebuilds all packages and websites, then validates example YAML. |
 | `npm run dev --workspace @website-factory/website-builder` | Starts the Astro dev server for the demo app. |
-| `npm run build --workspace @website-factory/website-builder` | Builds only the Astro demo app. |
+| `npm run build --workspace @website-factory/website-builder` | Builds only the Astro demo app and rewrites generated asset URLs so `dist/*.html` works through static hosting or direct `file://` preview. |
 | `npm run build --workspace @website-factory/generator` | Builds generator planning APIs after schema, themes, components, and SEO outputs are current. |
 | `npm run preview --workspace @website-factory/website-builder` | Serves the last builder app build locally with Astro preview. |
 | `npm run validate --workspace @website-factory/schema` | Builds the schema package and validates its fixture. |

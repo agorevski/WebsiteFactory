@@ -9,3 +9,5 @@
 - `npm run validate:examples --workspace @website-factory/website-builder`
 
 The app reads examples from repository-level `examples/**/website.yaml` files at build time and emits the root route plus any schema-defined subpages for each site.
+
+The build step rewrites generated `_astro` and theme asset URLs to be relative to each HTML file. That keeps the static output usable through `astro preview`, regular static hosting, or by opening `apps/website-builder/dist/index.html` directly from the filesystem.

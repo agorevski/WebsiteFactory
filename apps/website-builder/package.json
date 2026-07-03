@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node ../../scripts/relativize-static-html.mjs",
     "preview": "astro preview",
     "validate:examples": "node ../../scripts/validate-website-builder.mjs"
   },
