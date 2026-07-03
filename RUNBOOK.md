@@ -76,7 +76,7 @@ The static output is written to:
 apps/website-builder/dist
 ```
 
-The builder post-processes generated HTML so `_astro` and theme asset URLs are relative to each page. You can serve `apps/website-builder/dist` with `npm run preview --workspace @website-factory/website-builder`, deploy it to a static host, or open `apps/website-builder/dist/index.html` directly from the filesystem without Chrome looking for `file:///_astro/...`.
+The builder post-processes generated HTML so `_astro`, theme asset, and internal page URLs are relative to each page. You can serve `apps/website-builder/dist` with `npm run preview --workspace @website-factory/website-builder`, deploy it to a static host, or open `apps/website-builder/dist/index.html` directly from the filesystem without Chrome looking for `file:///_astro/...` or `file:///madrona-family-dental/...`.
 
 ### Compile and validate Madrona Family Dental
 

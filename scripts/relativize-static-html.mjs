@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { existsSync } from 'node:fs';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, relative, resolve, sep } from 'node:path';
+import { dirname, extname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -18,7 +18,7 @@ let rewrittenUrls = 0;
 for (const htmlFile of htmlFiles) {
   const source = await readFile(htmlFile, 'utf8');
   const assetPrefix = assetPrefixForHtmlFile(htmlFile);
-  const { html, replacements } = rewriteRootAssetUrls(source, assetPrefix);
+  const { html, replacements } = rewriteRootUrls(source, htmlFile, assetPrefix);
 
   if (replacements > 0) {
     await writeFile(htmlFile, html);
@@ -27,7 +27,7 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
-console.log(`Relativized ${rewrittenUrls} static asset URL(s) across ${rewrittenFiles} HTML file(s).`);
+console.log(`Relativized ${rewrittenUrls} static URL(s) across ${rewrittenFiles} HTML file(s).`);
 
 async function getHtmlFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -49,7 +49,7 @@ function assetPrefixForHtmlFile(htmlFile) {
   return relativePath === '' ? './' : `${relativePath}/`;
 }
 
-function rewriteRootAssetUrls(source, assetPrefix) {
+function rewriteRootUrls(source, htmlFile, assetPrefix) {
   let replacements = 0;
   let html = source.replace(/\b(?<attribute>href|src|poster)=(?<quote>["'])\/(?:\.\/)?(?<path>(?:_astro|themes)\/[^"']+)\k<quote>/g, (...args) => {
     const groups = args.at(-1);
@@ -83,7 +83,65 @@ function rewriteRootAssetUrls(source, assetPrefix) {
     return `srcset=${groups.quote}${nextValue}${groups.quote}`;
   });
 
+  html = html.replace(/<a\b(?<before>[^>]*?\bhref=)(?<quote>["'])\/(?<path>[^"']*)\k<quote>/g, (...args) => {
+    const groups = args.at(-1);
+
+    if (!isAnchorHrefGroups(groups)) {
+      return args[0];
+    }
+
+    const relativeHref = relativeHrefForRootPath(htmlFile, groups.path);
+
+    if (!relativeHref) {
+      return args[0];
+    }
+
+    replacements += 1;
+    return `<a${groups.before}${groups.quote}${relativeHref}${groups.quote}`;
+  });
+
   return { html, replacements };
+}
+
+function relativeHrefForRootPath(htmlFile, rootPath) {
+  if (rootPath.startsWith('/') || rootPath.startsWith('_astro/') || rootPath.startsWith('themes/')) {
+    return undefined;
+  }
+
+  const { pathname, suffix } = splitPathSuffix(rootPath);
+  const targetFile = rootPathTargetFile(pathname);
+  const relativePath = relative(dirname(htmlFile), targetFile).split(sep).join('/');
+  const normalizedPath = relativePath === '' ? 'index.html' : relativePath;
+
+  return `${normalizedPath.startsWith('.') ? normalizedPath : normalizedPath}${suffix}`;
+}
+
+function splitPathSuffix(rootPath) {
+  const hashIndex = rootPath.indexOf('#');
+  const pathAndQuery = hashIndex === -1 ? rootPath : rootPath.slice(0, hashIndex);
+  const hash = hashIndex === -1 ? '' : rootPath.slice(hashIndex);
+  const queryIndex = pathAndQuery.indexOf('?');
+
+  if (queryIndex === -1) {
+    return { pathname: pathAndQuery, suffix: hash };
+  }
+
+  return {
+    pathname: pathAndQuery.slice(0, queryIndex),
+    suffix: `${pathAndQuery.slice(queryIndex)}${hash}`,
+  };
+}
+
+function rootPathTargetFile(pathname) {
+  if (pathname === '') {
+    return join(distDir, 'index.html');
+  }
+
+  if (extname(pathname) !== '') {
+    return join(distDir, pathname);
+  }
+
+  return join(distDir, pathname, 'index.html');
 }
 
 function isAssetAttributeGroups(value) {
@@ -110,5 +168,16 @@ function isPathGroups(value) {
   return typeof value === 'object'
     && value !== null
     && 'path' in value
+    && typeof value.path === 'string';
+}
+
+function isAnchorHrefGroups(value) {
+  return typeof value === 'object'
+    && value !== null
+    && 'before' in value
+    && 'quote' in value
+    && 'path' in value
+    && typeof value.before === 'string'
+    && typeof value.quote === 'string'
     && typeof value.path === 'string';
 }
