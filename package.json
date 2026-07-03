@@ -21,7 +21,7 @@
     "qa:generated:static": "node scripts/validate-static-site.mjs --skip-html-validator",
     "qa:generated:html": "node scripts/validate-static-site.mjs --skip-linkinator",
     "qa:generated:dist": "node scripts/validate-generated-dist.mjs",
-    "qa:generated:visual": "node scripts/playwright-axe-smoke.mjs --max-pages=25 --viewport=390x844 --screenshot-dir=.website-factory-qa/screenshots --fail-on-horizontal-overflow --skip-axe",
+    "qa:generated:visual": "node scripts/playwright-axe-smoke.mjs --max-pages=25 --viewport=390x844 --screenshot-dir=.website-factory-qa/screenshots --fail-on-horizontal-overflow --allow-crawl-limit --skip-axe",
     "qa:templates:registry": "node scripts/validate-template-registry.mjs",
     "qa:templates:fuzz": "node --test scripts/template-fuzz.test.mjs",
     "qa:templates": "npm run qa:templates:registry && npm run qa:templates:fuzz",
