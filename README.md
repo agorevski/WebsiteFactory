@@ -2,11 +2,11 @@
 
 Website Factory is a schema-first static website generation workspace. It turns a portable YAML description of a local business into static Astro pages rendered with reusable React sections, token-driven themes, SEO/static artifact helpers, validation utilities, and provider-agnostic deployment contracts.
 
-The current repository is a private npm workspace and demonstration platform. It includes four example verticals, a static builder app, and supporting packages that define the boundaries for schema validation, templates, themes, components, SEO, AI-assisted content generation, quality checks, and deployment planning.
+The current repository is a private npm workspace and demonstration platform. It includes example verticals, researched local-business templates, a static builder app, and supporting packages that define the boundaries for schema validation, templates, themes, components, SEO, AI-assisted content generation, quality checks, and deployment planning.
 
 ## Architecture pipeline
 
-1. **Content starts as YAML** in `examples/*/website.yaml`. A file describes a business, theme, SEO metadata, navigation, hero content, reusable sections, final CTAs, and page mappings.
+1. **Content starts as YAML** in `examples/**/website.yaml`. A file describes a business, theme, SEO metadata, navigation, hero content, reusable sections, final CTAs, and page mappings.
 2. **`@website-factory/schema` validates the YAML** with Zod. The builder app imports `parseUniversalSite` through `apps/website-builder/src/lib/schema.ts` and fails fast on invalid content.
 3. **The builder app discovers examples at build time** from `apps/website-builder/src/lib/examples.ts`, sorts them by business name, and exposes them to Astro pages.
 4. **Astro generates static routes**. `src/pages/index.astro` renders the example gallery, and `src/pages/[slug].astro` uses `getStaticPaths()` to generate one route for each example slug.
@@ -86,11 +86,12 @@ Run commands from the repository root unless noted.
 
 ## Example sites
 
-Each example lives at `examples/<name>/website.yaml` and is rendered by the builder app.
+Each example lives at `examples/<name>/website.yaml` or, for location-split local businesses, `examples/<state>/<city>/<zipcode>/<business-name>/website.yaml`. The builder app discovers `website.yaml` files recursively.
 
 | Example file | Business | Vertical | Theme palette | Generated route |
 | --- | --- | --- | --- | --- |
 | `examples/dentist/website.yaml` | Bright Smiles Dental | `medical` | `clinic` | `/bright-smiles-dental/` |
+| `examples/wa/seattle/98122/madrona-family-dental/website.yaml` | Madrona Family Dental | `medical` | `clinic` | `/madrona-family-dental/` |
 | `examples/plumber/website.yaml` | Summit Plumbing | `home-services` | `trade` | `/summit-plumbing/` |
 | `examples/restaurant/website.yaml` | Ember & Olive | `food` | `hospitality` | `/ember-and-olive/` |
 | `examples/lawyer/website.yaml` | Northstar Legal | `professional` | `professional` | `/northstar-legal/` |
@@ -99,7 +100,7 @@ These examples demonstrate how the same data contract supports healthcare, home 
 
 ## Schema and content workflow
 
-1. Create or edit `examples/<site>/website.yaml`.
+1. Create or edit `examples/<site>/website.yaml`, or use `examples/<state>/<city>/<zipcode>/<business-name>/website.yaml` for location-split local business examples.
 2. Keep required top-level fields present: `schemaVersion`, `slug`, `vertical`, `theme`, `seo`, `business`, `navigation`, `hero`, `sections`, and `pages`.
 3. Use a unique kebab-case `slug`; it becomes the generated route.
 4. Choose a supported universal theme shape: `theme.palette` is one of `clinic`, `trade`, `hospitality`, or `professional`; `theme.mode` is `light` or `dark`; `theme.radius` is `soft`, `rounded`, or `crisp`.

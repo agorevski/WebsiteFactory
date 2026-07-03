@@ -1,6 +1,6 @@
 # Universal Schema
 
-The examples in `examples/*/website.yaml` use one portable contract:
+The examples in `examples/**/website.yaml` use one portable contract:
 
 - `schemaVersion`, `slug`, and `vertical` identify the document.
 - `theme` selects palette, radius, and mode tokens.

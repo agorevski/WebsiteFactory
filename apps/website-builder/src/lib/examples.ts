@@ -10,12 +10,23 @@ const repositoryRoot = process.env.WEBSITE_FACTORY_ROOT
     : currentWorkingDirectory);
 const examplesRoot = resolve(repositoryRoot, 'examples');
 
-async function getExampleFiles(): Promise<string[]> {
-  const entries = await readdir(examplesRoot, { withFileTypes: true });
+async function getExampleFiles(directory = examplesRoot): Promise<string[]> {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(entries.map(async (entry) => {
+    const entryPath = resolve(directory, entry.name);
 
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => resolve(examplesRoot, entry.name, 'website.yaml'));
+    if (entry.isDirectory()) {
+      return getExampleFiles(entryPath);
+    }
+
+    if (entry.isFile() && entry.name === 'website.yaml') {
+      return [entryPath];
+    }
+
+    return [];
+  }));
+
+  return files.flat().sort((left, right) => left.localeCompare(right));
 }
 
 export async function getExampleSites(): Promise<UniversalSite[]> {

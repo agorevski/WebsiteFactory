@@ -1,6 +1,6 @@
 # Copilot instructions for Website Factory
 
-Website Factory is a private npm workspace for schema-first static website generation. Keep changes aligned with the pipeline: `examples/*/website.yaml` -> `@website-factory/schema` Zod validation -> `@website-factory/website-builder` Astro static routes -> reusable React sections/templates/themes -> `apps/website-builder/dist`.
+Website Factory is a private npm workspace for schema-first static website generation. Keep changes aligned with the pipeline: `examples/**/website.yaml` -> `@website-factory/schema` Zod validation -> `@website-factory/website-builder` Astro static routes -> reusable React sections/templates/themes -> `apps/website-builder/dist`.
 
 ## Repository shape
 
@@ -28,7 +28,7 @@ Website Factory is a private npm workspace for schema-first static website gener
 
 ## Schema and content rules
 
-- Example sites live at `examples/<site>/website.yaml` and must validate through `parseUniversalSite`.
+- Example sites live at `examples/<site>/website.yaml` or `examples/<state>/<city>/<zipcode>/<business-name>/website.yaml` and must validate through `parseUniversalSite`.
 - Keep required universal YAML fields present: `schemaVersion`, `slug`, `vertical`, `theme`, `seo`, `business`, `navigation`, `hero`, `sections`, and `pages`.
 - Slugs must be unique lowercase kebab-case values; generated routes are `/<slug>/`.
 - Supported universal section types are `services`, `proof`, `process`, `testimonials`, `faq`, and `content`.
@@ -37,7 +37,7 @@ Website Factory is a private npm workspace for schema-first static website gener
 
 ## Builder and rendering rules
 
-- The builder discovers examples from `examples/*/website.yaml` at build time, sorts by business name, and uses Astro `getStaticPaths()` to generate static slug routes.
+- The builder discovers examples from `examples/**/website.yaml` at build time, sorts by business name, and uses Astro `getStaticPaths()` to generate static slug routes.
 - `UniversalLandingPage.astro` composes the app shell, header, hero, section renderer, and footer from validated universal site data. Avoid adding ad hoc content paths that bypass the schema.
 - Theme and presentation changes should remain token/data driven where possible instead of hardcoding vertical-specific behavior.
 

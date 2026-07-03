@@ -8,4 +8,4 @@
 - `npm run build --workspace @website-factory/website-builder`
 - `npm run validate:examples --workspace @website-factory/website-builder`
 
-The app reads examples from the repository-level `examples/*/website.yaml` files at build time and emits static pages for each site.
+The app reads examples from repository-level `examples/**/website.yaml` files at build time and emits static pages for each site.

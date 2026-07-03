@@ -38,7 +38,7 @@ This runs workspace type checks, the lint placeholder, package/app builds, and e
 npm run validate:examples
 ```
 
-The example validator builds `@website-factory/schema` when needed, checks required app/doc files, verifies required YAML tokens, parses each `examples/*/website.yaml`, and checks for unique slugs and required vertical coverage.
+The example validator builds `@website-factory/schema` when needed, checks required app/doc files, verifies required YAML tokens, parses each `examples/**/website.yaml`, and checks for unique slugs and required vertical coverage.
 
 ## 4. Build the static app
 
@@ -60,6 +60,34 @@ The static output is written to:
 apps/website-builder/dist
 ```
 
+### Compile and validate Madrona Family Dental
+
+The Madrona Family Dental source file is:
+
+```text
+examples/wa/seattle/98122/madrona-family-dental/website.yaml
+```
+
+After editing that YAML, validate all example site data from the repository root:
+
+```sh
+npm run validate:examples
+```
+
+Then compile the static builder app:
+
+```sh
+npm run build --workspace @website-factory/website-builder
+```
+
+The generated Madrona page is written to:
+
+```text
+apps/website-builder/dist/madrona-family-dental/index.html
+```
+
+The route in local preview or deployment is `/madrona-family-dental/`. For a full pre-handoff check after schema, package, or rendering changes, run `npm run validate` instead of only the example validator.
+
 ## 5. Run the Astro dev server
 
 Start the local development server from the root:
@@ -68,7 +96,7 @@ Start the local development server from the root:
 npm run dev --workspace @website-factory/website-builder
 ```
 
-The app reads validated examples from `examples/*/website.yaml` and generates routes from each example `slug`.
+The app reads validated `website.yaml` files recursively under `examples/` and generates routes from each example `slug`.
 
 ## 6. Add or edit example YAML sites
 
@@ -76,6 +104,7 @@ Example generated sites live at:
 
 ```text
 examples/<site-name>/website.yaml
+examples/<state>/<city>/<zipcode>/<business-name>/website.yaml
 ```
 
 Use an existing example such as `examples/dentist/website.yaml` as the safest starting point. Keep these fields present and aligned with the universal site schema:
@@ -200,4 +229,4 @@ If a generated site is broken in production:
 5. Correct the source data or code, then rerun `npm run validate`.
 6. Hand off a newly built `apps/website-builder/dist` artifact only after validation passes.
 
-For data-only incidents, prefer reverting or correcting the affected `examples/<site-name>/website.yaml` and rebuilding. For schema/template/package incidents, validate all examples before republishing because one shared component can affect every generated site.
+For data-only incidents, prefer reverting or correcting the affected `website.yaml` under `examples/` and rebuilding. For schema/template/package incidents, validate all examples before republishing because one shared component can affect every generated site.

@@ -57,22 +57,14 @@ const requiredYamlTokens = [
 ];
 
 const examplesDir = join(root, 'examples');
-const exampleDirs = existsSync(examplesDir)
-  ? (await readdir(examplesDir, { withFileTypes: true })).filter((entry) => entry.isDirectory())
+const exampleFiles = existsSync(examplesDir)
+  ? await getWebsiteYamlFiles(examplesDir, 'examples')
   : [];
 
 const slugs = new Set();
 const verticals = new Set();
 
-for (const dir of exampleDirs) {
-  const relativeFile = `examples/${dir.name}/website.yaml`;
-  const absoluteFile = join(root, relativeFile);
-
-  if (!existsSync(absoluteFile)) {
-    failures.push(`Missing ${relativeFile}`);
-    continue;
-  }
-
+for (const { absoluteFile, relativeFile } of exampleFiles) {
   const source = await readFile(absoluteFile, 'utf8');
   let site;
 
@@ -110,8 +102,8 @@ for (const expected of ['medical', 'home-services', 'food', 'professional']) {
   }
 }
 
-if (exampleDirs.length < 4) {
-  failures.push('Expected at least four example vertical directories');
+if (exampleFiles.length < 4) {
+  failures.push('Expected at least four example YAML files');
 }
 
 if (failures.length > 0) {
@@ -122,7 +114,7 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Validated ${exampleDirs.length} examples, ${requiredFiles.length} app/doc files, and ${slugs.size} unique slugs.`);
+console.log(`Validated ${exampleFiles.length} examples, ${requiredFiles.length} app/doc files, and ${slugs.size} unique slugs.`);
 
 if (process.argv.includes('--build')) {
   const result = spawnSync('npm', ['run', 'build', '--workspace', '@website-factory/website-builder'], {
@@ -130,4 +122,24 @@ if (process.argv.includes('--build')) {
     stdio: 'inherit',
   });
   process.exit(result.status ?? 1);
+}
+
+async function getWebsiteYamlFiles(directory, relativeDirectory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(entries.map(async (entry) => {
+    const absolutePath = join(directory, entry.name);
+    const relativePath = `${relativeDirectory}/${entry.name}`;
+
+    if (entry.isDirectory()) {
+      return getWebsiteYamlFiles(absolutePath, relativePath);
+    }
+
+    if (entry.isFile() && entry.name === 'website.yaml') {
+      return [{ absoluteFile: absolutePath, relativeFile: relativePath }];
+    }
+
+    return [];
+  }));
+
+  return files.flat().sort((left, right) => left.relativeFile.localeCompare(right.relativeFile));
 }
