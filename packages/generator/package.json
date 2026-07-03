@@ -1,9 +1,9 @@
 {
-  "name": "@website-factory/components",
+  "name": "@website-factory/generator",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Reusable semantic React section components for Website Factory sites.",
+  "description": "Schema-driven static generation plan utilities for Website Factory.",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,20 +11,15 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./marketplace": {
-      "types": "./dist/marketplace.d.ts",
-      "import": "./dist/marketplace.js"
     }
   },
   "files": [
     "dist"
   ],
-  "peerDependencies": {
-    "react": ">=19.0.0"
-  },
   "dependencies": {
+    "@website-factory/components": "0.1.0",
     "@website-factory/schema": "0.1.0",
+    "@website-factory/seo": "0.1.0",
     "@website-factory/themes": "0.1.0"
   },
   "scripts": {

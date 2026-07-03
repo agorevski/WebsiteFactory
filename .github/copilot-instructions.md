@@ -1,6 +1,6 @@
 # Copilot instructions for Website Factory
 
-Website Factory is a private npm workspace for schema-first static website generation. Keep changes aligned with the pipeline: `examples/**/website.yaml` -> `@website-factory/schema` Zod validation -> `@website-factory/website-builder` Astro static routes -> reusable React sections/templates/themes -> `apps/website-builder/dist`.
+Website Factory is a private npm workspace for schema-first static website generation. Keep changes aligned with the pipeline: `examples/**/website.yaml` -> `@website-factory/schema` Zod validation -> optional v2 normalized content -> `@website-factory/generator` planning -> marketplace components/templates/themes -> `@website-factory/website-builder` Astro static routes -> `apps/website-builder/dist`.
 
 ## Repository shape
 
@@ -8,8 +8,9 @@ Website Factory is a private npm workspace for schema-first static website gener
 - Preserve package boundaries:
   - `@website-factory/schema`: Zod schemas, YAML parsing, validation errors, exported TypeScript types.
   - `@website-factory/themes`: theme token registries and CSS variable helpers.
-  - `@website-factory/components`: reusable semantic React sections.
+  - `@website-factory/components`: reusable semantic React sections and component marketplace descriptors.
   - `@website-factory/templates`: data-only layout composition helpers.
+  - `@website-factory/generator`: content signal inference, section candidates, theme resolution, component selection, plugin hooks, and generation plan validation.
   - `@website-factory/seo`: metadata, JSON-LD, sitemap, robots, RSS, and SEO helpers.
   - `@website-factory/validation`: schema, SEO, accessibility, responsive, performance, contrast, checklist, and CLI validation primitives.
   - `@website-factory/ai`: provider-agnostic AI/content orchestration contracts.
@@ -33,6 +34,10 @@ Website Factory is a private npm workspace for schema-first static website gener
 - Slugs must be unique lowercase kebab-case values; generated routes are `/<slug>/`.
 - Supported universal section types are `services`, `proof`, `process`, `testimonials`, `faq`, and `content`.
 - Supported universal theme palettes are `clinic`, `trade`, `hospitality`, and `professional`; modes are `light` or `dark`; radii are `soft`, `rounded`, or `crisp`.
+- `theme.name` may target a registered theme from `packages/themes/src/themes.ts` such as `dentalClinic`, but keep `theme.palette` for schema/backward compatibility.
+- Optional `content.version: 2` data should normalize sourced facts into services, locations, contacts, people, FAQ, booking, compliance, media, reviews, and related structures without removing the required universal fields.
+- Supported YAML page template values are currently `landing` and `service-index`; app route/page behavior lives in `apps/website-builder/src/lib/pages.ts`.
+- Keep YAML presentation-agnostic: do not encode component variants or layouts in content. Use generator heuristics (`inferContentSignals`, `inferSectionCandidates`, `selectThemeForContent`, `createGenerationPlan`) to confirm section/theme/component plans.
 - Keep AI-assisted content schema-first: generate YAML, validate with Zod, review claims and regulated vertical content, render a static preview, then require human approval before publishing.
 
 ## Builder and rendering rules
@@ -40,10 +45,12 @@ Website Factory is a private npm workspace for schema-first static website gener
 - The builder discovers examples from `examples/**/website.yaml` at build time, sorts by business name, and uses Astro `getStaticPaths()` to generate static slug routes.
 - `UniversalLandingPage.astro` composes the app shell, header, hero, section renderer, and footer from validated universal site data. Avoid adding ad hoc content paths that bypass the schema.
 - Theme and presentation changes should remain token/data driven where possible instead of hardcoding vertical-specific behavior.
+- Component additions should update the marketplace registry in `packages/components/src/marketplace.ts` and package exports so generator selection remains discoverable.
 
 ## Validation commands
 
 - After editing example YAML or content flow, run `npm run validate:examples`.
+- After editing v2 content or generation heuristics, run a generator smoke check with `createGenerationPlan` when package outputs are current.
 - After TypeScript/package changes, run the smallest relevant workspace check, for example `npm run typecheck --workspace @website-factory/schema` or `npm run build --workspace @website-factory/schema`.
 - Before handoff for cross-package or rendering changes, run `npm run validate`.
 - The root `npm run lint` script is currently a placeholder; do not add a new linting tool unless the task explicitly requires it.

@@ -82,6 +82,37 @@ export interface FaqItem {
   answer: string;
 }
 
+export interface ProductAggregateRatingInput {
+  ratingValue: number;
+  reviewCount?: number;
+  ratingCount?: number;
+  bestRating?: number;
+  worstRating?: number;
+}
+
+export interface ProductOfferInput {
+  url?: string;
+  price?: string | number;
+  priceCurrency?: string;
+  availability?: string;
+  itemCondition?: string;
+  priceValidUntil?: string | Date;
+  seller?: string | OrganizationProfile | BusinessProfile;
+}
+
+export interface ProductInput {
+  name: string;
+  description?: string;
+  image?: string | SeoImage | Array<string | SeoImage>;
+  sku?: string;
+  gtin?: string;
+  brand?: string | OrganizationProfile;
+  category?: string;
+  offers?: ProductOfferInput | ProductOfferInput[];
+  aggregateRating?: ProductAggregateRatingInput;
+  reviews?: ReviewInput[];
+}
+
 export interface ReviewInput {
   author: string | PersonProfile;
   ratingValue: number;
@@ -90,6 +121,7 @@ export interface ReviewInput {
   reviewBody?: string;
   datePublished?: string | Date;
   itemReviewedName?: string;
+  itemReviewed?: ProductInput | BusinessProfile | OrganizationProfile;
 }
 
 export interface BreadcrumbItem {
@@ -133,7 +165,7 @@ export interface PageSeoInput {
   images?: Array<string | SeoImage>;
   noIndex?: boolean;
   noFollow?: boolean;
-  type?: "website" | "article" | "profile" | "business" | string;
+  type?: "website" | "article" | "profile" | "business" | "product" | string;
   tags?: string[];
   section?: string;
   publishedAt?: string | Date;
@@ -144,6 +176,7 @@ export interface PageSeoInput {
   reviews?: ReviewInput[];
   author?: string | PersonProfile;
   article?: ArticleInput;
+  product?: ProductInput;
 }
 
 export interface OpenGraphMetadata {
@@ -233,6 +266,62 @@ export interface RssFeedItem {
   author?: string;
   categories?: string[];
   guid?: string;
+}
+
+export interface LlmsTxtLink {
+  title: string;
+  url: string;
+  description?: string;
+}
+
+export interface LlmsTxtSection {
+  heading: string;
+  body?: string;
+  links?: LlmsTxtLink[];
+}
+
+export interface LlmsTxtOptions {
+  title?: string;
+  description?: string;
+  siteUrl?: string;
+  pages?: PageSeoInput[];
+  sections?: LlmsTxtSection[];
+  includeSitemap?: boolean;
+  sitemapUrl?: string;
+}
+
+export interface PageSeoArtifact {
+  path: string;
+  url: string;
+  metadata: PageMetadata;
+  metaTags: string;
+  structuredData: JsonLdNode[];
+  jsonLdScript: string;
+}
+
+export interface SeoArtifactFile {
+  path: string;
+  contents: string;
+  contentType: string;
+}
+
+export interface SeoArtifactManifest {
+  pages: PageSeoArtifact[];
+  sitemapXml: string;
+  robotsTxt: string;
+  llmsTxt: string;
+  imageSitemapXml?: string;
+  rssXml?: string;
+  files: SeoArtifactFile[];
+}
+
+export interface SeoArtifactOptions extends MetadataOptions {
+  sitemapEntries?: SitemapEntry[];
+  includeImageSitemap?: boolean;
+  robots?: Omit<RobotsTxtOptions, "siteUrl">;
+  rssFeed?: RssFeedInfo;
+  rssItems?: RssFeedItem[];
+  llms?: Omit<LlmsTxtOptions, "siteUrl" | "pages">;
 }
 
 export interface SchemaSeoAdapter<TSchema, TResult = SiteSeoInput> {

@@ -1,4 +1,39 @@
 export type {
+  ComponentAccessibilityExpectation,
+  ComponentCategoryId,
+  ComponentContentSignal,
+  ComponentDataRequirement,
+  ComponentImplementationDescriptor,
+  ComponentImplementationId,
+  ComponentImplementationType,
+  ComponentLayoutRole,
+  ComponentMarketplaceCategory,
+  ComponentMarketplaceRegistry,
+  ComponentMarketplaceSelectionCriteria,
+  ComponentMarketplaceSummary,
+  ComponentPresentationBoundary,
+  ComponentThemeTokenHook,
+  ComponentThemeTrait,
+  ComponentVariantId
+} from './marketplace';
+export {
+  componentMarketplaceCategories,
+  componentMarketplaceImplementations,
+  componentMarketplaceRegistry,
+  getComponentCategory,
+  getComponentImplementation,
+  getComponentMarketplaceCategory,
+  getComponentMarketplaceImplementation,
+  getComponentMarketplaceSummary,
+  getComponentMarketplaceVariant,
+  listComponentCategories,
+  listComponentImplementations,
+  listComponentMarketplaceCategories,
+  listComponentMarketplaceImplementations,
+  selectComponentImplementations,
+  selectComponentMarketplaceImplementations
+} from './marketplace';
+export type {
   BrandIdentity,
   BreadcrumbItem,
   BreadcrumbsData,

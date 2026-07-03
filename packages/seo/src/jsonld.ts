@@ -7,6 +7,8 @@ import type {
   OrganizationProfile,
   PageSeoInput,
   PersonProfile,
+  ProductInput,
+  ProductOfferInput,
   ReviewInput,
   SeoImage,
   SiteSeoInput
@@ -34,6 +36,10 @@ export function generateStructuredData(site: SiteSeoInput, page: PageSeoInput = 
   const article = page.article ?? inferArticle(page);
   if (article) {
     nodes.push(buildArticleJsonLd(site, page, article, canonicalUrl));
+  }
+
+  if (page.product) {
+    nodes.push(buildProductJsonLd(site, page.product));
   }
 
   if (page.faq && page.faq.length > 0) {
@@ -108,6 +114,13 @@ export function buildBusinessJsonLd(site: SiteSeoInput, business: BusinessProfil
   });
 }
 
+export function buildLocalBusinessJsonLd(site: SiteSeoInput, business: BusinessProfile): JsonLdNode {
+  return buildBusinessJsonLd(site, {
+    ...business,
+    type: business.type ?? "LocalBusiness"
+  });
+}
+
 export function buildPersonJsonLd(person: PersonProfile, baseUrl: string): JsonLdNode {
   return cleanJsonLd({
     "@context": JSON_LD_CONTEXT,
@@ -166,6 +179,25 @@ export function buildFaqJsonLd(items: FaqItem[]): JsonLdNode {
   });
 }
 
+export function buildProductJsonLd(site: SiteSeoInput, product: ProductInput): JsonLdNode {
+  const images = normalizeImages(product.image ?? site.defaultImage, site.url).map((image) => image.url);
+
+  return cleanJsonLd({
+    "@context": JSON_LD_CONTEXT,
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: images,
+    sku: product.sku,
+    gtin: product.gtin,
+    brand: normalizeBrand(product.brand, site.url),
+    category: product.category,
+    offers: normalizeOffers(product.offers, site),
+    aggregateRating: normalizeAggregateRating(product.aggregateRating),
+    review: product.reviews?.map((review) => buildReviewBody(site, review))
+  });
+}
+
 export function buildReviewJsonLd(
   site: SiteSeoInput,
   page: PageSeoInput,
@@ -175,20 +207,8 @@ export function buildReviewJsonLd(
   return cleanJsonLd({
     "@context": JSON_LD_CONTEXT,
     "@type": "Review",
-    itemReviewed: {
-      "@type": page.type === "article" ? "Article" : "Thing",
-      name: review.itemReviewedName ?? page.title ?? site.name,
-      url: canonicalUrl
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: review.ratingValue,
-      bestRating: review.bestRating ?? 5,
-      worstRating: review.worstRating ?? 1
-    },
-    author: normalizeAuthor(review.author, site.url),
-    reviewBody: review.reviewBody,
-    datePublished: formatIsoDate(review.datePublished)
+    itemReviewed: normalizeReviewedItem(site, page, review, canonicalUrl),
+    ...buildReviewBody(site, review)
   });
 }
 
@@ -249,6 +269,159 @@ function normalizeAuthor(author: string | PersonProfile | undefined, baseUrl: st
   }
 
   return buildPersonJsonLd(author, baseUrl);
+}
+
+function normalizeBrand(brand: string | OrganizationProfile | undefined, baseUrl: string): JsonLdNode | string | undefined {
+  if (!brand) {
+    return undefined;
+  }
+
+  if (typeof brand === "string") {
+    return brand;
+  }
+
+  return cleanJsonLd({
+    "@type": "Brand",
+    name: brand.name,
+    logo: normalizeLogo(brand.logo, baseUrl),
+    url: brand.url ? normalizeUrl(brand.url, baseUrl) : undefined,
+    sameAs: brand.sameAs
+  });
+}
+
+function normalizeOffers(offers: ProductOfferInput | ProductOfferInput[] | undefined, site: SiteSeoInput): JsonLdNode | JsonLdNode[] | undefined {
+  if (!offers) {
+    return undefined;
+  }
+
+  const normalized = asArray(offers).map((offer) => cleanJsonLd({
+    "@type": "Offer",
+    url: offer.url ? normalizeUrl(offer.url, site.url) : undefined,
+    price: offer.price,
+    priceCurrency: offer.priceCurrency,
+    availability: normalizeSchemaUrl(offer.availability),
+    itemCondition: normalizeSchemaUrl(offer.itemCondition),
+    priceValidUntil: formatIsoDate(offer.priceValidUntil),
+    seller: normalizeSeller(offer.seller, site)
+  }));
+
+  return Array.isArray(offers) ? normalized : normalized[0];
+}
+
+function normalizeSeller(seller: string | OrganizationProfile | BusinessProfile | undefined, site: SiteSeoInput): JsonLdNode | string | undefined {
+  if (!seller) {
+    return undefined;
+  }
+
+  if (typeof seller === "string") {
+    return seller;
+  }
+
+  if (isBusinessProfile(seller)) {
+    return buildBusinessJsonLd(site, seller);
+  }
+
+  return buildOrganizationJsonLd(site, seller);
+}
+
+function normalizeAggregateRating(rating: ProductInput["aggregateRating"]): JsonLdNode | undefined {
+  if (!rating) {
+    return undefined;
+  }
+
+  return cleanJsonLd({
+    "@type": "AggregateRating",
+    ratingValue: rating.ratingValue,
+    reviewCount: rating.reviewCount,
+    ratingCount: rating.ratingCount,
+    bestRating: rating.bestRating ?? 5,
+    worstRating: rating.worstRating ?? 1
+  });
+}
+
+function normalizeSchemaUrl(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  return value.startsWith("http") ? value : `https://schema.org/${value}`;
+}
+
+function buildReviewBody(site: SiteSeoInput, review: ReviewInput): JsonLdNode {
+  return cleanJsonLd({
+    "@type": "Review",
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.ratingValue,
+      bestRating: review.bestRating ?? 5,
+      worstRating: review.worstRating ?? 1
+    },
+    author: normalizeAuthor(review.author, site.url),
+    reviewBody: review.reviewBody,
+    datePublished: formatIsoDate(review.datePublished)
+  });
+}
+
+function normalizeReviewedItem(
+  site: SiteSeoInput,
+  page: PageSeoInput,
+  review: ReviewInput,
+  canonicalUrl: string
+): JsonLdNode {
+  if (review.itemReviewed) {
+    return normalizeReviewTarget(site, review.itemReviewed, canonicalUrl);
+  }
+
+  if (page.product) {
+    return cleanJsonLd({
+      "@type": "Product",
+      name: page.product.name,
+      url: canonicalUrl
+    });
+  }
+
+  return cleanJsonLd({
+    "@type": page.type === "article" ? "Article" : page.type === "business" ? "LocalBusiness" : "Thing",
+    name: review.itemReviewedName ?? page.title ?? site.name,
+    url: canonicalUrl
+  });
+}
+
+function normalizeReviewTarget(
+  site: SiteSeoInput,
+  item: ProductInput | BusinessProfile | OrganizationProfile,
+  canonicalUrl: string
+): JsonLdNode {
+  if (isProductInput(item)) {
+    return cleanJsonLd({
+      "@type": "Product",
+      name: item.name,
+      url: canonicalUrl
+    });
+  }
+
+  if (isBusinessProfile(item)) {
+    return cleanJsonLd({
+      "@type": item.type ?? "LocalBusiness",
+      name: item.name ?? site.name,
+      url: item.url ? normalizeUrl(item.url, site.url) : canonicalUrl
+    });
+  }
+
+  return cleanJsonLd({
+    "@type": "Organization",
+    name: item.name ?? site.name,
+    url: item.url ? normalizeUrl(item.url, site.url) : canonicalUrl
+  });
+}
+
+function isProductInput(item: ProductInput | BusinessProfile | OrganizationProfile): item is ProductInput {
+  return "sku" in item || "gtin" in item || "offers" in item || "aggregateRating" in item;
+}
+
+function isBusinessProfile(item: BusinessProfile | OrganizationProfile): item is BusinessProfile;
+function isBusinessProfile(item: ProductInput | BusinessProfile | OrganizationProfile): item is BusinessProfile {
+  return "type" in item || "priceRange" in item || "openingHours" in item || "medicalSpecialty" in item;
 }
 
 function inferArticle(page: PageSeoInput): ArticleInput | undefined {

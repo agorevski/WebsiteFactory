@@ -1,12 +1,90 @@
 import type {
-  RssFeedInfo,
-  RssFeedItem,
+  LlmsTxtOptions,
+  PageSeoArtifact,
+  PageSeoInput,
   RobotsRule,
   RobotsTxtOptions,
+  RssFeedInfo,
+  RssFeedItem,
+  SeoArtifactFile,
+  SeoArtifactManifest,
+  SeoArtifactOptions,
   SeoImage,
-  SitemapEntry
+  SitemapEntry,
+  SiteSeoInput
 } from "./types.js";
-import { escapeXml, formatIsoDate, normalizeImage, normalizeUrl, withoutTrailingSlash } from "./utils.js";
+import { generateStructuredData, renderJsonLdScript } from "./jsonld.js";
+import { generatePageMetadata, renderMetaTags } from "./metadata.js";
+import { escapeXml, formatIsoDate, normalizeImage, normalizeImages, normalizeUrl, withoutTrailingSlash } from "./utils.js";
+
+export function generatePageSeoArtifact(
+  site: SiteSeoInput,
+  page: PageSeoInput = {},
+  options: SeoArtifactOptions = {}
+): PageSeoArtifact {
+  const metadata = generatePageMetadata(site, page, options);
+  const structuredData = generateStructuredData(site, page);
+  const path = page.path ?? new URL(metadata.canonicalUrl).pathname;
+
+  return {
+    path,
+    url: metadata.canonicalUrl,
+    metadata,
+    metaTags: renderMetaTags(metadata),
+    structuredData,
+    jsonLdScript: structuredData.length > 0 ? renderJsonLdScript(structuredData) : ""
+  };
+}
+
+export function generateSeoArtifacts(
+  site: SiteSeoInput,
+  pages: PageSeoInput[] = [],
+  options: SeoArtifactOptions = {}
+): SeoArtifactManifest {
+  const normalizedPages = pages.length > 0 ? pages : [{ path: "/", title: site.name }];
+  const pageArtifacts = normalizedPages.map((page) => generatePageSeoArtifact(site, page, options));
+  const sitemapEntries = options.sitemapEntries ?? normalizedPages.map((page) => pageToSitemapEntry(site, page));
+  const sitemapXml = generateSitemap(sitemapEntries, site.url);
+  const hasImageEntries = sitemapEntries.some((entry) => (entry.images ?? []).length > 0);
+  const shouldIncludeImageSitemap = options.includeImageSitemap === true || (options.includeImageSitemap !== false && hasImageEntries);
+  const imageSitemapXml = shouldIncludeImageSitemap ? generateImageSitemap(sitemapEntries, site.url) : undefined;
+  const sitemapUrls = [normalizeUrl("/sitemap.xml", site.url)];
+  if (shouldIncludeImageSitemap) {
+    sitemapUrls.push(normalizeUrl("/image-sitemap.xml", site.url));
+  }
+  const primarySitemapUrl = sitemapUrls[0] ?? normalizeUrl("/sitemap.xml", site.url);
+  const robotsTxt = generateRobotsTxt({
+    ...options.robots,
+    siteUrl: site.url,
+    sitemapUrls: options.robots?.sitemapUrls ?? sitemapUrls
+  });
+  const llmsTxt = generateLlmsTxt(site, {
+    ...options.llms,
+    siteUrl: site.url,
+    pages: normalizedPages,
+    sitemapUrl: options.llms?.sitemapUrl ?? primarySitemapUrl
+  });
+  const rssXml = options.rssFeed ? generateRssFeed(options.rssFeed, options.rssItems ?? []) : undefined;
+  const files = buildArtifactFiles(sitemapXml, robotsTxt, llmsTxt, imageSitemapXml, rssXml);
+
+  const manifest: SeoArtifactManifest = {
+    pages: pageArtifacts,
+    sitemapXml,
+    robotsTxt,
+    llmsTxt,
+    files
+  };
+
+  if (imageSitemapXml) {
+    manifest.imageSitemapXml = imageSitemapXml;
+  }
+
+  if (rssXml) {
+    manifest.rssXml = rssXml;
+  }
+
+  return manifest;
+}
 
 export function generateSitemap(entries: SitemapEntry[], siteUrl: string): string {
   const urls = entries
@@ -103,6 +181,7 @@ export function generateRobotsTxt(options: RobotsTxtOptions): string {
 }
 
 export function generateRssFeed(feed: RssFeedInfo, items: RssFeedItem[] = []): string {
+  const siteUrl = normalizeUrl(feed.siteUrl, feed.siteUrl);
   const sortedItems = [...items].sort((left, right) => {
     const leftTime = new Date(left.publishedAt ?? left.updatedAt ?? 0).getTime();
     const rightTime = new Date(right.publishedAt ?? right.updatedAt ?? 0).getTime();
@@ -111,14 +190,14 @@ export function generateRssFeed(feed: RssFeedInfo, items: RssFeedItem[] = []): s
 
   const channel = [
     `<title>${escapeXml(feed.title)}</title>`,
-    `<link>${escapeXml(feed.siteUrl)}</link>`,
+    `<link>${escapeXml(siteUrl)}</link>`,
     `<description>${escapeXml(feed.description)}</description>`,
-    feed.feedUrl ? `<atom:link href="${escapeXml(feed.feedUrl)}" rel="self" type="application/rss+xml" />` : undefined,
+    feed.feedUrl ? `<atom:link href="${escapeXml(normalizeUrl(feed.feedUrl, siteUrl))}" rel="self" type="application/rss+xml" />` : undefined,
     feed.language ? `<language>${escapeXml(feed.language)}</language>` : undefined,
     feed.copyright ? `<copyright>${escapeXml(feed.copyright)}</copyright>` : undefined,
     feed.managingEditor ? `<managingEditor>${escapeXml(feed.managingEditor)}</managingEditor>` : undefined,
     feed.webMaster ? `<webMaster>${escapeXml(feed.webMaster)}</webMaster>` : undefined,
-    ...sortedItems.map((item) => renderRssItem(item, feed.siteUrl))
+    ...sortedItems.map((item) => renderRssItem(item, siteUrl))
   ].filter((line): line is string => Boolean(line));
 
   return [
@@ -133,6 +212,48 @@ export function generateRssFeed(feed: RssFeedInfo, items: RssFeedItem[] = []): s
 
 export function createEmptyRssFeed(feed: RssFeedInfo): string {
   return generateRssFeed(feed, []);
+}
+
+export function generateLlmsTxt(site: SiteSeoInput, options: LlmsTxtOptions = {}): string {
+  const siteUrl = normalizeUrl(options.siteUrl ?? site.url, site.url);
+  const pages = [...(options.pages ?? [])].sort((left, right) => pageTitle(left, site).localeCompare(pageTitle(right, site)));
+  const lines = [
+    `# ${options.title ?? site.name}`,
+    ""
+  ];
+
+  const description = options.description ?? site.description;
+  if (description) {
+    lines.push(`> ${description}`, "");
+  }
+
+  lines.push(`Site: ${siteUrl}`);
+  if (options.includeSitemap !== false) {
+    lines.push(`Sitemap: ${normalizeUrl(options.sitemapUrl ?? "/sitemap.xml", siteUrl)}`);
+  }
+
+  if (pages.length > 0) {
+    lines.push("", "## Pages");
+    for (const page of pages) {
+      const title = pageTitle(page, site);
+      const url = normalizeUrl(page.canonicalUrl ?? page.url ?? page.path ?? "/", siteUrl);
+      const summary = page.description ?? page.summary ?? page.article?.description ?? page.product?.description;
+      lines.push(summary ? `- [${title}](${url}): ${summary}` : `- [${title}](${url})`);
+    }
+  }
+
+  for (const section of options.sections ?? []) {
+    lines.push("", `## ${section.heading}`);
+    if (section.body) {
+      lines.push(section.body);
+    }
+    for (const link of section.links ?? []) {
+      const url = normalizeUrl(link.url, siteUrl);
+      lines.push(link.description ? `- [${link.title}](${url}): ${link.description}` : `- [${link.title}](${url})`);
+    }
+  }
+
+  return `${lines.join("\n").trim()}\n`;
 }
 
 function renderImageSitemapNode(image: SeoImage, siteUrl: string, indent: string): string {
@@ -178,4 +299,57 @@ function toList(value: string | string[] | undefined): string[] {
 
 function clampPriority(priority: number): number {
   return Math.min(1, Math.max(0, priority));
+}
+
+function pageToSitemapEntry(site: SiteSeoInput, page: PageSeoInput): SitemapEntry {
+  const url = page.canonicalUrl ?? page.url ?? page.path ?? "/";
+  const images = normalizeImages(page.images ?? page.image ?? page.product?.image ?? site.defaultImage, site.url);
+  const entry: SitemapEntry = {
+    url,
+    changeFrequency: page.type === "article" ? "monthly" : "weekly",
+    priority: page.path === "/" || page.url === site.url ? 1 : 0.7
+  };
+
+  const lastModified = page.modifiedAt ?? page.publishedAt ?? page.article?.modifiedAt ?? page.article?.publishedAt;
+  if (lastModified) {
+    entry.lastModified = lastModified;
+  }
+
+  if (images.length > 0) {
+    entry.images = images;
+  }
+
+  if (page.alternates) {
+    entry.alternates = page.alternates;
+  }
+
+  return entry;
+}
+
+function pageTitle(page: PageSeoInput, site: SiteSeoInput): string {
+  return page.title ?? page.product?.name ?? page.article?.headline ?? site.name;
+}
+
+function buildArtifactFiles(
+  sitemapXml: string,
+  robotsTxt: string,
+  llmsTxt: string,
+  imageSitemapXml: string | undefined,
+  rssXml: string | undefined
+): SeoArtifactFile[] {
+  const files: SeoArtifactFile[] = [
+    { path: "sitemap.xml", contents: sitemapXml, contentType: "application/xml" },
+    { path: "robots.txt", contents: robotsTxt, contentType: "text/plain; charset=utf-8" },
+    { path: "llms.txt", contents: llmsTxt, contentType: "text/plain; charset=utf-8" }
+  ];
+
+  if (imageSitemapXml) {
+    files.push({ path: "image-sitemap.xml", contents: imageSitemapXml, contentType: "application/xml" });
+  }
+
+  if (rssXml) {
+    files.push({ path: "rss.xml", contents: rssXml, contentType: "application/rss+xml" });
+  }
+
+  return files;
 }

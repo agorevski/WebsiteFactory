@@ -102,7 +102,9 @@ The generated Madrona page is written to:
 apps/website-builder/dist/madrona-family-dental/index.html
 ```
 
-The route in local preview or deployment is `/madrona-family-dental/`. For a full pre-handoff check after schema, package, or rendering changes, run `npm run validate` instead of only the example validator.
+The route in local preview or deployment is `/madrona-family-dental/`. Use `vertical: medical`, `theme.palette: clinic`, and the registered `theme.name: dentalClinic` when available. Keep the YAML conservative: if official pages are unavailable or return errors, document that content relies on indexed official snippets, public listings, and practice review rather than unsourced claims.
+
+For Madrona-specific generator confidence after package outputs are current, run the generator smoke check in section 6 and confirm the plan resolves a clinic/dental theme, service/contact/FAQ-oriented sections, and the expected `/madrona-family-dental/` route. For a full pre-handoff check after schema, package, or rendering changes, run `npm run validate` instead of only the example validator.
 
 ## 5. Run the Astro dev server
 
@@ -144,6 +146,35 @@ npm run validate:examples
 ```
 
 If the site should be visible in the demo, confirm the `slug` is lowercase, URL-safe, and unique. The Astro route will be `/<slug>/`.
+
+### Schema, theme, template, and component selection
+
+Use this workflow before writing or refreshing YAML:
+
+| Decision | How to choose | Source of truth |
+| --- | --- | --- |
+| Schema level | Always keep required universal fields. Add optional `content.version: 2` when source facts support normalized services, locations, people, FAQ, booking, compliance, media, or review data. | `packages/schema/src/index.ts` exports `universalSiteSchema`, `UniversalSiteSchema`, `parseUniversalSite`, and `universalContentV2Schema`. |
+| Vertical | Use the broad existing top-level vertical for builder compatibility; use `content.verticals` for normalized v2 detail. | Existing examples and `normalizedVerticalSchema`. |
+| Theme | Keep `theme.palette` as `clinic`, `trade`, `hospitality`, or `professional`; set `theme.name` to a registered theme such as `dentalClinic` when the registry supports the content. | `packages/themes/src/themes.ts`, `packages/themes/src/index.ts`, `selectThemeForContent`. |
+| Page template | Use only schema-supported `pages[].template` values: `landing` or `service-index`. Root pages usually use `landing`; service directories use `service-index`. | `packages/schema/src/index.ts`; app route mapping in `apps/website-builder/src/lib/pages.ts`. |
+| Sections | Use universal section types: `services`, `proof`, `process`, `testimonials`, `faq`, `content`. Prefer `content` over fabricated testimonials for unsourced review themes. | `universalSectionSchema`; existing examples. |
+| Components | Do not put component variants in YAML. Provide content signals/data and let the generator and marketplace select implementations. | `packages/components/src/marketplace.ts`, `packages/generator/src/index.ts`. |
+| Quality | Keep titles, descriptions, canonical paths, alt text, source notes, and regulated-content disclaimers reviewable. | `packages/seo/src/index.ts`, `packages/validation/src/index.ts`. |
+
+### Generator smoke check
+
+Run this when adding v2 content, changing theme names, adding page mappings, or when section choices are uncertain. Build dependent packages first if their `dist` output is stale.
+
+```sh
+npm run build --workspace @website-factory/schema
+npm run build --workspace @website-factory/themes
+npm run build --workspace @website-factory/components
+npm run build --workspace @website-factory/seo
+npm run build --workspace @website-factory/generator
+node --input-type=module -e "import { readFileSync } from 'node:fs'; import { parseUniversalSite } from './packages/schema/dist/index.js'; import { createGenerationPlan, validateGenerationPlan } from './packages/generator/dist/index.js'; const site = parseUniversalSite(readFileSync('examples/wa/seattle/98122/madrona-family-dental/website.yaml', 'utf8'), 'examples/wa/seattle/98122/madrona-family-dental/website.yaml'); const plan = createGenerationPlan(site); const validation = validateGenerationPlan(plan); console.log(JSON.stringify({ theme: plan.theme.resolvedThemeId, sections: plan.sections.map((section) => section.id), routes: plan.staticPlan.routes.map((route) => route.path), diagnostics: validation.diagnostics }, null, 2)); if (!validation.valid) process.exit(1);"
+```
+
+The smoke check is not a replacement for `npm run validate:examples`; it confirms the generator can infer content signals, select marketplace components, resolve themes, and create static route plans from the YAML.
 
 ## 7. Debug schema validation failures
 

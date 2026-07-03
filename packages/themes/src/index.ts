@@ -1,23 +1,38 @@
 export type {
   AnimationTokens,
+  BreakpointRole,
   ButtonToken,
   ButtonVariant,
+  CardToken,
+  CardVariant,
+  ContainerRole,
   ElevationRole,
   FooterTokens,
+  FormTokens,
+  HeroTokens,
+  IconTokens,
+  MotionPresetRole,
+  MotionPresetToken,
   NavigationTokens,
+  PageTemplateRole,
+  PageTemplateToken,
   RadiusRole,
+  ResponsiveTokens,
+  SectionDefaultToken,
+  SectionRole,
   SpacingRole,
   ThemeColorRole,
   ThemeColorTokens,
   ThemeMode,
   ThemeOverrides,
+  ThemeTokenOverrides,
   ThemeTokens,
   TypographyRole,
   TypographyToken,
   WebsiteTheme
-} from './types';
-export { themes } from './themes';
-export type { ThemeName } from './themes';
+} from './types.js';
+export { themes } from './themes.js';
+export type { ThemeName } from './themes.js';
 export {
   defaultThemeName,
   getTheme,
@@ -29,4 +44,4 @@ export {
   themeClassNames,
   themeCssText,
   themeToCssVariables
-} from './engine';
+} from './engine.js';

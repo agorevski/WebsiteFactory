@@ -1,10 +1,10 @@
-import { themes, type ThemeName } from './themes';
-import type { ThemeMode, ThemeOverrides, ThemeTokens, WebsiteTheme } from './types';
+import { themes, type ThemeName } from './themes.js';
+import type { ThemeMode, ThemeOverrides, ThemeTokens, WebsiteTheme } from './types.js';
 
 export const defaultThemeName: ThemeName = 'modern';
 
 export function listThemes(): readonly WebsiteTheme<ThemeName>[] {
-  return Object.values(themes) as readonly WebsiteTheme<ThemeName>[];
+  return Object.values(themes);
 }
 
 export function isThemeName(value: string): value is ThemeName {
@@ -12,7 +12,7 @@ export function isThemeName(value: string): value is ThemeName {
 }
 
 export function getTheme(name: ThemeName = defaultThemeName): WebsiteTheme<ThemeName> {
-  return themes[name] as WebsiteTheme<ThemeName>;
+  return themes[name];
 }
 
 export function resolveTheme(name?: string): WebsiteTheme<ThemeName> {
@@ -43,8 +43,33 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+const radiusRoles = ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'pill', 'full'];
+const elevationRoles = ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+const containerRoles = ['narrow', 'content', 'wide', 'full', 'prose'];
+
+function resolveReferencedValue(prefix: string, value: string): string {
+  if (radiusRoles.includes(value) && prefix.endsWith('-radius')) {
+    return `var(--wf-radius-${value})`;
+  }
+
+  if (elevationRoles.includes(value) && (prefix.endsWith('-shadow') || prefix.endsWith('-hover-shadow'))) {
+    return `var(--wf-elevation-${value})`;
+  }
+
+  if (containerRoles.includes(value) && (prefix.endsWith('-container') || prefix.endsWith('-max-width'))) {
+    return `var(--wf-containers-${value})`;
+  }
+
+  return value;
+}
+
 function flattenTokens(prefix: string, value: unknown, target: Record<string, string>): void {
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === 'string') {
+    target[prefix] = resolveReferencedValue(prefix, value);
+    return;
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean') {
     target[prefix] = String(value);
     return;
   }
@@ -61,16 +86,10 @@ function flattenTokens(prefix: string, value: unknown, target: Record<string, st
 export function themeToCssVariables(theme: WebsiteTheme, mode: ThemeMode = theme.defaultMode): Record<string, string> {
   const resolvedMode = resolveThemeMode(theme, mode);
   const variables: Record<string, string> = {};
+  const { modes, ...sharedTokens } = theme.tokens;
   const tokenGroups: Omit<ThemeTokens, 'modes'> & { readonly colors: ThemeTokens['modes'][ThemeMode] } = {
-    colors: theme.tokens.modes[resolvedMode],
-    typography: theme.tokens.typography,
-    spacing: theme.tokens.spacing,
-    radius: theme.tokens.radius,
-    elevation: theme.tokens.elevation,
-    buttons: theme.tokens.buttons,
-    animation: theme.tokens.animation,
-    navigation: theme.tokens.navigation,
-    footer: theme.tokens.footer
+    colors: modes[resolvedMode],
+    ...sharedTokens
   };
 
   for (const [group, value] of Object.entries(tokenGroups)) {

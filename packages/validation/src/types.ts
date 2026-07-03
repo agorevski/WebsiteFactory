@@ -38,6 +38,10 @@ export interface ImageNode {
   width?: number | undefined;
   height?: number | undefined;
   loading?: "eager" | "lazy" | string | undefined;
+  srcset?: string | undefined;
+  sizes?: string | undefined;
+  decoding?: "async" | "sync" | "auto" | string | undefined;
+  fetchPriority?: "high" | "low" | "auto" | string | undefined;
   selector?: string | undefined;
 }
 
@@ -66,9 +70,92 @@ export interface InteractiveNode {
   tagName?: string | undefined;
   tabIndex?: number | undefined;
   ariaLabel?: string | undefined;
+  ariaLabelledBy?: string | undefined;
   text?: string | undefined;
+  disabled?: boolean | undefined;
   hasKeyboardHandler?: boolean | undefined;
   selector?: string | undefined;
+}
+
+export interface LandmarkNode {
+  role: "banner" | "navigation" | "main" | "complementary" | "contentinfo" | "search" | "form" | string;
+  tagName?: string | undefined;
+  label?: string | undefined;
+  selector?: string | undefined;
+}
+
+export interface AriaNode {
+  selector?: string | undefined;
+  tagName?: string | undefined;
+  role?: string | undefined;
+  ariaHidden?: boolean | undefined;
+  ariaLabel?: string | undefined;
+  ariaLabelledBy?: string | undefined;
+  ariaDescribedBy?: string | undefined;
+  ariaControls?: string | undefined;
+  invalidAttributes?: string[] | undefined;
+  missingReferences?: string[] | undefined;
+  focusable?: boolean | undefined;
+  interactive?: boolean | undefined;
+  text?: string | undefined;
+}
+
+export interface ScreenReaderSignals {
+  hasLangAttribute?: boolean | undefined;
+  lang?: string | undefined;
+  hasDocumentTitle?: boolean | undefined;
+  hasSkipLink?: boolean | undefined;
+  ariaLiveRegionCount?: number | undefined;
+  hiddenFocusableSelectors?: string[] | undefined;
+}
+
+export interface MotionSignals {
+  honorsReducedMotion?: boolean | undefined;
+  animatedSelectors?: string[] | undefined;
+  autoplayMediaSelectors?: string[] | undefined;
+}
+
+export interface ImageOptimizationIssue {
+  src: string;
+  selector?: string | undefined;
+  reason: string;
+}
+
+export interface ImageOptimizationSignals {
+  responsiveImageCount?: number | undefined;
+  missingDimensionSelectors?: string[] | undefined;
+  unoptimizedImages?: ImageOptimizationIssue[] | undefined;
+  oversizedImages?: ImageOptimizationIssue[] | undefined;
+  modernFormats?: boolean | undefined;
+  preloadedHeroImage?: boolean | undefined;
+}
+
+export type FontDisplayStrategy = "auto" | "block" | "swap" | "fallback" | "optional" | string;
+
+export interface CssOptimizationSignals {
+  hasCriticalCss?: boolean | undefined;
+  criticalCssBytes?: number | undefined;
+  blockingStylesheetCount?: number | undefined;
+  unusedCssBytes?: number | undefined;
+  fontDisplay?: FontDisplayStrategy | undefined;
+  preloadedFontCount?: number | undefined;
+  fontFileCount?: number | undefined;
+  usesVariableFonts?: boolean | undefined;
+}
+
+export interface JavaScriptOptimizationSignals {
+  usesStaticRendering?: boolean | undefined;
+  minimalJavaScript?: boolean | undefined;
+  totalScriptBytes?: number | undefined;
+  routeScriptBytes?: number | undefined;
+  inlineScriptBytes?: number | undefined;
+  moduleScriptCount?: number | undefined;
+  deferredScriptCount?: number | undefined;
+  asyncScriptCount?: number | undefined;
+  thirdPartyScriptCount?: number | undefined;
+  codeSplitChunkCount?: number | undefined;
+  lazyLoadedComponentCount?: number | undefined;
+  hydrationStrategy?: "static" | "islands" | "spa" | string | undefined;
 }
 
 export interface SeoDocument {
@@ -100,6 +187,19 @@ export interface PerformanceSignals {
   scriptCount?: number | undefined;
   stylesheetCount?: number | undefined;
   hasLazyImages?: boolean | undefined;
+  usesStaticRendering?: boolean | undefined;
+  minimalJavaScript?: boolean | undefined;
+  hasCriticalCss?: boolean | undefined;
+  criticalCssBytes?: number | undefined;
+  blockingStylesheetCount?: number | undefined;
+  fontDisplay?: FontDisplayStrategy | undefined;
+  preloadedFontCount?: number | undefined;
+  codeSplitChunkCount?: number | undefined;
+  lazyLoadedComponentCount?: number | undefined;
+  thirdPartyScriptCount?: number | undefined;
+  deferredScriptCount?: number | undefined;
+  asyncScriptCount?: number | undefined;
+  moduleScriptCount?: number | undefined;
 }
 
 export interface ResponsiveSignals {
@@ -116,6 +216,16 @@ export interface ContrastToken {
   fontWeight?: number | undefined;
 }
 
+export interface ContrastAssessment {
+  token: ContrastToken;
+  ratio?: number | undefined;
+  requiredRatio: number;
+  wcagLevel: "AA";
+  largeText: boolean;
+  passed: boolean;
+  parseable: boolean;
+}
+
 export interface PageValidationInput {
   path?: string | undefined;
   url?: string | undefined;
@@ -125,6 +235,13 @@ export interface PageValidationInput {
   formControls?: FormControlNode[] | undefined;
   links?: LinkNode[] | undefined;
   interactive?: InteractiveNode[] | undefined;
+  landmarks?: LandmarkNode[] | undefined;
+  aria?: AriaNode[] | undefined;
+  screenReader?: ScreenReaderSignals | undefined;
+  motion?: MotionSignals | undefined;
+  imageOptimization?: ImageOptimizationSignals | undefined;
+  cssOptimization?: CssOptimizationSignals | undefined;
+  javascript?: JavaScriptOptimizationSignals | undefined;
   seo?: SeoDocument | undefined;
   performance?: PerformanceSignals | undefined;
   responsive?: ResponsiveSignals | undefined;

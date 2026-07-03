@@ -20,7 +20,7 @@ export function generatePageMetadata(
   const title = buildTitle(site, page, options);
   const description = buildDescription(site, page, title, options);
   const canonicalUrl = normalizeUrl(page.canonicalUrl ?? page.url ?? page.path ?? "/", site.url);
-  const images = normalizeImages(page.images ?? page.image ?? site.defaultImage, site.url);
+  const images = normalizeImages(page.images ?? page.image ?? page.product?.image ?? site.defaultImage, site.url);
   const publishedTime = formatIsoDate(page.publishedAt ?? page.article?.publishedAt);
   const modifiedTime = formatIsoDate(page.modifiedAt ?? page.article?.modifiedAt);
   const card: TwitterCardType = images.length > 0 ? "summary_large_image" : "summary";
@@ -29,7 +29,7 @@ export function generatePageMetadata(
     description,
     url: canonicalUrl,
     siteName: site.name,
-    type: page.type ?? (publishedTime ? "article" : "website"),
+    type: page.type ?? (page.product ? "product" : publishedTime ? "article" : "website"),
     images,
     tags: page.tags ?? page.article?.tags ?? [],
     ...optional("locale", page.locale ?? site.locale),
@@ -91,6 +91,25 @@ export function renderMetaTags(metadata: PageMetadata): string {
     if (image.height) {
       lines.push(`<meta property="og:image:height" content="${image.height.toString()}">`);
     }
+    if (image.type) {
+      lines.push(`<meta property="og:image:type" content="${escapeHtml(image.type)}">`);
+    }
+  }
+
+  if (metadata.openGraph.publishedTime) {
+    lines.push(`<meta property="article:published_time" content="${escapeHtml(metadata.openGraph.publishedTime)}">`);
+  }
+
+  if (metadata.openGraph.modifiedTime) {
+    lines.push(`<meta property="article:modified_time" content="${escapeHtml(metadata.openGraph.modifiedTime)}">`);
+  }
+
+  if (metadata.openGraph.section) {
+    lines.push(`<meta property="article:section" content="${escapeHtml(metadata.openGraph.section)}">`);
+  }
+
+  for (const tag of metadata.openGraph.tags) {
+    lines.push(`<meta property="article:tag" content="${escapeHtml(tag)}">`);
   }
 
   if (metadata.twitter.site) {
@@ -103,6 +122,9 @@ export function renderMetaTags(metadata: PageMetadata): string {
 
   if (metadata.twitter.image) {
     lines.push(`<meta name="twitter:image" content="${escapeHtml(metadata.twitter.image.url)}">`);
+    if (metadata.twitter.image.alt) {
+      lines.push(`<meta name="twitter:image:alt" content="${escapeHtml(metadata.twitter.image.alt)}">`);
+    }
   }
 
   for (const [locale, url] of Object.entries(metadata.alternates).sort(([left], [right]) => left.localeCompare(right))) {
@@ -113,7 +135,7 @@ export function renderMetaTags(metadata: PageMetadata): string {
 }
 
 function buildTitle(site: SiteSeoInput, page: PageSeoInput, options: MetadataOptions): string {
-  const rawTitle = firstText(page.title, site.name) ?? "";
+  const rawTitle = firstText(page.title, page.product?.name, site.name) ?? "";
   const separator = options.titleSeparator ?? " | ";
   const templated = options.titleTemplate
     ? options.titleTemplate.replace(/%s/g, rawTitle).replace(/%site/g, site.name)
@@ -130,7 +152,15 @@ function buildDescription(
   fallbackTitle: string,
   options: MetadataOptions
 ): string {
-  const raw = firstText(page.description, page.summary, page.article?.description, site.description, options.defaultDescription, fallbackTitle) ?? "";
+  const raw = firstText(
+    page.description,
+    page.summary,
+    page.article?.description,
+    page.product?.description,
+    site.description,
+    options.defaultDescription,
+    fallbackTitle
+  ) ?? "";
   return truncateText(stripHtml(raw), options.maxDescriptionLength ?? DEFAULT_MAX_DESCRIPTION_LENGTH);
 }
 

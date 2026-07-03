@@ -13,6 +13,9 @@ export function createA11yChecklist(input: PageValidationInput): ChecklistItem[]
   const headings = input.headings ?? [];
   const controls = input.formControls ?? [];
   const images = input.images ?? [];
+  const landmarks = input.landmarks ?? [];
+  const aria = input.aria ?? [];
+  const motion = input.motion;
 
   return [
     {
@@ -47,6 +50,36 @@ export function createA11yChecklist(input: PageValidationInput): ChecklistItem[]
         const nativeElement = node.tagName && ["button", "a", "input", "select", "textarea", "summary"].includes(node.tagName);
         return nativeElement || node.tabIndex !== undefined || node.hasKeyboardHandler;
       })
+    },
+    {
+      id: "main-landmark",
+      label: "Page exposes one main landmark",
+      category: "a11y",
+      severity: "warning",
+      passed: landmarks.length === 0 || landmarks.filter((landmark) => landmark.role === "main").length === 1
+    },
+    {
+      id: "aria-integrity",
+      label: "ARIA references and attributes are valid",
+      category: "a11y",
+      severity: "error",
+      passed: aria.every((node) => (node.invalidAttributes ?? []).length === 0 && (node.missingReferences ?? []).length === 0 && !(node.ariaHidden && node.focusable))
+    },
+    {
+      id: "screen-reader-basics",
+      label: "Document has screen reader basics",
+      category: "a11y",
+      severity: "warning",
+      passed: input.screenReader
+        ? input.screenReader.hasDocumentTitle !== false && input.screenReader.hasLangAttribute !== false
+        : true
+    },
+    {
+      id: "reduced-motion",
+      label: "Motion honors reduced-motion preferences",
+      category: "a11y",
+      severity: "warning",
+      passed: !motion || (motion.animatedSelectors ?? []).length === 0 || motion.honorsReducedMotion === true
     }
   ];
 }

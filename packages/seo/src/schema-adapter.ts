@@ -2,6 +2,8 @@ import type {
   BusinessProfile,
   FaqItem,
   PageSeoInput,
+  ProductInput,
+  ProductOfferInput,
   ReviewInput,
   SchemaSeoAdapter,
   SeoImage,
@@ -98,6 +100,7 @@ export function mapSchemaPageToSeo(page: Record<string, unknown>): PageSeoInput 
   const modifiedAt = readString(page, "modifiedAt") ?? readString(page, "dateModified");
   const faq = readFaqItems(readRecordArray(page.faq));
   const reviews = readReviews(readRecordArray(page.reviews));
+  const product = readProduct(readRecord(page.product));
 
   return {
     path: normalizePath(readString(page, "path") ?? readString(page, "slug")),
@@ -114,7 +117,8 @@ export function mapSchemaPageToSeo(page: Record<string, unknown>): PageSeoInput 
     ...optional("publishedAt", publishedAt),
     ...optional("modifiedAt", modifiedAt),
     ...optional("faq", faq),
-    ...optional("reviews", reviews)
+    ...optional("reviews", reviews),
+    ...optional("product", product)
   };
 }
 
@@ -334,6 +338,88 @@ function readReviews(items: Array<Record<string, unknown>> | undefined): ReviewI
   });
 
   return reviews.length > 0 ? reviews : undefined;
+}
+
+function readProduct(product: Record<string, unknown> | undefined): ProductInput | undefined {
+  const name = readString(product, "name") ?? readString(product, "title");
+  if (!name) {
+    return undefined;
+  }
+
+  const offers = readOffers(readRecordArray(product?.offers) ?? readSingleOffer(product));
+  const reviews = readReviews(readRecordArray(product?.reviews));
+  return {
+    name,
+    ...optional("description", readString(product, "description") ?? readString(product, "summary")),
+    ...optional("image", readImage(product, "image")),
+    ...optional("sku", readString(product, "sku")),
+    ...optional("gtin", readString(product, "gtin")),
+    ...optional("brand", readString(product, "brand")),
+    ...optional("category", readString(product, "category")),
+    ...optional("offers", offers),
+    ...optional("aggregateRating", readAggregateRating(readRecord(product?.aggregateRating))),
+    ...optional("reviews", reviews)
+  };
+}
+
+function readSingleOffer(product: Record<string, unknown> | undefined): Array<Record<string, unknown>> | undefined {
+  if (!product) {
+    return undefined;
+  }
+
+  const price = readString(product, "price") ?? readNumber(product, "price")?.toString();
+  const currency = readString(product, "priceCurrency") ?? readString(product, "currency");
+  if (!price && !currency) {
+    return undefined;
+  }
+
+  return [{
+    price,
+    priceCurrency: currency,
+    url: readString(product, "url")
+  }];
+}
+
+function readOffers(items: Array<Record<string, unknown>> | undefined): ProductOfferInput | ProductOfferInput[] | undefined {
+  const offers = (items ?? []).flatMap((item) => {
+    const price = readString(item, "price") ?? readNumber(item, "price")?.toString();
+    const priceCurrency = readString(item, "priceCurrency") ?? readString(item, "currency");
+    const url = readString(item, "url");
+    if (!price && !priceCurrency && !url) {
+      return [];
+    }
+
+    return [{
+      ...optional("url", url),
+      ...optional("price", price),
+      ...optional("priceCurrency", priceCurrency),
+      ...optional("availability", readString(item, "availability")),
+      ...optional("itemCondition", readString(item, "itemCondition")),
+      ...optional("priceValidUntil", readString(item, "priceValidUntil"))
+    }];
+  });
+
+  if (offers.length === 0) {
+    return undefined;
+  }
+
+  const first = offers[0];
+  return offers.length === 1 ? first : offers;
+}
+
+function readAggregateRating(rating: Record<string, unknown> | undefined): ProductInput["aggregateRating"] {
+  const ratingValue = readNumber(rating, "ratingValue") ?? readNumber(rating, "rating");
+  if (ratingValue === undefined) {
+    return undefined;
+  }
+
+  return {
+    ratingValue,
+    ...optional("reviewCount", readNumber(rating, "reviewCount")),
+    ...optional("ratingCount", readNumber(rating, "ratingCount")),
+    ...optional("bestRating", readNumber(rating, "bestRating")),
+    ...optional("worstRating", readNumber(rating, "worstRating"))
+  };
 }
 
 function readAddress(address: Record<string, unknown> | undefined): BusinessProfile["address"] {

@@ -1,39 +1,141 @@
 import type {
+  AriaNode,
+  CssOptimizationSignals,
   FormControlNode,
   HeadingNode,
   ImageNode,
+  ImageOptimizationSignals,
   InteractiveNode,
+  JavaScriptOptimizationSignals,
+  LandmarkNode,
   LinkNode,
+  MotionSignals,
   PageValidationInput,
+  ScreenReaderSignals,
   SeoDocument
 } from "./types.js";
+
+const landmarkRoles = new Set(["banner", "navigation", "main", "complementary", "contentinfo", "search", "form"]);
+const interactiveRoles = new Set(["button", "link", "menuitem", "tab", "checkbox", "radio", "switch", "textbox", "combobox"]);
+const validAriaAttributes = new Set([
+  "aria-activedescendant",
+  "aria-atomic",
+  "aria-autocomplete",
+  "aria-busy",
+  "aria-checked",
+  "aria-colcount",
+  "aria-colindex",
+  "aria-colspan",
+  "aria-controls",
+  "aria-current",
+  "aria-describedby",
+  "aria-description",
+  "aria-details",
+  "aria-disabled",
+  "aria-errormessage",
+  "aria-expanded",
+  "aria-flowto",
+  "aria-haspopup",
+  "aria-hidden",
+  "aria-invalid",
+  "aria-keyshortcuts",
+  "aria-label",
+  "aria-labelledby",
+  "aria-level",
+  "aria-live",
+  "aria-modal",
+  "aria-multiline",
+  "aria-multiselectable",
+  "aria-orientation",
+  "aria-owns",
+  "aria-placeholder",
+  "aria-posinset",
+  "aria-pressed",
+  "aria-readonly",
+  "aria-relevant",
+  "aria-required",
+  "aria-roledescription",
+  "aria-rowcount",
+  "aria-rowindex",
+  "aria-rowspan",
+  "aria-selected",
+  "aria-setsize",
+  "aria-sort",
+  "aria-valuemax",
+  "aria-valuemin",
+  "aria-valuenow",
+  "aria-valuetext"
+]);
 
 export function enrichFromHtml(input: PageValidationInput): PageValidationInput {
   if (!input.html) {
     return input;
   }
 
+  const html = input.html;
+  const extractedImages = input.images ?? extractImages(html);
+  const cssOptimization = {
+    ...extractCssOptimization(html),
+    ...input.cssOptimization
+  };
+  const javascript = {
+    ...extractJavaScriptOptimization(html),
+    ...input.javascript
+  };
+
   return {
     ...input,
-    headings: input.headings ?? extractHeadings(input.html),
-    images: input.images ?? extractImages(input.html),
-    formControls: input.formControls ?? extractFormControls(input.html),
-    links: input.links ?? extractLinks(input.html),
-    interactive: input.interactive ?? extractInteractive(input.html),
+    headings: input.headings ?? extractHeadings(html),
+    images: extractedImages,
+    formControls: input.formControls ?? extractFormControls(html),
+    links: input.links ?? extractLinks(html),
+    interactive: input.interactive ?? extractInteractive(html),
+    landmarks: input.landmarks ?? extractLandmarks(html),
+    aria: input.aria ?? extractAriaNodes(html),
+    screenReader: {
+      ...extractScreenReaderSignals(html),
+      ...input.screenReader
+    },
+    motion: {
+      ...extractMotionSignals(html),
+      ...input.motion
+    },
+    imageOptimization: {
+      ...extractImageOptimizationSignals(html, extractedImages),
+      ...input.imageOptimization
+    },
+    cssOptimization,
+    javascript,
     seo: {
-      ...extractSeo(input.html),
+      ...extractSeo(html),
       ...input.seo
     },
     responsive: {
-      hasViewportMeta: hasViewportMeta(input.html),
+      hasViewportMeta: hasViewportMeta(html),
+      usesResponsiveImages: extractedImages.some((image) => Boolean(image.srcset || image.sizes)),
       ...input.responsive
     },
     performance: {
-      htmlBytes: new TextEncoder().encode(input.html).length,
-      imageCount: countMatches(input.html, /<img\b/gi),
-      scriptCount: countMatches(input.html, /<script\b/gi),
-      stylesheetCount: countMatches(input.html, /<link\b[^>]*rel=["']?stylesheet/gi),
-      hasLazyImages: /<img\b[^>]*\bloading=["']lazy["']/i.test(input.html),
+      htmlBytes: byteLength(html),
+      imageCount: extractedImages.length,
+      scriptCount: countMatches(html, /<script\b/gi),
+      stylesheetCount: countMatches(html, /<link\b[^>]*rel=["']?stylesheet/gi),
+      scriptBytes: javascript.totalScriptBytes,
+      styleBytes: cssOptimization.criticalCssBytes,
+      hasLazyImages: extractedImages.some((image) => image.loading === "lazy"),
+      usesStaticRendering: javascript.usesStaticRendering,
+      minimalJavaScript: javascript.minimalJavaScript,
+      hasCriticalCss: cssOptimization.hasCriticalCss,
+      criticalCssBytes: cssOptimization.criticalCssBytes,
+      blockingStylesheetCount: cssOptimization.blockingStylesheetCount,
+      fontDisplay: cssOptimization.fontDisplay,
+      preloadedFontCount: cssOptimization.preloadedFontCount,
+      codeSplitChunkCount: javascript.codeSplitChunkCount,
+      lazyLoadedComponentCount: javascript.lazyLoadedComponentCount,
+      thirdPartyScriptCount: javascript.thirdPartyScriptCount,
+      deferredScriptCount: javascript.deferredScriptCount,
+      asyncScriptCount: javascript.asyncScriptCount,
+      moduleScriptCount: javascript.moduleScriptCount,
       ...input.performance
     }
   };
@@ -57,6 +159,10 @@ export function extractImages(html: string): ImageNode[] {
       width: readNumber(attrs.width),
       height: readNumber(attrs.height),
       loading: attrs.loading,
+      srcset: attrs.srcset,
+      sizes: attrs.sizes,
+      decoding: attrs.decoding,
+      fetchPriority: attrs.fetchpriority,
       selector: `img:nth-of-type(${index + 1})`
     };
   });
@@ -108,10 +214,10 @@ export function extractInteractive(html: string): InteractiveNode[] {
     .flatMap((match, index): InteractiveNode[] => {
       const tagName = (match[1] ?? "").toLowerCase();
       const attrs = parseAttributes(match[2] ?? "");
-      const isNative = ["button", "a", "input", "select", "textarea", "summary"].includes(tagName);
+      const isNative = isNativeInteractive(tagName, attrs);
       const role = attrs.role;
       const hasClick = attrs.onclick !== undefined || attrs["@click"] !== undefined;
-      const isInteractive = isNative || hasClick || role === "button" || role === "link" || role === "menuitem";
+      const isInteractive = isNative || hasClick || interactiveRoles.has(role ?? "");
 
       if (!isInteractive) {
         return [];
@@ -122,11 +228,166 @@ export function extractInteractive(html: string): InteractiveNode[] {
         tagName,
         tabIndex: readNumber(attrs.tabindex),
         ariaLabel: attrs["aria-label"],
+        ariaLabelledBy: attrs["aria-labelledby"],
         text: stripTags(match[3] ?? ""),
+        disabled: attrs.disabled !== undefined || attrs["aria-disabled"] === "true",
         hasKeyboardHandler: attrs.onkeydown !== undefined || attrs.onkeyup !== undefined || attrs.onkeypress !== undefined,
         selector: `${tagName}:nth-of-type(${index + 1})`
       }];
     });
+}
+
+export function extractLandmarks(html: string): LandmarkNode[] {
+  return [...html.matchAll(/<(header|nav|main|aside|footer|form|section|div)\b([^>]*)>/gi)].flatMap((match, index) => {
+    const tagName = (match[1] ?? "").toLowerCase();
+    const attrs = parseAttributes(match[2] ?? "");
+    const role = attrs.role ?? nativeLandmarkRole(tagName, attrs);
+    if (!role || !landmarkRoles.has(role)) {
+      return [];
+    }
+
+    return [{
+      role,
+      tagName,
+      label: attrs["aria-label"] ?? attrs["aria-labelledby"],
+      selector: `${tagName}:nth-of-type(${index + 1})`
+    }];
+  });
+}
+
+export function extractAriaNodes(html: string): AriaNode[] {
+  const ids = collectIds(html);
+  return [...html.matchAll(/<([a-z0-9-]+)\b([^>]*)>/gi)].flatMap((match, index): AriaNode[] => {
+    const tagName = (match[1] ?? "").toLowerCase();
+    const attrs = parseAttributes(match[2] ?? "");
+    const role = attrs.role;
+    const ariaAttributes = Object.keys(attrs).filter((name) => name.startsWith("aria-"));
+    const focusable = isFocusable(tagName, attrs);
+    const interactive = isNativeInteractive(tagName, attrs) || interactiveRoles.has(role ?? "") || attrs.onclick !== undefined;
+    if (!role && ariaAttributes.length === 0 && !focusable && !interactive) {
+      return [];
+    }
+
+    const invalidAttributes = ariaAttributes.filter((name) => !validAriaAttributes.has(name));
+    const missingReferences = [
+      ...missingIdRefs(attrs["aria-labelledby"], ids),
+      ...missingIdRefs(attrs["aria-describedby"], ids),
+      ...missingIdRefs(attrs["aria-controls"], ids)
+    ];
+
+    return [{
+      selector: `${tagName}:nth-of-type(${index + 1})`,
+      tagName,
+      role,
+      ariaHidden: attrs["aria-hidden"] === "true",
+      ariaLabel: attrs["aria-label"],
+      ariaLabelledBy: attrs["aria-labelledby"],
+      ariaDescribedBy: attrs["aria-describedby"],
+      ariaControls: attrs["aria-controls"],
+      invalidAttributes,
+      missingReferences,
+      focusable,
+      interactive
+    }];
+  });
+}
+
+export function extractScreenReaderSignals(html: string): ScreenReaderSignals {
+  const htmlAttrs = parseAttributes(/<html\b([^>]*)>/i.exec(html)?.[1] ?? "");
+  const hiddenFocusableSelectors = extractAriaNodes(html)
+    .filter((node) => node.ariaHidden && node.focusable)
+    .flatMap((node) => node.selector ? [node.selector] : []);
+
+  return {
+    hasLangAttribute: Boolean(htmlAttrs.lang?.trim()),
+    lang: htmlAttrs.lang,
+    hasDocumentTitle: Boolean(readTagText(html, "title")),
+    hasSkipLink: hasSkipLink(html),
+    ariaLiveRegionCount: countMatches(html, /\baria-live=|\brole=["']?(alert|status|log)\b/gi),
+    hiddenFocusableSelectors
+  };
+}
+
+export function extractMotionSignals(html: string): MotionSignals {
+  const animatedSelectors = findAnimatedSelectors(html);
+  const autoplayMediaSelectors = [...html.matchAll(/<(video|audio)\b([^>]*)>/gi)].flatMap((match, index) => {
+    const attrs = parseAttributes(match[2] ?? "");
+    if (attrs.autoplay === undefined) {
+      return [];
+    }
+
+    const tagName = match[1] ?? "media";
+    return [`${tagName}:nth-of-type(${index + 1})`];
+  });
+
+  return {
+    honorsReducedMotion: /prefers-reduced-motion/i.test(html),
+    animatedSelectors,
+    autoplayMediaSelectors
+  };
+}
+
+export function extractImageOptimizationSignals(html: string, images: ImageNode[] = extractImages(html)): ImageOptimizationSignals {
+  const missingDimensionSelectors = images
+    .filter((image) => image.width === undefined || image.height === undefined)
+    .flatMap((image) => image.selector ? [image.selector] : []);
+  const unoptimizedImages = images.flatMap((image) => {
+    const reasons = imageOptimizationReasons(image);
+    return reasons.map((reason) => ({
+      src: image.src,
+      selector: image.selector,
+      reason
+    }));
+  });
+
+  return {
+    responsiveImageCount: images.filter((image) => Boolean(image.srcset || image.sizes)).length,
+    missingDimensionSelectors,
+    unoptimizedImages,
+    modernFormats: images.length > 0 ? images.every((image) => isModernImageFormat(image.src)) : undefined,
+    preloadedHeroImage: /<link\b[^>]*rel=["']?preload[^>]*as=["']?image/i.test(html)
+  };
+}
+
+export function extractCssOptimization(html: string): CssOptimizationSignals {
+  const styles = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map((match) => match[1] ?? "");
+  const styleText = styles.join("\n");
+  const fontDisplay = /font-display\s*:\s*([a-z-]+)/i.exec(styleText)?.[1];
+
+  return {
+    hasCriticalCss: styles.length > 0,
+    criticalCssBytes: byteLength(styleText),
+    blockingStylesheetCount: countBlockingStylesheets(html),
+    fontDisplay,
+    preloadedFontCount: countMatches(html, /<link\b[^>]*rel=["']?preload[^>]*as=["']?font/gi),
+    fontFileCount: countMatches(html, /\.(?:woff2?|ttf|otf)(?:[?#][^"')\s]+)?/gi),
+    usesVariableFonts: /font-variation-settings|\.woff2[^"']*variable|var\(/i.test(styleText)
+  };
+}
+
+export function extractJavaScriptOptimization(html: string): JavaScriptOptimizationSignals {
+  const scripts = extractScripts(html);
+  const inlineScriptBytes = scripts.reduce((total, script) => total + byteLength(script.content), 0);
+  const totalScriptBytes = inlineScriptBytes;
+  const deferredScriptCount = scripts.filter((script) => script.attrs.defer !== undefined).length;
+  const asyncScriptCount = scripts.filter((script) => script.attrs.async !== undefined).length;
+  const moduleScriptCount = scripts.filter((script) => script.attrs.type === "module" || script.attrs.type === "modulepreload").length;
+  const thirdPartyScriptCount = scripts.filter((script) => isThirdPartyUrl(script.attrs.src)).length;
+
+  return {
+    usesStaticRendering: scripts.length === 0 || scripts.every((script) => script.attrs["data-static"] === "true"),
+    minimalJavaScript: scripts.length <= 3 && inlineScriptBytes <= 20_000 && thirdPartyScriptCount === 0,
+    totalScriptBytes,
+    routeScriptBytes: totalScriptBytes,
+    inlineScriptBytes,
+    moduleScriptCount,
+    deferredScriptCount,
+    asyncScriptCount,
+    thirdPartyScriptCount,
+    codeSplitChunkCount: countMatches(html, /<link\b[^>]*rel=["']?modulepreload|<script\b[^>]*type=["']module/gi),
+    lazyLoadedComponentCount: countMatches(html, /\bloading=["']lazy|\bdata-lazy\b|\bclient:visible\b|\bclient:idle\b/gi),
+    hydrationStrategy: scripts.length === 0 ? "static" : thirdPartyScriptCount > 0 ? "spa" : "islands"
+  };
 }
 
 export function extractSeo(html: string): SeoDocument {
@@ -217,6 +478,10 @@ function collectJsonLdTypes(value: unknown, types: Set<string>): void {
 
   collectJsonLdTypes(record["@graph"], types);
   collectJsonLdTypes(record.mainEntity, types);
+  collectJsonLdTypes(record.itemListElement, types);
+  collectJsonLdTypes(record.itemReviewed, types);
+  collectJsonLdTypes(record.review, types);
+  collectJsonLdTypes(record.offers, types);
 }
 
 function hasViewportMeta(html: string): boolean {
@@ -258,4 +523,143 @@ function safeJsonParse(value: string): unknown {
 
 function countMatches(value: string, pattern: RegExp): number {
   return [...value.matchAll(pattern)].length;
+}
+
+function byteLength(value: string): number {
+  return new TextEncoder().encode(value).length;
+}
+
+function nativeLandmarkRole(tagName: string, attrs: Record<string, string | undefined>): string | undefined {
+  switch (tagName) {
+    case "header":
+      return "banner";
+    case "nav":
+      return "navigation";
+    case "main":
+      return "main";
+    case "aside":
+      return "complementary";
+    case "footer":
+      return "contentinfo";
+    case "form":
+      return attrs["aria-label"] || attrs["aria-labelledby"] ? "form" : undefined;
+    default:
+      return undefined;
+  }
+}
+
+function collectIds(html: string): Set<string> {
+  const ids = new Set<string>();
+  for (const match of html.matchAll(/<[^>]+\bid\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s"'>]+))/gi)) {
+    const id = match[1] ?? match[2] ?? match[3];
+    if (id) {
+      ids.add(id);
+    }
+  }
+
+  return ids;
+}
+
+function missingIdRefs(value: string | undefined, ids: Set<string>): string[] {
+  return (value ?? "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((id) => !ids.has(id));
+}
+
+function isNativeInteractive(tagName: string, attrs: Record<string, string | undefined>): boolean {
+  if (["button", "input", "select", "textarea", "summary"].includes(tagName)) {
+    return true;
+  }
+
+  return tagName === "a" && Boolean(attrs.href);
+}
+
+function isFocusable(tagName: string, attrs: Record<string, string | undefined>): boolean {
+  const tabIndex = readNumber(attrs.tabindex);
+  if (tabIndex !== undefined && tabIndex >= 0) {
+    return true;
+  }
+
+  return isNativeInteractive(tagName, attrs) && attrs.disabled === undefined;
+}
+
+function hasSkipLink(html: string): boolean {
+  for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    const attrs = parseAttributes(match[1] ?? "");
+    const text = stripTags(match[2] ?? "").toLowerCase();
+    if (attrs.href?.startsWith("#") && (text.includes("skip") || attrs.class?.toLowerCase().includes("skip"))) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function findAnimatedSelectors(html: string): string[] {
+  const selectors = new Set<string>();
+  if (/<style\b[^>]*>[\s\S]*(animation|transition)\s*:/i.test(html)) {
+    selectors.add("style");
+  }
+
+  for (const match of html.matchAll(/<([a-z0-9-]+)\b([^>]*)>/gi)) {
+    const tagName = match[1] ?? "element";
+    const attrs = parseAttributes(match[2] ?? "");
+    if (/animation|transition/i.test(attrs.style ?? "")) {
+      selectors.add(`${tagName}[style]`);
+    }
+  }
+
+  return [...selectors];
+}
+
+function imageOptimizationReasons(image: ImageNode): string[] {
+  const reasons: string[] = [];
+  if (!image.srcset && !image.sizes && !isVectorImage(image.src)) {
+    reasons.push("missing responsive srcset/sizes metadata");
+  }
+  if (!isModernImageFormat(image.src) && !isVectorImage(image.src)) {
+    reasons.push("image is not a modern web format");
+  }
+  if (image.decoding !== "async" && !isVectorImage(image.src)) {
+    reasons.push("missing async decoding hint");
+  }
+
+  return reasons;
+}
+
+function isModernImageFormat(src: string): boolean {
+  return /\.(?:avif|webp)(?:[?#].*)?$/i.test(src);
+}
+
+function isVectorImage(src: string): boolean {
+  return /\.svg(?:[?#].*)?$/i.test(src) || src.startsWith("data:image/svg");
+}
+
+function countBlockingStylesheets(html: string): number {
+  return [...html.matchAll(/<link\b([^>]*)>/gi)].filter((match) => {
+    const attrs = parseAttributes(match[1] ?? "");
+    if (attrs.rel?.toLowerCase() !== "stylesheet") {
+      return false;
+    }
+
+    const media = attrs.media?.toLowerCase();
+    return !media || media === "all" || media === "screen";
+  }).length;
+}
+
+interface ScriptTag {
+  attrs: Record<string, string | undefined>;
+  content: string;
+}
+
+function extractScripts(html: string): ScriptTag[] {
+  return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].map((match) => ({
+    attrs: parseAttributes(match[1] ?? ""),
+    content: match[2] ?? ""
+  }));
+}
+
+function isThirdPartyUrl(src: string | undefined): boolean {
+  return Boolean(src && /^https?:\/\//i.test(src) && !src.includes("localhost"));
 }

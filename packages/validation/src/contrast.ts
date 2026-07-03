@@ -1,27 +1,22 @@
-import type { ContrastToken, ValidationIssue } from "./types.js";
+import type { ContrastAssessment, ContrastToken, ValidationIssue } from "./types.js";
 
 export function validateContrastTokens(tokens: ContrastToken[] = [], path?: string): ValidationIssue[] {
-  return tokens.flatMap<ValidationIssue>((token) => {
-    const foreground = parseColor(token.foreground);
-    const background = parseColor(token.background);
-
-    if (!foreground || !background) {
+  return assessContrastTokens(tokens).flatMap<ValidationIssue>((assessment) => {
+    if (!assessment.parseable) {
       return [{
         ruleId: "contrast-token-parseable",
         category: "a11y",
         severity: "warning",
-        message: `Contrast token "${token.name}" uses an unsupported color format.`,
+        message: `Contrast token "${assessment.token.name}" uses an unsupported color format.`,
         path,
         context: {
-          foreground: token.foreground,
-          background: token.background
+          foreground: assessment.token.foreground,
+          background: assessment.token.background
         }
       } satisfies ValidationIssue];
     }
 
-    const ratio = contrastRatio(foreground, background);
-    const required = isLargeText(token) ? 3 : 4.5;
-    if (ratio >= required) {
+    if (assessment.passed || assessment.ratio === undefined) {
       return [];
     }
 
@@ -29,16 +24,46 @@ export function validateContrastTokens(tokens: ContrastToken[] = [], path?: stri
       ruleId: "contrast-token-aa",
       category: "a11y",
       severity: "error",
-      message: `Contrast token "${token.name}" has ratio ${ratio.toFixed(2)}:1; expected at least ${required}:1.`,
+      message: `Contrast token "${assessment.token.name}" has ratio ${assessment.ratio.toFixed(2)}:1; expected at least ${assessment.requiredRatio}:1.`,
       path,
       help: "Adjust foreground/background color tokens to meet WCAG AA contrast.",
       context: {
-        ratio: Number(ratio.toFixed(2)),
-        required,
-        foreground: token.foreground,
-        background: token.background
+        ratio: Number(assessment.ratio.toFixed(2)),
+        required: assessment.requiredRatio,
+        foreground: assessment.token.foreground,
+        background: assessment.token.background
       }
     } satisfies ValidationIssue];
+  });
+}
+
+export function assessContrastTokens(tokens: ContrastToken[] = []): ContrastAssessment[] {
+  return tokens.map((token) => {
+    const requiredRatio = isLargeText(token) ? 3 : 4.5;
+    const base = {
+      token,
+      requiredRatio,
+      wcagLevel: "AA" as const,
+      largeText: isLargeText(token)
+    };
+    const foreground = parseColor(token.foreground);
+    const background = parseColor(token.background);
+
+    if (!foreground || !background) {
+      return {
+        ...base,
+        passed: false,
+        parseable: false
+      };
+    }
+
+    const ratio = contrastRatio(foreground, background);
+    return {
+      ...base,
+      ratio,
+      passed: ratio >= requiredRatio,
+      parseable: true
+    };
   });
 }
 

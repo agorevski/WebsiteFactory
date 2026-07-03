@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@website-factory/components/marketplace": [
+        "../components/src/marketplace.ts"
+      ],
+      "@website-factory/schema": [
+        "../schema/src/index.ts"
+      ],
+      "@website-factory/seo": [
+        "../seo/src/index.ts"
+      ],
+      "@website-factory/themes": [
+        "../themes/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
