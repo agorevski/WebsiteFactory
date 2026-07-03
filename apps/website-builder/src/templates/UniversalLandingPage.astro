@@ -5,6 +5,7 @@ import SiteFooter from '../components/SiteFooter';
 import SiteHeader from '../components/SiteHeader';
 import { formatPageLabel, normalizePagePath, type UniversalPage } from '../lib/pages';
 import type { UniversalSection, UniversalSite } from '../lib/schema';
+import { templateThemeClassName } from '../lib/theme';
 
 interface Props {
   site: UniversalSite;
@@ -27,7 +28,7 @@ const pageHero = isRootPage ? site.hero : {
   },
 };
 ---
-<div class={`site-shell radius-${site.theme.radius}`}>
+<div class={`site-shell ${templateThemeClassName(site)} radius-${site.theme.radius}`}>
   <SiteHeader site={site} />
   <main>
     <Hero business={site.business} hero={pageHero} theme={site.theme} variant={isRootPage ? 'landing' : 'page'} />

@@ -5,12 +5,24 @@ function phoneHref(phone: string): string {
 }
 
 export default function SiteHeader({ site }: { site: UniversalSite }) {
+  const [primaryHours] = site.business.hours;
+
   return (
     <header className="site-header">
+      <div className="header-top">
+        <div className="container header-top-inner">
+          <span>{site.business.tagline}</span>
+          <a href={phoneHref(site.business.phone)}>{site.business.phone}</a>
+          {primaryHours ? <span>{primaryHours.label}: {primaryHours.value}</span> : null}
+        </div>
+      </div>
       <div className="container header-inner">
         <a className="brand" href={`/${site.slug}/`} aria-label={`${site.business.name} home`}>
           <span aria-hidden="true">{site.business.name.slice(0, 1)}</span>
-          <strong>{site.business.name}</strong>
+          <strong>
+            {site.business.name}
+            <small>{site.business.type}</small>
+          </strong>
         </a>
         <nav className="primary-nav" aria-label="Primary navigation">
           {site.navigation.map((item) => (

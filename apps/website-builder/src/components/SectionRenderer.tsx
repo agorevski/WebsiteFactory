@@ -44,6 +44,27 @@ function SectionIntro({ section }: { section: UniversalSection }) {
   );
 }
 
+function initialsFromTitle(title: string): string {
+  return title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
+function thumbnailLabel(section: UniversalSection, title: string): string {
+  if (section.type === 'services') {
+    return initialsFromTitle(title);
+  }
+
+  if (section.type === 'content') {
+    return 'Info';
+  }
+
+  return section.type;
+}
+
 function ContentItems({ section }: { section: UniversalSection }) {
   if (section.items.length === 0) {
     return null;
@@ -55,6 +76,9 @@ function ContentItems({ section }: { section: UniversalSection }) {
     <div className={gridClassName}>
       {section.items.map((item) => (
         <article className={`card ${section.type === 'services' ? 'service-card' : ''}`} key={item.title}>
+          <div className="card-media" aria-hidden="true">
+            <span>{thumbnailLabel(section, item.title)}</span>
+          </div>
           <h3>{item.title}</h3>
           <p>{item.description}</p>
         </article>

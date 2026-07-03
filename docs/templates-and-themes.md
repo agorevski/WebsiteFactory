@@ -12,4 +12,4 @@ Templates should stay vertical-aware but not vertical-specific. The builder app 
 - final CTA
 - footer business details
 
-Themes are token-based. YAML chooses a palette such as `clinic`, `trade`, `hospitality`, or `professional`; CSS variables translate that palette into accent colors, surfaces, and component styles. Future themes can add typography, imagery, spacing, or animation tokens without changing content data.
+Themes are token-based. YAML chooses a palette such as `clinic`, `trade`, `hospitality`, or `professional`; the builder resolves that palette to a template theme class such as `template-clinic-showcase`. CSS variables translate the template theme into accent colors, surfaces, hero art, thumbnails, cards, navigation, and footer treatments. Future themes can add typography, imagery, spacing, or animation tokens without changing content data.

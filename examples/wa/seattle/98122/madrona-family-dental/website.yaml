@@ -2,7 +2,7 @@ schemaVersion: 1
 slug: madrona-family-dental
 vertical: medical
 theme:
-  name: Calm Clinic
+  name: Clinic Showcase
   palette: clinic
   mode: light
   radius: soft
@@ -60,6 +60,7 @@ hero:
   eyebrow: Madrona family dentist
   title: Calm, personal dental care right in the neighborhood.
   summary: Madrona Family Dental helps Seattle patients plan routine checkups, whitening or aligner conversations, and long-term care from an office on East Spring Street.
+  mediaAlt: Abstract dental office preview with calm clinic cards and smile-focused visual accents.
   primaryCta:
     label: Call the office
     href: "tel:+12063245400"

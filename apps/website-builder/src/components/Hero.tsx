@@ -11,9 +11,14 @@ function phoneHref(phone: string): string {
   return `tel:${phone.replace(/[^+\d]/g, '')}`;
 }
 
+function formatAddress(address: UniversalSite['business']['address']): string {
+  return `${address.street}, ${address.city}, ${address.region} ${address.postalCode}`;
+}
+
 export default function Hero({ business, hero, theme, variant = 'landing' }: Props) {
   const isPageHero = variant === 'page';
   const address = business.address;
+  const primaryHours = business.hours[0];
 
   return (
     <section className={`hero section-pad ${isPageHero ? 'hero-page' : ''}`}>
@@ -34,37 +39,48 @@ export default function Hero({ business, hero, theme, variant = 'landing' }: Pro
           </div>
         </div>
         {isPageHero ? null : (
-          <aside className="hero-card" aria-label={`${business.name} summary`}>
-            <span className="theme-pill">{theme.name}</span>
-            <h2>{business.name}</h2>
-            <p>{business.tagline}</p>
-            <dl>
-              <div>
-                <dt>Address</dt>
-                <dd>
-                  {address.street}
-                  <br />
-                  {address.city}, {address.region} {address.postalCode}
-                </dd>
+          <aside className="hero-showcase" aria-label={`${business.name} website preview`}>
+            <div className="hero-photo-card" role="img" aria-label={hero.mediaAlt ?? `${business.name} dental care preview`}>
+              <div className="hero-photo-art" aria-hidden="true">
+                <span className="smile-arc" />
+                <span className="spark spark-one" />
+                <span className="spark spark-two" />
               </div>
-              <div>
-                <dt>Hours</dt>
-                <dd>{business.hours.map((item) => `${item.label}: ${item.value}`).join(' | ')}</dd>
+              <div className="hero-photo-caption">
+                <span>Comfort-focused visits</span>
+                <strong>{business.areaServed.slice(0, 2).join(' + ')}</strong>
               </div>
-              <div>
-                <dt>Call</dt>
-                <dd>
-                  <a href={phoneHref(business.phone)}>{business.phone}</a>
-                </dd>
-              </div>
-            </dl>
-            {business.credentials.length > 0 ? (
-              <ul className="trust-list" aria-label={`${business.name} trust details`}>
-                {business.credentials.slice(0, 3).map((credential) => (
-                  <li key={credential}>{credential}</li>
-                ))}
-              </ul>
-            ) : null}
+            </div>
+            <div className="hero-card">
+              <span className="theme-pill">{theme.name}</span>
+              <h2>{business.name}</h2>
+              <p>{business.tagline}</p>
+              <dl>
+                <div>
+                  <dt>Address</dt>
+                  <dd>{formatAddress(address)}</dd>
+                </div>
+                {primaryHours ? (
+                  <div>
+                    <dt>Hours</dt>
+                    <dd>{primaryHours.label}: {primaryHours.value}</dd>
+                  </div>
+                ) : null}
+                <div>
+                  <dt>Call</dt>
+                  <dd>
+                    <a href={phoneHref(business.phone)}>{business.phone}</a>
+                  </dd>
+                </div>
+              </dl>
+              {business.credentials.length > 0 ? (
+                <ul className="trust-list" aria-label={`${business.name} trust details`}>
+                  {business.credentials.slice(0, 3).map((credential) => (
+                    <li key={credential}>{credential}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
           </aside>
         )}
       </div>
