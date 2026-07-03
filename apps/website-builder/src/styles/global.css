@@ -1364,7 +1364,7 @@ h3 {
   flex-wrap: wrap;
   border-radius: var(--wf-radius-pill, 999px);
   background: color-mix(in srgb, var(--wf-colors-primary), var(--wf-colors-surface) 88%);
-  color: var(--wf-colors-link);
+  color: var(--wf-colors-text);
   font-size: 0.88rem;
   font-weight: 900;
   padding: 0.65rem 0.75rem 0.65rem 1rem;
@@ -1383,6 +1383,11 @@ h3 {
   font-weight: 900;
   padding: 0.55rem 0.9rem;
   text-decoration: none;
+}
+
+.prototype-banner a {
+  background: var(--wf-colors-text);
+  color: var(--wf-colors-background);
 }
 
 .prototype-site-header {
@@ -1744,7 +1749,13 @@ h3 {
   border: 1px solid color-mix(in srgb, var(--wf-colors-border), transparent 18%);
   border-radius: var(--wf-radius-lg, 1rem);
   background: color-mix(in srgb, var(--wf-colors-primary), var(--wf-colors-surface) 88%);
+  color: var(--wf-colors-text);
   padding: 0.85rem;
+}
+
+.prototype-template-meta dt,
+.prototype-template-meta dd {
+  color: inherit;
 }
 
 .prototype-rhythm-strip {

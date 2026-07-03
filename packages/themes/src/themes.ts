@@ -1854,7 +1854,7 @@ export const themes = {
         surfaceAlt: '#e6f8fb',
         text: '#12313b',
         textMuted: '#4e6870',
-        primary: '#0891b2',
+        primary: '#0e7490',
         primaryForeground: '#ffffff',
         secondary: '#155e75',
         secondaryForeground: '#ffffff',
