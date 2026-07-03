@@ -1,4 +1,5 @@
 ---
+import { listTemplates } from '@website-factory/templates';
 import { listThemes, themeCssText } from '@website-factory/themes';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getExampleSites } from '../lib/examples';
@@ -14,24 +15,52 @@ const styleCards = listThemes()
     cssText: themeCssText(theme, theme.defaultMode),
   }))
   .sort((left, right) => left.displayName.localeCompare(right.displayName));
+const templateCards = listTemplates()
+  .map((template) => {
+    const sections = [...template.sections].sort((left, right) => left.order - right.order);
+    const requiredSectionCount = sections.filter((section) => section.required).length;
+    const rhythmLabel = [
+      `${template.name} section rhythm preview`,
+      `${sections.length} total sections`,
+      `${requiredSectionCount} required`,
+      `order: ${sections.map((section) => section.schemaType).join(', ')}`,
+    ].join('; ');
+
+    return {
+      id: template.id,
+      name: template.name,
+      description: template.description,
+      audience: template.audience,
+      layout: template.layout,
+      defaultTheme: template.defaultTheme,
+      tags: template.tags,
+      sections,
+      requiredSectionCount,
+      sectionCount: sections.length,
+      rhythmLabel,
+      prototypeHref: `/templates/${template.id}/`,
+    };
+  })
+  .sort((left, right) => left.name.localeCompare(right.name));
 ---
 <SiteLayout
   title="Website Factory Tailnet Preview"
-  description="Phone-friendly catalog of generated websites and registered Website Factory styles."
+  description="Phone-friendly catalog of generated websites, templates, and registered Website Factory styles."
 >
   <main class="builder-index">
     <section class="section-pad hero builder-hero">
       <div class="container hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">Tailnet preview hub</p>
-          <h1>View every published site and style from your phone.</h1>
+          <h1>View every published site, template, and style from your phone.</h1>
           <p class="lede">
-            Browse the generated website catalog and registered style tokens from any device on your tailnet.
+            Browse generated websites, registered templates, and style tokens from any device on your tailnet.
             The builder server is configured for port 3434 and binds to your machine's Tailscale address.
           </p>
           <div class="button-row">
             <a class="button button-primary" href="#websites">Open websites</a>
             <a class="button button-secondary" href="#styles">Browse styles</a>
+            <a class="button button-secondary" href="#templates">View templates</a>
           </div>
         </div>
         <aside class="hero-card preview-card">
@@ -48,6 +77,10 @@ const styleCards = listThemes()
             <div>
               <dt>Styles</dt>
               <dd>{styleCards.length}</dd>
+            </div>
+            <div>
+              <dt>Templates</dt>
+              <dd>{templateCards.length}</dd>
             </div>
           </dl>
         </aside>
@@ -114,6 +147,67 @@ const styleCards = listThemes()
               <ul class="tag-list" aria-label={`${styleCard.displayName} tags`}>
                 {styleCard.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
               </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad" id="templates">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Template catalog</p>
+          <h2>All registered Website Factory templates</h2>
+          <p>Templates come directly from the shared registry and summarize their intended audience, layout rhythm, and required content coverage.</p>
+        </div>
+        <div class="template-grid">
+          {templateCards.map((templateCard) => (
+            <article id={`template-${templateCard.id}`} class="card template-card">
+              <div class="template-wireframe" role="img" aria-label={templateCard.rhythmLabel}>
+                {templateCard.sections.map((section) => (
+                  <span
+                    class={`wireframe-segment wireframe-segment-${section.slot}${section.required ? ' wireframe-segment-required' : ''}`}
+                    aria-hidden="true"
+                  ></span>
+                ))}
+              </div>
+              <p class="eyebrow">{templateCard.id}</p>
+              <h3>{templateCard.name}</h3>
+              <p>{templateCard.description}</p>
+              <dl class="compact-meta template-meta">
+                <div>
+                  <dt>Audience</dt>
+                  <dd>{templateCard.audience}</dd>
+                </div>
+                <div>
+                  <dt>Layout</dt>
+                  <dd>{templateCard.layout}</dd>
+                </div>
+                <div>
+                  <dt>Default theme</dt>
+                  <dd>{templateCard.defaultTheme}</dd>
+                </div>
+                <div>
+                  <dt>Required sections</dt>
+                  <dd>{templateCard.requiredSectionCount}</dd>
+                </div>
+                <div>
+                  <dt>Total sections</dt>
+                  <dd>{templateCard.sectionCount}</dd>
+                </div>
+              </dl>
+              <ul class="tag-list" aria-label={`${templateCard.name} tags`}>
+                {templateCard.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+              <div class="button-row card-actions">
+                <a
+                  class="button button-primary"
+                  href={templateCard.prototypeHref}
+                  aria-label={`Open ${templateCard.name} prototype website`}
+                >
+                  Open prototype website
+                </a>
+              </div>
             </article>
           ))}
         </div>

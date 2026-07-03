@@ -9,9 +9,9 @@ export type {
   TemplateSectionDefinition,
   TemplateSlot,
   WebsiteTemplate
-} from './types';
-export { templates } from './templates';
-export type { TemplateId } from './templates';
+} from './types.js';
+export { templates } from './templates.js';
+export type { TemplateId } from './templates.js';
 export {
   composeTemplate,
   defaultTemplateId,
@@ -23,4 +23,4 @@ export {
   resolveTemplate,
   schemaSectionsFromWebsiteData,
   validateTemplateComposition
-} from './registry';
+} from './registry.js';

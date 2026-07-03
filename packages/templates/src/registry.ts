@@ -1,6 +1,6 @@
 import type { WebsiteData } from '@website-factory/schema';
-import { templates, type TemplateId } from './templates';
-import type { SchemaSectionReference, TemplateCompositionInput, TemplateResolvedSection, TemplateSectionDefinition, WebsiteTemplate } from './types';
+import { templates, type TemplateId } from './templates.js';
+import type { SchemaSectionReference, TemplateCompositionInput, TemplateResolvedSection, TemplateSectionDefinition, WebsiteTemplate } from './types.js';
 
 export const defaultTemplateId: TemplateId = 'modern';
 

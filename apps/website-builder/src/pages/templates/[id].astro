@@ -1,0 +1,117 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getTemplatePrototypes, type TemplatePrototype } from '../../lib/templatePrototypes';
+
+export function getStaticPaths() {
+  return getTemplatePrototypes().map((prototype) => ({
+    params: { id: prototype.id },
+    props: { prototype }
+  }));
+}
+
+interface Props {
+  prototype: TemplatePrototype;
+}
+
+const { prototype } = Astro.props;
+const prototypeClassName = ['template-prototype-site', ...prototype.theme.classNames].join(' ');
+const canonicalPath = `/templates/${prototype.id}/`;
+---
+<SiteLayout title={prototype.pageTitle} description={prototype.pageDescription} canonicalPath={canonicalPath}>
+  <div class={prototypeClassName} style={prototype.theme.cssText}>
+    <div class="prototype-shell">
+      <div class="prototype-banner">
+        <span>{prototype.name} template prototype · {prototype.theme.displayName}</span>
+        <a href="/#templates">Back to templates</a>
+      </div>
+
+      <header class="prototype-site-header">
+        <a class="prototype-site-brand" href={canonicalPath}>
+          <span>{prototype.brandName}</span>
+        </a>
+        <nav class="prototype-site-nav" aria-label="Prototype sections">
+          <a href="#template-overview">Overview</a>
+          <a href="#template-rhythm">Rhythm</a>
+          {prototype.navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+          <a href="#template-contact">Contact</a>
+        </nav>
+      </header>
+
+      <main id="template-overview">
+        <section class="prototype-site-hero" aria-labelledby="prototype-title">
+          <div>
+            <p class="eyebrow">{prototype.eyebrow}</p>
+            <h1 id="prototype-title">{prototype.heroTitle}</h1>
+            <p>{prototype.heroLead}</p>
+            <ul class="tag-list" aria-label={`${prototype.name} template tags`}>
+              {prototype.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          </div>
+          <aside class="prototype-hero-card" aria-labelledby="prototype-meta-title">
+            <h2 id="prototype-meta-title">Prototype defaults</h2>
+            <dl class="prototype-template-meta">
+              {prototype.metrics.map((item) => (
+                <div>
+                  <dt>{item.term}</dt>
+                  <dd>{item.description}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        </section>
+
+        <section class="prototype-section" id="template-rhythm" aria-labelledby="template-rhythm-title">
+          <p class="eyebrow">Template rhythm</p>
+          <h2 id="template-rhythm-title">Sections render in registry order</h2>
+          <p>
+            This prototype turns the registered template metadata into a complete website-like flow with header, hero,
+            content rhythm, conversion callout, and footer. Each section below follows the template order and shows its
+            schema type, component variant, purpose, and required/optional status.
+          </p>
+        </section>
+
+        {prototype.sections.map((section) => (
+          <section class="prototype-section" id={section.fragmentId} aria-labelledby={`${section.fragmentId}-title`}>
+            <p class="eyebrow">{section.eyebrow}</p>
+            <h2 id={`${section.fragmentId}-title`}>{section.heading}</h2>
+            <p><strong>{section.purposeLabel}:</strong> {section.purpose}</p>
+            <dl class="prototype-template-meta">
+              {section.meta.map((item) => (
+                <div>
+                  <dt>{item.term}</dt>
+                  <dd>{item.description}</dd>
+                </div>
+              ))}
+            </dl>
+            <div class="prototype-section-grid">
+              {section.details.map((detail) => (
+                <article class={`prototype-section-card ${section.required ? 'prototype-section-required' : 'prototype-section-optional'}`}>
+                  <h3>{detail.title}</h3>
+                  <p>{detail.body}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <section class="prototype-callout" id="template-contact" aria-labelledby="template-contact-title">
+          <div>
+            <p class="eyebrow">Next step</p>
+            <h2 id="template-contact-title">Use this rhythm when your content matches the template.</h2>
+            <p>
+              Start from schema-first content, then let Website Factory pair the {prototype.name} template with the
+              {' '}{prototype.theme.displayName} default theme.
+            </p>
+          </div>
+          <a href="/#templates">Compare templates</a>
+        </section>
+      </main>
+
+      <footer class="prototype-footer">
+        <p><strong>{prototype.brandName}</strong> · {prototype.audienceLabel} · {prototype.layoutLabel}</p>
+        <p>{prototype.requiredSectionCount} required sections, {prototype.optionalSectionCount} optional sections.</p>
+        <a href="/#templates">Back to template catalog</a>
+      </footer>
+    </div>
+  </div>
+</SiteLayout>
