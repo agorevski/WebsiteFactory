@@ -43,11 +43,15 @@ const jsonLd = site ? {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <link rel="canonical" href={canonicalPath} />
     <title>{title}</title>
     {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <slot />
   </body>
 </html>

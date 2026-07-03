@@ -10,12 +10,12 @@ type Props = {
 };
 
 type AnchorAttributes = {
-  rel?: 'noreferrer';
+  rel?: 'noopener noreferrer';
   target?: '_blank';
 };
 
 function externalAttributes(href: string): AnchorAttributes {
-  return href.startsWith('http') ? { rel: 'noreferrer', target: '_blank' } : {};
+  return href.startsWith('http') ? { rel: 'noopener noreferrer', target: '_blank' } : {};
 }
 
 function Actions({ actions }: { actions: UniversalAction[] }) {

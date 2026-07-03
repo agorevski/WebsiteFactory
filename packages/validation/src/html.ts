@@ -17,6 +17,7 @@ import type {
 
 const landmarkRoles = new Set(["banner", "navigation", "main", "complementary", "contentinfo", "search", "form"]);
 const interactiveRoles = new Set(["button", "link", "menuitem", "tab", "checkbox", "radio", "switch", "textbox", "combobox"]);
+const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
 const validAriaAttributes = new Set([
   "aria-activedescendant",
   "aria-atomic",
@@ -144,7 +145,7 @@ export function enrichFromHtml(input: PageValidationInput): PageValidationInput 
 export function extractHeadings(html: string): HeadingNode[] {
   return [...html.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1>/gi)].map((match, index) => ({
     level: Number(match[1]) as HeadingNode["level"],
-    text: stripTags(match[3] ?? ""),
+    text: extractVisibleText(match[3] ?? ""),
     selector: `h${match[1]}:nth-of-type(${index + 1})`
   }));
 }
@@ -173,7 +174,7 @@ export function extractFormControls(html: string): FormControlNode[] {
   for (const match of html.matchAll(/<label\b([^>]*)>([\s\S]*?)<\/label>/gi)) {
     const attrs = parseAttributes(match[1] ?? "");
     if (attrs.for) {
-      labelsByFor.set(attrs.for, stripTags(match[2] ?? ""));
+      labelsByFor.set(attrs.for, extractVisibleText(match[2] ?? ""));
     }
   }
 
@@ -200,7 +201,7 @@ export function extractLinks(html: string): LinkNode[] {
     const attrs = parseAttributes(match[1] ?? "");
     return {
       href: attrs.href,
-      text: stripTags(match[2] ?? ""),
+      text: extractVisibleText(match[2] ?? ""),
       ariaLabel: attrs["aria-label"],
       target: attrs.target,
       rel: attrs.rel,
@@ -210,7 +211,7 @@ export function extractLinks(html: string): LinkNode[] {
 }
 
 export function extractInteractive(html: string): InteractiveNode[] {
-  return [...html.matchAll(/<(button|a|input|select|textarea|summary|[a-z0-9-]+)\b([^>]*)>([\s\S]*?)(?:<\/\1>|$)/gi)]
+  return [...html.matchAll(/<([a-z0-9-]+)\b([^>]*)>/gi)]
     .flatMap((match, index): InteractiveNode[] => {
       const tagName = (match[1] ?? "").toLowerCase();
       const attrs = parseAttributes(match[2] ?? "");
@@ -229,7 +230,9 @@ export function extractInteractive(html: string): InteractiveNode[] {
         tabIndex: readNumber(attrs.tabindex),
         ariaLabel: attrs["aria-label"],
         ariaLabelledBy: attrs["aria-labelledby"],
-        text: stripTags(match[3] ?? ""),
+        text: isVoidElement(tagName)
+          ? undefined
+          : readElementText(html, tagName, match.index, match[0]?.length ?? 0),
         disabled: attrs.disabled !== undefined || attrs["aria-disabled"] === "true",
         hasKeyboardHandler: attrs.onkeydown !== undefined || attrs.onkeyup !== undefined || attrs.onkeypress !== undefined,
         selector: `${tagName}:nth-of-type(${index + 1})`
@@ -279,6 +282,7 @@ export function extractAriaNodes(html: string): AriaNode[] {
       selector: `${tagName}:nth-of-type(${index + 1})`,
       tagName,
       role,
+      text: readElementText(html, tagName, match.index, match[0]?.length ?? 0),
       ariaHidden: attrs["aria-hidden"] === "true",
       ariaLabel: attrs["aria-label"],
       ariaLabelledBy: attrs["aria-labelledby"],
@@ -290,6 +294,45 @@ export function extractAriaNodes(html: string): AriaNode[] {
       interactive
     }];
   });
+}
+
+function readElementText(html: string, tagName: string, startIndex: number | undefined, openingTagLength: number): string | undefined {
+  if (startIndex === undefined || isVoidElement(tagName)) {
+    return undefined;
+  }
+
+  const contentStart = startIndex + openingTagLength;
+  const closingTagStart = findClosingTagStart(html, tagName, contentStart);
+  if (closingTagStart === -1) {
+    return undefined;
+  }
+
+  return extractVisibleText(html.slice(contentStart, closingTagStart));
+}
+
+function findClosingTagStart(html: string, tagName: string, contentStart: number): number {
+  const tagPattern = new RegExp(`<\\/?${escapeRegExp(tagName)}\\b[^>]*>`, "gi");
+  tagPattern.lastIndex = contentStart;
+  let depth = 1;
+  let match: RegExpExecArray | null;
+
+  while ((match = tagPattern.exec(html)) !== null) {
+    const tag = match[0] ?? "";
+    if (tag.startsWith("</")) {
+      depth -= 1;
+      if (depth === 0) {
+        return match.index;
+      }
+    } else if (!tag.endsWith("/>") && !isVoidElement(tagName)) {
+      depth += 1;
+    }
+  }
+
+  return -1;
+}
+
+function isVoidElement(tagName: string): boolean {
+  return voidElements.has(tagName);
 }
 
 export function extractScreenReaderSignals(html: string): ScreenReaderSignals {
@@ -366,12 +409,12 @@ export function extractCssOptimization(html: string): CssOptimizationSignals {
 }
 
 export function extractJavaScriptOptimization(html: string): JavaScriptOptimizationSignals {
-  const scripts = extractScripts(html);
+  const scripts = extractScripts(html).filter(isExecutableScript);
   const inlineScriptBytes = scripts.reduce((total, script) => total + byteLength(script.content), 0);
   const totalScriptBytes = inlineScriptBytes;
   const deferredScriptCount = scripts.filter((script) => script.attrs.defer !== undefined).length;
   const asyncScriptCount = scripts.filter((script) => script.attrs.async !== undefined).length;
-  const moduleScriptCount = scripts.filter((script) => script.attrs.type === "module" || script.attrs.type === "modulepreload").length;
+  const moduleScriptCount = scripts.filter((script) => script.attrs.type?.toLowerCase() === "module").length;
   const thirdPartyScriptCount = scripts.filter((script) => isThirdPartyUrl(script.attrs.src)).length;
 
   return {
@@ -414,7 +457,7 @@ export function extractSeo(html: string): SeoDocument {
 
 function readTagText(html: string, tagName: string): string | undefined {
   const match = new RegExp(`<${tagName}\\b[^>]*>([\\s\\S]*?)<\\/${tagName}>`, "i").exec(html);
-  const text = stripTags(match?.[1] ?? "");
+  const text = extractVisibleText(match?.[1] ?? "");
   return text || undefined;
 }
 
@@ -598,19 +641,77 @@ function hasSkipLink(html: string): boolean {
 
 function findAnimatedSelectors(html: string): string[] {
   const selectors = new Set<string>();
-  if (/<style\b[^>]*>[\s\S]*(animation|transition)\s*:/i.test(html)) {
+  const styleText = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map((match) => match[1] ?? "").join("\n");
+  if (hasMotionDeclaration(styleText)) {
     selectors.add("style");
   }
 
   for (const match of html.matchAll(/<([a-z0-9-]+)\b([^>]*)>/gi)) {
     const tagName = match[1] ?? "element";
     const attrs = parseAttributes(match[2] ?? "");
-    if (/animation|transition/i.test(attrs.style ?? "")) {
+    if (hasMotionDeclaration(attrs.style ?? "")) {
       selectors.add(`${tagName}[style]`);
     }
   }
 
   return [...selectors];
+}
+
+function hasMotionDeclaration(value: string): boolean {
+  return /(?:^|[;{])\s*(?:animation(?:-[a-z-]+)?|transition(?:-[a-z-]+)?)\s*:/i.test(value);
+}
+
+function extractVisibleText(value: string): string {
+  return stripTags(removeHiddenElementText(value));
+}
+
+function removeHiddenElementText(value: string): string {
+  let output = "";
+  let cursor = 0;
+
+  for (const match of value.matchAll(/<([a-z0-9-]+)\b([^>]*)>/gi)) {
+    const tagName = (match[1] ?? "").toLowerCase();
+    const attrs = parseAttributes(match[2] ?? "");
+    const tagStart = match.index ?? 0;
+
+    if (tagStart < cursor) {
+      continue;
+    }
+
+    if (!isHiddenFromAccessibleName(attrs)) {
+      continue;
+    }
+
+    output += value.slice(cursor, tagStart);
+    const openingTag = match[0] ?? "";
+    const tagEnd = tagStart + openingTag.length;
+
+    if (openingTag.endsWith("/>") || isVoidElement(tagName)) {
+      cursor = tagEnd;
+      continue;
+    }
+
+    const closingStart = findClosingTagStart(value, tagName, tagEnd);
+    cursor = closingStart === -1 ? tagEnd : findTagEnd(value, closingStart);
+  }
+
+  return output + value.slice(cursor);
+}
+
+function isHiddenFromAccessibleName(attrs: Record<string, string | undefined>): boolean {
+  const style = attrs.style?.toLowerCase() ?? "";
+  return attrs["aria-hidden"] === "true"
+    || attrs.hidden !== undefined
+    || /(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b/.test(style);
+}
+
+function findTagEnd(html: string, tagStart: number): number {
+  const tagEnd = html.indexOf(">", tagStart);
+  return tagEnd === -1 ? tagStart : tagEnd + 1;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function imageOptimizationReasons(image: ImageNode): string[] {
@@ -658,6 +759,11 @@ function extractScripts(html: string): ScriptTag[] {
     attrs: parseAttributes(match[1] ?? ""),
     content: match[2] ?? ""
   }));
+}
+
+function isExecutableScript(script: ScriptTag): boolean {
+  const type = script.attrs.type?.split(";")[0]?.trim().toLowerCase();
+  return !type || ["module", "text/javascript", "application/javascript", "text/ecmascript", "application/ecmascript"].includes(type);
 }
 
 function isThirdPartyUrl(src: string | undefined): boolean {

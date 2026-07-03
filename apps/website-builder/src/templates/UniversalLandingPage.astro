@@ -30,7 +30,7 @@ const pageHero = isRootPage ? site.hero : {
 ---
 <div class={`site-shell ${templateThemeClassName(site)} radius-${site.theme.radius}`}>
   <SiteHeader site={site} />
-  <main>
+  <main id="main-content">
     <Hero business={site.business} hero={pageHero} theme={site.theme} variant={isRootPage ? 'landing' : 'page'} />
     <SectionRenderer cta={site.ctas?.final} sections={sections} />
   </main>

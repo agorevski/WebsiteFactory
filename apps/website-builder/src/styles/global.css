@@ -73,6 +73,25 @@ a {
   color: inherit;
 }
 
+.skip-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  border-radius: 999px;
+  background: var(--accent);
+  color: white;
+  font-weight: 900;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {
@@ -738,6 +757,25 @@ h3 {
 
 .card:hover .card-media img {
   transform: scale(1.045);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .skip-link,
+  .button,
+  .card,
+  .card-media img {
+    transition: none;
+  }
+
+  .button:hover,
+  .card:hover,
+  .card:hover .card-media img {
+    transform: none;
+  }
 }
 
 .card-media span {

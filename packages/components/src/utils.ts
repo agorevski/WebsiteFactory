@@ -24,7 +24,7 @@ export function ctaClassName(variant: CtaVariant = 'primary'): string {
 }
 
 export function externalLinkAttributes(external?: boolean): { readonly target?: '_blank'; readonly rel?: string } {
-  return external ? { target: '_blank', rel: 'noreferrer' } : {};
+  return external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 }
 
 export function sectionClassName(className?: string): string {
