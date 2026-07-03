@@ -25,6 +25,7 @@ Options:
   --screenshot-dir <dir>  Write full-page PNG screenshots for visited pages
   --fail-on-horizontal-overflow
                           Report pages where content overflows the viewport horizontally
+  --allow-crawl-limit     Do not fail when --max-pages intentionally limits the crawl
   --headed                Run the browser headed. Default: headless
   --skip-axe              Skip axe-core checks and only run browser/network smoke checks
   --help                  Show this help
@@ -33,7 +34,8 @@ Environment variables:
   GENERATED_SITE_URL, SITE_URL, PLAYWRIGHT_BASE_URL
   GENERATED_SITE_MAX_PAGES, PLAYWRIGHT_BROWSER, PLAYWRIGHT_TIMEOUT_MS,
   PLAYWRIGHT_SETTLE_MS, PLAYWRIGHT_VIEWPORT, PLAYWRIGHT_SCREENSHOT_DIR,
-  PLAYWRIGHT_FAIL_ON_HORIZONTAL_OVERFLOW, PLAYWRIGHT_HEADED, SKIP_AXE
+  PLAYWRIGHT_FAIL_ON_HORIZONTAL_OVERFLOW, PLAYWRIGHT_ALLOW_CRAWL_LIMIT,
+  PLAYWRIGHT_HEADED, SKIP_AXE
 `;
 
 export async function runCli(argv = process.argv.slice(2)) {
@@ -68,6 +70,7 @@ export function parseArgs(args) {
     viewport: process.env.PLAYWRIGHT_VIEWPORT ? normalizeViewport(process.env.PLAYWRIGHT_VIEWPORT) : undefined,
     screenshotDir: process.env.PLAYWRIGHT_SCREENSHOT_DIR,
     failOnHorizontalOverflow: readBoolean(process.env.PLAYWRIGHT_FAIL_ON_HORIZONTAL_OVERFLOW),
+    allowCrawlLimit: readBoolean(process.env.PLAYWRIGHT_ALLOW_CRAWL_LIMIT),
     headed: readBoolean(process.env.PLAYWRIGHT_HEADED),
     skipAxe: readBoolean(process.env.SKIP_AXE),
     startInputs: [],
@@ -116,6 +119,8 @@ export function parseArgs(args) {
       options.screenshotDir = readInlineValue(arg, '--screenshot-dir');
     } else if (arg === '--fail-on-horizontal-overflow') {
       options.failOnHorizontalOverflow = true;
+    } else if (arg === '--allow-crawl-limit') {
+      options.allowCrawlLimit = true;
     } else if (arg === '--headed') {
       options.headed = true;
     } else if (arg === '--skip-axe') {
@@ -230,7 +235,7 @@ async function crawlGeneratedSite(context, AxeBuilder, options) {
     }
   }
 
-  if (queue.length > 0 || skippedForLimit > 0) {
+  if (!options.allowCrawlLimit && (queue.length > 0 || skippedForLimit > 0)) {
     findings.push({
       type: 'crawl-limit',
       pageUrl: options.baseUrl.href,

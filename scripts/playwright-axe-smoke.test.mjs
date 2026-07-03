@@ -13,6 +13,7 @@ test('parseArgs accepts viewport, screenshot directory, and horizontal overflow 
     '--viewport=390x844',
     '--screenshot-dir=.website-factory-qa/screenshots',
     '--fail-on-horizontal-overflow',
+    '--allow-crawl-limit',
     '--skip-axe',
     '/sample/',
   ]);
@@ -20,6 +21,7 @@ test('parseArgs accepts viewport, screenshot directory, and horizontal overflow 
   assert.deepEqual(options.viewport, { width: 390, height: 844 });
   assert.equal(options.screenshotDir, '.website-factory-qa/screenshots');
   assert.equal(options.failOnHorizontalOverflow, true);
+  assert.equal(options.allowCrawlLimit, true);
   assert.equal(options.skipAxe, true);
   assert.deepEqual(options.startUrls, ['http://127.0.0.1:4173/sample/']);
 });
