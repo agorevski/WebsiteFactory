@@ -173,7 +173,7 @@ export const templates = {
       section('gallery', 'gallery', 'Gallery', 'grid', 'main', 40),
       section('faq', 'faq', 'FAQ', 'compact', 'main', 50),
       section('contact', 'contact', 'Contact', 'centered', 'main', 60, { required: true }),
-      section('footer', 'footer', 'Footer', 'simple', 'footer', 70)
+      section('footer', 'footer', 'Footer', 'simple', 'footer', 70, { required: true })
     ],
     ['minimal', 'fast', 'brochure']
   ),

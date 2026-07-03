@@ -1,5 +1,8 @@
 #!/usr/bin/env node
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import process from 'node:process';
+import { pathToFileURL } from 'node:url';
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 const DEFAULT_MAX_PAGES = 100;
@@ -18,6 +21,10 @@ Options:
   --browser <name>        chromium, firefox, or webkit. Default: chromium
   --timeout-ms <ms>       Navigation timeout per page. Default: ${DEFAULT_NAVIGATION_TIMEOUT_MS}
   --settle-ms <ms>        Delay after load before collecting links and running axe. Default: ${DEFAULT_SETTLE_MS}
+  --viewport <WxH>        Browser viewport, for example 390x844. Default: browser default
+  --screenshot-dir <dir>  Write full-page PNG screenshots for visited pages
+  --fail-on-horizontal-overflow
+                          Report pages where content overflows the viewport horizontally
   --headed                Run the browser headed. Default: headless
   --skip-axe              Skip axe-core checks and only run browser/network smoke checks
   --help                  Show this help
@@ -25,36 +32,42 @@ Options:
 Environment variables:
   GENERATED_SITE_URL, SITE_URL, PLAYWRIGHT_BASE_URL
   GENERATED_SITE_MAX_PAGES, PLAYWRIGHT_BROWSER, PLAYWRIGHT_TIMEOUT_MS,
-  PLAYWRIGHT_SETTLE_MS, PLAYWRIGHT_HEADED, SKIP_AXE
+  PLAYWRIGHT_SETTLE_MS, PLAYWRIGHT_VIEWPORT, PLAYWRIGHT_SCREENSHOT_DIR,
+  PLAYWRIGHT_FAIL_ON_HORIZONTAL_OVERFLOW, PLAYWRIGHT_HEADED, SKIP_AXE
 `;
 
-const config = parseArgs(process.argv.slice(2));
+export async function runCli(argv = process.argv.slice(2)) {
+  const config = parseArgs(argv);
 
-if (config.help) {
-  console.log(helpText);
-  process.exit(0);
+  if (config.help) {
+    console.log(helpText);
+    return 0;
+  }
+
+  const { playwright, AxeBuilder } = await loadDependencies(config.skipAxe);
+  const browserType = getBrowserType(playwright, config.browser);
+  const browser = await browserType.launch({ headless: !config.headed });
+  const context = await browser.newContext(config.viewport ? { viewport: config.viewport } : undefined);
+
+  try {
+    const result = await crawlGeneratedSite(context, AxeBuilder, config);
+    printResult(result, config);
+    return result.findings.length > 0 ? 1 : 0;
+  } finally {
+    await browser.close();
+  }
 }
 
-const { playwright, AxeBuilder } = await loadDependencies(config.skipAxe);
-const browserType = getBrowserType(playwright, config.browser);
-const browser = await browserType.launch({ headless: !config.headed });
-const context = await browser.newContext();
-
-try {
-  const result = await crawlGeneratedSite(context, AxeBuilder, config);
-  printResult(result, config);
-  process.exitCode = result.findings.length > 0 ? 1 : 0;
-} finally {
-  await browser.close();
-}
-
-function parseArgs(args) {
+export function parseArgs(args) {
   const options = {
     baseUrl: firstDefinedEnv(['GENERATED_SITE_URL', 'SITE_URL', 'PLAYWRIGHT_BASE_URL']) ?? DEFAULT_BASE_URL,
     browser: process.env.PLAYWRIGHT_BROWSER ?? 'chromium',
     maxPages: readInteger(process.env.GENERATED_SITE_MAX_PAGES, DEFAULT_MAX_PAGES, 'GENERATED_SITE_MAX_PAGES'),
     navigationTimeoutMs: readInteger(process.env.PLAYWRIGHT_TIMEOUT_MS, DEFAULT_NAVIGATION_TIMEOUT_MS, 'PLAYWRIGHT_TIMEOUT_MS'),
     settleMs: readInteger(process.env.PLAYWRIGHT_SETTLE_MS, DEFAULT_SETTLE_MS, 'PLAYWRIGHT_SETTLE_MS'),
+    viewport: process.env.PLAYWRIGHT_VIEWPORT ? normalizeViewport(process.env.PLAYWRIGHT_VIEWPORT) : undefined,
+    screenshotDir: process.env.PLAYWRIGHT_SCREENSHOT_DIR,
+    failOnHorizontalOverflow: readBoolean(process.env.PLAYWRIGHT_FAIL_ON_HORIZONTAL_OVERFLOW),
     headed: readBoolean(process.env.PLAYWRIGHT_HEADED),
     skipAxe: readBoolean(process.env.SKIP_AXE),
     startInputs: [],
@@ -91,6 +104,18 @@ function parseArgs(args) {
       index += 1;
     } else if (arg.startsWith('--settle-ms=')) {
       options.settleMs = readInteger(readInlineValue(arg, '--settle-ms'), DEFAULT_SETTLE_MS, arg);
+    } else if (arg === '--viewport') {
+      options.viewport = normalizeViewport(readRequiredValue(args, index, arg));
+      index += 1;
+    } else if (arg.startsWith('--viewport=')) {
+      options.viewport = normalizeViewport(readInlineValue(arg, '--viewport'));
+    } else if (arg === '--screenshot-dir') {
+      options.screenshotDir = readRequiredValue(args, index, arg);
+      index += 1;
+    } else if (arg.startsWith('--screenshot-dir=')) {
+      options.screenshotDir = readInlineValue(arg, '--screenshot-dir');
+    } else if (arg === '--fail-on-horizontal-overflow') {
+      options.failOnHorizontalOverflow = true;
     } else if (arg === '--headed') {
       options.headed = true;
     } else if (arg === '--skip-axe') {
@@ -284,6 +309,45 @@ async function inspectPage(context, AxeBuilder, url, options) {
   }
 
   if (loaded) {
+    if (options.failOnHorizontalOverflow) {
+      try {
+        const overflow = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        }));
+
+        if (overflow.scrollWidth > overflow.clientWidth) {
+          findings.push({
+            type: 'horizontal-overflow',
+            pageUrl: url,
+            message: `Page overflows horizontally: scrollWidth ${overflow.scrollWidth}px exceeds clientWidth ${overflow.clientWidth}px.`,
+          });
+        }
+      } catch (error) {
+        findings.push({
+          type: 'overflow-check-error',
+          pageUrl: url,
+          message: error instanceof Error ? error.message : `Failed to check horizontal overflow for ${url}`,
+        });
+      }
+    }
+
+    if (options.screenshotDir) {
+      try {
+        await mkdir(options.screenshotDir, { recursive: true });
+        await page.screenshot({
+          path: screenshotPathForUrl(url, options.screenshotDir),
+          fullPage: true,
+        });
+      } catch (error) {
+        findings.push({
+          type: 'screenshot-error',
+          pageUrl: url,
+          message: error instanceof Error ? error.message : `Failed to write screenshot for ${url}`,
+        });
+      }
+    }
+
     if (AxeBuilder) {
       try {
         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
@@ -379,6 +443,34 @@ function normalizeDiscoveredUrl(value, baseUrl) {
 
 function looksLikePageUrl(url) {
   return !PAGE_FILE_EXTENSION_PATTERN.test(url.pathname);
+}
+
+export function normalizeViewport(value) {
+  const match = /^(\d+)x(\d+)$/i.exec(value);
+
+  if (!match) {
+    throw new Error(`viewport must use WIDTHxHEIGHT, for example 390x844.`);
+  }
+
+  const width = Number.parseInt(match[1], 10);
+  const height = Number.parseInt(match[2], 10);
+
+  if (!Number.isSafeInteger(width) || !Number.isSafeInteger(height) || width < 1 || height < 1) {
+    throw new Error('viewport width and height must be positive integers.');
+  }
+
+  return { width, height };
+}
+
+export function screenshotPathForUrl(value, screenshotDir) {
+  const url = new URL(value);
+  const slug = url.pathname
+    .replace(/^\/+|\/+$/g, '')
+    .replace(/[^a-z0-9]+/gi, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase() || 'index';
+
+  return join(screenshotDir, `${slug}.png`);
 }
 
 function isSameOrigin(value, baseUrl) {
@@ -497,4 +589,13 @@ function indentDetail(detail) {
     .split('\n')
     .map((line) => `   ${line}`)
     .join('\n');
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  runCli().then((exitCode) => {
+    process.exitCode = exitCode;
+  }, (error) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+  });
 }

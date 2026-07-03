@@ -183,13 +183,17 @@ run_html_validation_if_available() {
 
 echo "Writing generated-site QA report to ${REPORT_DIR}"
 
+run_check "template-registry" "Template registry invariants" npm run qa:templates:registry
+run_check "template-fuzz" "Template fuzz checks" npm run qa:templates:fuzz
 run_check "build" "Workspace build" npm run qa:generated:build
+run_check "dist-validation" "Generated dist validation" npm run qa:generated:dist
 
 start_preview
 wait_for_preview || true
 
 run_check "lhci" "Lighthouse CI" npm run qa:generated:lhci
 run_check "playwright-axe" "Playwright/axe smoke checks" npm run qa:generated:playwright
+run_check "playwright-visual" "Playwright viewport visual checks" npm run qa:generated:visual
 run_check "static-validation" "Static link validation" npm run qa:generated:static
 run_html_validation_if_available
 

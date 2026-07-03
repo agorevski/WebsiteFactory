@@ -19,6 +19,7 @@ playwright-report/
 test-results/
 .lighthouseci/
 qa-reports/
+.website-factory-qa/
 
 # Local deployment state
 .netlify/
