@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "_workspaces:present": "test -n \"$(find apps packages -mindepth 2 -maxdepth 2 -name package.json -print -quit 2>/dev/null)\"",
-    "build": "npm run build --workspace @website-factory/schema && npm run build --workspace @website-factory/themes && npm run build --workspace @website-factory/components && npm run build --workspace @website-factory/templates && npm run build --workspace @website-factory/seo && npm run build --workspace @website-factory/generator && npm run build --workspace @website-factory/validation && npm run build --workspace @website-factory/ai && npm run build --workspace @website-factory/deployment && npm run build --workspace @website-factory/website-builder",
+    "build": "node scripts/build-workspaces.mjs",
     "typecheck": "if npm run _workspaces:present --silent; then npm run typecheck --workspaces --if-present; else echo \"No workspace type checks configured yet.\"; fi",
     "lint": "echo \"No linting configured yet.\"",
     "validate": "npm run typecheck && npm run lint && npm run build && npm run validate:examples",
