@@ -334,6 +334,129 @@ const playfulColors: Record<'light' | 'dark' | 'highContrast', ThemeColorTokens>
   highContrast
 };
 
+const clinicShowcaseColors: Record<'light' | 'dark' | 'highContrast', ThemeColorTokens> = {
+  light: {
+    ...lightNeutral,
+    background: '#f2fbfa',
+    surface: '#ffffff',
+    surfaceAlt: '#e3f4f2',
+    text: '#142b3d',
+    textMuted: '#526679',
+    primary: '#2f7d78',
+    secondary: '#17324a',
+    accent: '#a9d9d3',
+    border: '#c9e3df',
+    focus: '#1f8b85',
+    link: '#226d68'
+  },
+  dark: {
+    ...darkNeutral,
+    background: '#071719',
+    surface: '#10282a',
+    surfaceAlt: '#163639',
+    text: '#eefcf9',
+    textMuted: '#bedbd7',
+    primary: '#7ccbc3',
+    primaryForeground: '#071719',
+    secondary: '#d7eef8',
+    secondaryForeground: '#071719',
+    accent: '#b9eee6',
+    border: '#2b5b5e',
+    link: '#9fe6dd'
+  },
+  highContrast
+};
+
+const tradeProColors: Record<'light' | 'dark' | 'highContrast', ThemeColorTokens> = {
+  light: {
+    ...lightNeutral,
+    background: '#fff7ed',
+    surface: '#ffffff',
+    surfaceAlt: '#ffedd5',
+    text: '#1c1917',
+    textMuted: '#57534e',
+    primary: '#c2410c',
+    secondary: '#111827',
+    accent: '#f97316',
+    border: '#fed7aa',
+    link: '#9a3412'
+  },
+  dark: {
+    ...darkNeutral,
+    background: '#160b05',
+    surface: '#23140c',
+    surfaceAlt: '#372013',
+    primary: '#fb923c',
+    primaryForeground: '#160b05',
+    secondary: '#f8fafc',
+    secondaryForeground: '#160b05',
+    accent: '#fdba74',
+    border: '#6b3b20',
+    link: '#fdba74'
+  },
+  highContrast
+};
+
+const hospitalityEditorialColors: Record<'light' | 'dark' | 'highContrast', ThemeColorTokens> = {
+  light: {
+    ...classicColors.light,
+    background: '#fff8ed',
+    surface: '#fffdf7',
+    surfaceAlt: '#f4e3ca',
+    text: '#2b2017',
+    textMuted: '#695846',
+    primary: '#9a5a16',
+    secondary: '#3a2a1c',
+    accent: '#d9a441',
+    border: '#dfc39b',
+    link: '#81470e'
+  },
+  dark: {
+    ...classicColors.dark,
+    background: '#140e08',
+    surface: '#21170d',
+    surfaceAlt: '#332314',
+    primary: '#f2b95d',
+    primaryForeground: '#140e08',
+    secondary: '#fff3d7',
+    secondaryForeground: '#140e08',
+    accent: '#f6d08a',
+    border: '#5d4227',
+    link: '#f2b95d'
+  },
+  highContrast
+};
+
+const professionalTrustColors: Record<'light' | 'dark' | 'highContrast', ThemeColorTokens> = {
+  light: {
+    ...lightNeutral,
+    background: '#f6f8ff',
+    surface: '#ffffff',
+    surfaceAlt: '#e8edff',
+    text: '#111827',
+    textMuted: '#4b5563',
+    primary: '#3730a3',
+    secondary: '#172554',
+    accent: '#0ea5e9',
+    border: '#dbe4ff',
+    link: '#312e81'
+  },
+  dark: {
+    ...darkNeutral,
+    background: '#070a1c',
+    surface: '#111633',
+    surfaceAlt: '#1d2550',
+    primary: '#a5b4fc',
+    primaryForeground: '#070a1c',
+    secondary: '#dbeafe',
+    secondaryForeground: '#070a1c',
+    accent: '#7dd3fc',
+    border: '#33407a',
+    link: '#bfdbfe'
+  },
+  highContrast
+};
+
 export const themes = {
   modern: {
     id: 'modern',
@@ -586,6 +709,151 @@ export const themes = {
         ...baseAnimation,
         durationBase: '220ms',
         durationSlow: '420ms'
+      }
+    })
+  },
+  'clinic-showcase': {
+    id: 'clinic-showcase',
+    displayName: 'Clinic Showcase',
+    description: 'Polished healthcare theme with calm teal surfaces, generous spacing, image-led hero cards, and trust-first CTAs.',
+    defaultMode: 'light',
+    supportedModes: ['light', 'dark', 'highContrast'],
+    tags: ['clinic', 'medical', 'dental', 'wellness'],
+    tokens: tokens({
+      modes: clinicShowcaseColors,
+      spacing: {
+        ...baseSpacing,
+        section: 'clamp(4.5rem, 8vw, 7.5rem)',
+        container: 'min(1160px, calc(100vw - 2rem))'
+      },
+      radius: {
+        ...baseRadius,
+        md: '1rem',
+        lg: '1.35rem',
+        xl: '2rem'
+      },
+      elevation: {
+        ...baseElevation,
+        md: '0 16px 38px rgb(23 50 74 / 0.12)',
+        lg: '0 28px 70px rgb(23 50 74 / 0.16)',
+        xl: '0 42px 110px rgb(23 50 74 / 0.22)'
+      },
+      navigation: {
+        layout: 'split',
+        background: 'surface',
+        foreground: 'text',
+        linkHover: 'primary',
+        border: 'border',
+        sticky: true,
+        height: '5rem',
+        blur: true
+      },
+      footer: {
+        layout: 'rich',
+        background: 'secondary',
+        foreground: 'secondaryForeground',
+        link: 'accent',
+        border: 'border',
+        density: 'spacious'
+      }
+    })
+  },
+  'trade-pro': {
+    id: 'trade-pro',
+    displayName: 'Trade Pro',
+    description: 'High-contrast home-service theme with urgent CTAs, robust card treatments, and bold service-area sections.',
+    defaultMode: 'light',
+    supportedModes: ['light', 'dark', 'highContrast'],
+    tags: ['trade', 'home-services', 'plumbing', 'repair'],
+    tokens: tokens({
+      modes: tradeProColors,
+      spacing: {
+        ...baseSpacing,
+        section: 'clamp(4rem, 7vw, 6.5rem)'
+      },
+      radius: {
+        ...baseRadius,
+        md: '0.5rem',
+        lg: '0.85rem',
+        xl: '1.1rem'
+      },
+      navigation: {
+        layout: 'split',
+        background: 'secondary',
+        foreground: 'secondaryForeground',
+        linkHover: 'accent',
+        border: 'border',
+        sticky: true,
+        height: '4.75rem',
+        blur: false
+      },
+      footer: {
+        layout: 'columns',
+        background: 'secondary',
+        foreground: 'secondaryForeground',
+        link: 'accent',
+        border: 'border',
+        density: 'comfortable'
+      }
+    })
+  },
+  'hospitality-editorial': {
+    id: 'hospitality-editorial',
+    displayName: 'Hospitality Editorial',
+    description: 'Warm editorial hospitality theme with serif headlines, layered imagery, and menu-friendly content rhythm.',
+    defaultMode: 'light',
+    supportedModes: ['light', 'dark', 'highContrast'],
+    tags: ['hospitality', 'restaurant', 'editorial', 'local-business'],
+    tokens: tokens({
+      modes: hospitalityEditorialColors,
+      typography: classicTypography,
+      spacing: {
+        ...baseSpacing,
+        section: 'clamp(5rem, 9vw, 8rem)',
+        container: 'min(1180px, calc(100vw - 2rem))'
+      },
+      radius: {
+        ...baseRadius,
+        md: '0.75rem',
+        lg: '1rem',
+        xl: '1.25rem'
+      },
+      footer: {
+        layout: 'rich',
+        background: 'secondary',
+        foreground: 'secondaryForeground',
+        link: 'accent',
+        border: 'border',
+        density: 'spacious'
+      }
+    })
+  },
+  'professional-trust': {
+    id: 'professional-trust',
+    displayName: 'Professional Trust',
+    description: 'Structured professional-services theme with crisp hierarchy, deep blue trust colors, and credibility-first sections.',
+    defaultMode: 'light',
+    supportedModes: ['light', 'dark', 'highContrast'],
+    tags: ['professional', 'legal', 'consulting', 'trust'],
+    tokens: tokens({
+      modes: professionalTrustColors,
+      navigation: {
+        layout: 'split',
+        background: 'surface',
+        foreground: 'text',
+        linkHover: 'primary',
+        border: 'border',
+        sticky: true,
+        height: '4.75rem',
+        blur: true
+      },
+      footer: {
+        layout: 'columns',
+        background: 'secondary',
+        foreground: 'secondaryForeground',
+        link: 'accent',
+        border: 'border',
+        density: 'comfortable'
       }
     })
   }

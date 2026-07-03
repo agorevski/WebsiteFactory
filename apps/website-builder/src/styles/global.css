@@ -1,48 +1,55 @@
 :root {
   color-scheme: light;
-  --background: #f7fbfb;
-  --background-strong: #e7f3f1;
-  --surface: #ffffff;
-  --surface-muted: #f1f6f8;
-  --ink: #172033;
-  --muted: #475569;
-  --accent: #2563eb;
-  --accent-strong: #1d4ed8;
-  --accent-soft: #dbeafe;
-  --border: #dbe4ee;
-  --shadow: 0 18px 45px rgb(15 23 42 / 10%);
-  --shadow-soft: 0 10px 25px rgb(15 23 42 / 7%);
-  --display-font: Georgia, "Times New Roman", serif;
-  --secondary: #355873;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --wf-colors-background: #f7fbfb;
+  --wf-colors-surface: #ffffff;
+  --wf-colors-surface-alt: #f1f6f8;
+  --wf-colors-text: #172033;
+  --wf-colors-text-muted: #475569;
+  --wf-colors-primary: #2563eb;
+  --wf-colors-primary-foreground: #ffffff;
+  --wf-colors-secondary: #1d4ed8;
+  --wf-colors-accent: #dbeafe;
+  --wf-colors-border: #dbe4ee;
+  --wf-elevation-sm: 0 10px 25px rgb(15 23 42 / 7%);
+  --wf-elevation-lg: 0 18px 45px rgb(15 23 42 / 10%);
+  --wf-typography-display-font-family: Georgia, "Times New Roman", serif;
+  --wf-typography-body-font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --background: var(--wf-colors-background);
+  --background-strong: color-mix(in srgb, var(--wf-colors-primary), var(--wf-colors-background) 82%);
+  --surface: var(--wf-colors-surface);
+  --surface-muted: var(--wf-colors-surface-alt);
+  --ink: var(--wf-colors-text);
+  --muted: var(--wf-colors-text-muted);
+  --accent: var(--wf-colors-primary);
+  --accent-strong: var(--wf-colors-secondary);
+  --accent-soft: color-mix(in srgb, var(--wf-colors-accent), white 42%);
+  --border: var(--wf-colors-border);
+  --shadow: var(--wf-elevation-lg);
+  --shadow-soft: var(--wf-elevation-sm);
+  --display-font: var(--wf-typography-display-font-family);
+  --body-font: var(--wf-typography-body-font-family);
+  --secondary: var(--wf-colors-accent);
+  font-family: var(--body-font);
 }
 
 .theme-clinic {
-  --background: #f4fbfa;
-  --background-strong: #d8eeeb;
-  --surface-muted: #edf7f6;
-  --accent: #42837d;
-  --accent-strong: #355873;
-  --accent-soft: #d7efed;
-  --secondary: #7e95a6;
+  --accent-soft: color-mix(in srgb, var(--wf-colors-accent), white 34%);
 }
 
 .theme-trade {
-  --accent: #c2410c;
-  --accent-strong: #9a3412;
-  --accent-soft: #ffedd5;
+  --accent-soft: color-mix(in srgb, var(--wf-colors-accent), white 22%);
 }
 
 .theme-hospitality {
-  --accent: #b45309;
-  --accent-strong: #92400e;
-  --accent-soft: #fef3c7;
+  --accent-soft: color-mix(in srgb, var(--wf-colors-accent), white 28%);
 }
 
 .theme-professional {
-  --accent: #3730a3;
-  --accent-strong: #312e81;
-  --accent-soft: #e0e7ff;
+  --accent-soft: color-mix(in srgb, var(--wf-colors-accent), white 36%);
+}
+
+.theme-mode-dark {
+  color-scheme: dark;
 }
 
 * {
@@ -56,8 +63,8 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-soft), transparent 35%), transparent 30rem),
-    linear-gradient(180deg, var(--background), #ffffff 45%, var(--background));
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-soft), transparent 28%), transparent 30rem),
+    linear-gradient(180deg, var(--background), var(--surface) 45%, var(--background));
   color: var(--ink);
   line-height: 1.6;
 }
@@ -115,7 +122,7 @@ h3 {
   min-height: 100vh;
   background:
     radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--accent-soft), transparent 18%), transparent 26rem),
-    linear-gradient(180deg, #ffffff, var(--background) 34rem, #ffffff);
+    linear-gradient(180deg, var(--surface), var(--background) 34rem, var(--surface));
 }
 
 .section-pad {
@@ -127,7 +134,7 @@ h3 {
   top: 0;
   z-index: 10;
   border-bottom: 1px solid color-mix(in srgb, var(--border), transparent 20%);
-  background: rgb(255 255 255 / 90%);
+  background: color-mix(in srgb, var(--surface), transparent 10%);
   backdrop-filter: blur(16px);
 }
 
@@ -316,6 +323,41 @@ h3 {
   background: color-mix(in srgb, var(--secondary), transparent 82%);
 }
 
+.hero-photo-card-has-image {
+  min-height: clamp(360px, 52vw, 560px);
+  background: var(--accent-strong);
+}
+
+.hero-photo-card-has-image::before {
+  inset: 0;
+  z-index: 1;
+  width: auto;
+  height: auto;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 6%), rgb(0 0 0 / 42%)),
+    radial-gradient(circle at 72% 18%, color-mix(in srgb, var(--accent), transparent 68%), transparent 17rem);
+}
+
+.hero-photo-card-has-image::after {
+  z-index: 1;
+  width: 16rem;
+  height: 16rem;
+  right: -5rem;
+  bottom: -5rem;
+  left: auto;
+  top: auto;
+  background: color-mix(in srgb, var(--accent-soft), transparent 24%);
+}
+
+.hero-photo-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .hero-photo-art {
   position: absolute;
   inset: 2rem;
@@ -360,6 +402,7 @@ h3 {
 
 .hero-photo-caption {
   position: absolute;
+  z-index: 2;
   right: 1.1rem;
   bottom: 1.1rem;
   left: 1.1rem;
@@ -522,7 +565,7 @@ h3 {
 }
 
 .page-section {
-  background: white;
+  background: var(--surface);
 }
 
 .section-alt {
@@ -632,6 +675,39 @@ h3 {
   left: -1.7rem;
   top: -1.8rem;
   background: color-mix(in srgb, var(--accent), transparent 72%);
+}
+
+.card-media-has-image {
+  min-height: 10.5rem;
+  background: var(--accent-strong);
+}
+
+.card-media-has-image::before {
+  inset: 0;
+  z-index: 1;
+  width: auto;
+  height: auto;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, transparent, rgb(0 0 0 / 24%)),
+    radial-gradient(circle at 78% 20%, color-mix(in srgb, var(--accent), transparent 62%), transparent 10rem);
+}
+
+.card-media-has-image::after {
+  display: none;
+}
+
+.card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 260ms ease;
+}
+
+.card:hover .card-media img {
+  transform: scale(1.045);
 }
 
 .card-media span {
@@ -755,7 +831,7 @@ h3 {
 .site-footer {
   background:
     radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--accent), transparent 72%), transparent 18rem),
-    #0f172a;
+    var(--wf-colors-secondary, #0f172a);
   color: white;
   padding: 4rem 0;
 }
@@ -840,6 +916,90 @@ h3 {
 .template-clinic-showcase .final-cta .cta-card {
   background:
     linear-gradient(135deg, #ffffff, color-mix(in srgb, var(--accent-soft), white 28%));
+}
+
+.template-trade-pro .header-top {
+  background: var(--wf-colors-secondary, #111827);
+  color: var(--wf-colors-primary-foreground, #ffffff);
+}
+
+.template-trade-pro .site-header {
+  background: color-mix(in srgb, var(--wf-colors-secondary, #111827), transparent 8%);
+}
+
+.template-trade-pro .brand,
+.template-trade-pro .primary-nav a,
+.template-trade-pro .header-call {
+  color: white;
+}
+
+.template-trade-pro .brand small {
+  color: color-mix(in srgb, white, transparent 30%);
+}
+
+.template-trade-pro .brand span,
+.template-trade-pro .header-call {
+  border-radius: 0.75rem;
+  background: var(--accent);
+}
+
+.template-trade-pro .hero {
+  background:
+    linear-gradient(115deg, color-mix(in srgb, var(--wf-colors-secondary, #111827), black 8%) 0 52%, transparent 52%),
+    radial-gradient(circle at 84% 20%, color-mix(in srgb, var(--accent), transparent 58%), transparent 22rem),
+    var(--surface-muted);
+}
+
+.template-trade-pro .hero h1,
+.template-trade-pro .hero .lede,
+.template-trade-pro .hero .eyebrow {
+  color: white;
+}
+
+.template-trade-pro .service-card {
+  border-top: 0;
+  border-left: 6px solid var(--accent);
+}
+
+.template-hospitality-editorial .site-header {
+  background: color-mix(in srgb, var(--background), white 28%);
+}
+
+.template-hospitality-editorial .hero {
+  background:
+    radial-gradient(circle at 78% 16%, color-mix(in srgb, var(--accent), transparent 55%), transparent 24rem),
+    linear-gradient(135deg, var(--surface), var(--background) 62%, var(--surface-muted));
+}
+
+.template-hospitality-editorial .hero-photo-card,
+.template-hospitality-editorial .card-media {
+  border-radius: 1.1rem;
+}
+
+.template-hospitality-editorial .card {
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--surface-muted), white 58%));
+}
+
+.template-professional-trust .hero {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-strong), white 8%), color-mix(in srgb, var(--accent), black 16%)),
+    var(--accent-strong);
+}
+
+.template-professional-trust .hero h1,
+.template-professional-trust .hero .lede,
+.template-professional-trust .hero .eyebrow {
+  color: white;
+}
+
+.template-professional-trust .hero .button-secondary {
+  border-color: rgb(255 255 255 / 30%);
+  background: rgb(255 255 255 / 12%);
+  color: white;
+}
+
+.template-professional-trust .stat-card {
+  border-top: 4px solid var(--accent);
 }
 
 .radius-crisp .card,

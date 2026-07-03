@@ -65,6 +65,22 @@ function thumbnailLabel(section: UniversalSection, title: string): string {
   return section.type;
 }
 
+function CardMedia({ item, section }: { item: UniversalSection['items'][number]; section: UniversalSection }) {
+  if (item.image) {
+    return (
+      <div className="card-media card-media-has-image">
+        <img src={item.image.src} alt={item.image.alt} loading="lazy" decoding="async" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="card-media" aria-hidden="true">
+      <span>{thumbnailLabel(section, item.title)}</span>
+    </div>
+  );
+}
+
 function ContentItems({ section }: { section: UniversalSection }) {
   if (section.items.length === 0) {
     return null;
@@ -76,9 +92,7 @@ function ContentItems({ section }: { section: UniversalSection }) {
     <div className={gridClassName}>
       {section.items.map((item) => (
         <article className={`card ${section.type === 'services' ? 'service-card' : ''}`} key={item.title}>
-          <div className="card-media" aria-hidden="true">
-            <span>{thumbnailLabel(section, item.title)}</span>
-          </div>
+          <CardMedia item={item} section={section} />
           <h3>{item.title}</h3>
           <p>{item.description}</p>
         </article>

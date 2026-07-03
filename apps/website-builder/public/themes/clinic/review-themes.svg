@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Patient feedback theme illustration</title>
+  <desc id="desc">Layered review cards with stars and calm teal accents.</desc>
+  <rect width="640" height="420" rx="34" fill="#f4fbfa"/>
+  <circle cx="512" cy="104" r="118" fill="#d7efed"/>
+  <rect x="104" y="104" width="370" height="98" rx="24" fill="#ffffff"/>
+  <rect x="160" y="230" width="376" height="98" rx="24" fill="#ffffff"/>
+  <path d="M144 154h186M202 280h194" stroke="#17324a" stroke-width="14" stroke-linecap="round" opacity=".22"/>
+  <path d="M144 178h118M202 304h152" stroke="#17324a" stroke-width="10" stroke-linecap="round" opacity=".16"/>
+  <g fill="#2f7d78">
+    <path d="M386 132l10 22 24 2-18 16 6 24-22-12-22 12 6-24-18-16 24-2z"/>
+    <path d="M444 258l10 22 24 2-18 16 6 24-22-12-22 12 6-24-18-16 24-2z"/>
+  </g>
+</svg>

@@ -53,6 +53,9 @@ navigation:
   - label: Location
     href: /madrona-family-dental/location/
     variant: text
+  - label: Reviews
+    href: /madrona-family-dental/#patient-feedback
+    variant: text
   - label: FAQ
     href: /madrona-family-dental/#faq
     variant: text
@@ -60,7 +63,10 @@ hero:
   eyebrow: Madrona family dentist
   title: Calm, personal dental care right in the neighborhood.
   summary: Madrona Family Dental helps Seattle patients plan routine checkups, whitening or aligner conversations, and long-term care from an office on East Spring Street.
-  mediaAlt: Abstract dental office preview with calm clinic cards and smile-focused visual accents.
+  image:
+    src: /themes/clinic/madrona-hero.svg
+    alt: Calm illustrated dental studio with soft teal clinic colors, rounded furniture, and natural light.
+  mediaAlt: Calm illustrated dental studio with soft teal clinic colors, rounded furniture, and natural light.
   primaryCta:
     label: Call the office
     href: "tel:+12063245400"
@@ -84,6 +90,21 @@ sections:
         value: Referral-based
       - label: Contact
         value: Call office
+  - id: patient-feedback
+    type: content
+    eyebrow: Review themes
+    title: A trust section that feels like real social proof
+    summary: Public review summaries emphasize professionalism, courtesy, skill, and gentle cleanings; this section keeps those themes review-safe without inventing direct testimonials.
+    items:
+      - title: Professional, courteous care
+        description: Public review summaries consistently mention a professional team and respectful patient interactions.
+        image:
+          src: /themes/clinic/review-themes.svg
+          alt: Layered patient feedback cards with teal review accents.
+      - title: Gentle hygiene visits
+        description: Indexed review summaries praise hygienists for comfortable, pain-aware cleanings and clear guidance.
+      - title: Complex-care confidence
+        description: Public summaries note positive experiences with involved dental needs, crowns, and practical home-care encouragement.
   - id: services
     type: services
     eyebrow: Care paths
@@ -92,12 +113,24 @@ sections:
     items:
       - title: General dentistry
         description: Routine exams, cleanings, dental care planning, and prevention-focused guidance for long-term oral health.
+        image:
+          src: /themes/clinic/general-dentistry.svg
+          alt: Preventive dental visit illustration with calendar, mirror, and calm clinic colors.
       - title: Whitening conversations
         description: Teeth whitening information for patients with stained, dull, or discolored teeth who want a brighter smile.
+        image:
+          src: /themes/clinic/cosmetic-care.svg
+          alt: Bright smile illustration with sparkles and soft teal accents.
       - title: Orthodontic aligners
         description: Clear aligner conversations for patients exploring removable trays that gradually shift teeth into alignment.
+        image:
+          src: /themes/clinic/aligners.svg
+          alt: Clear aligner planning illustration with progress cards.
       - title: Family dental care
         description: Supportive visits for neighborhood patients who want comfortable, personal care and clear next steps.
+        image:
+          src: /themes/clinic/neighborhood-care.svg
+          alt: Welcoming neighborhood dental clinic storefront illustration.
     actions:
       - label: Call about services
         href: "tel:+12063245400"
@@ -193,6 +226,7 @@ pages:
     template: landing
     sections:
       - visit-details
+      - patient-feedback
       - services
       - process
       - comfort

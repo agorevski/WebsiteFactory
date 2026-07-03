@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import type { UniversalSite } from '../lib/schema';
-import { templateThemeClassName } from '../lib/theme';
+import { siteThemeClassNames, siteThemeCssText } from '../lib/theme';
 
 interface Props {
   title: string;
@@ -12,8 +12,8 @@ interface Props {
 
 const { title, description, site, canonicalPath: canonicalPathProp } = Astro.props;
 const canonicalPath = canonicalPathProp ?? site?.seo.canonicalPath ?? Astro.url.pathname;
-const themeClass = `theme-${site?.theme.palette ?? 'professional'}`;
-const templateClass = templateThemeClassName(site);
+const themeClass = siteThemeClassNames(site);
+const themeCssText = siteThemeCssText(site);
 const jsonLd = site ? {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
@@ -33,7 +33,7 @@ const jsonLd = site ? {
 } : undefined;
 ---
 <!doctype html>
-<html lang="en" class={`${themeClass} ${templateClass}`}>
+<html lang="en" class={themeClass} style={themeCssText}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

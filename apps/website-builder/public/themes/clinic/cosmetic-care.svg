@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Bright smile cosmetic care illustration</title>
+  <desc id="desc">A soft smile arc with sparkles and layered clinic color cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d7efed"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" rx="34" fill="url(#bg)"/>
+  <circle cx="142" cy="120" r="96" fill="#a9d9d3" opacity=".58"/>
+  <circle cx="506" cy="310" r="128" fill="#17324a" opacity=".1"/>
+  <path d="M170 188c34 88 108 132 222 132s188-44 222-132" fill="none" stroke="#2f7d78" stroke-width="24" stroke-linecap="round"/>
+  <path d="M252 212h276" stroke="#ffffff" stroke-width="34" stroke-linecap="round"/>
+  <path d="M212 98l18 42 42 18-42 18-18 42-18-42-42-18 42-18zM478 74l12 28 28 12-28 12-12 28-12-28-28-12 28-12z" fill="#ffffff"/>
+  <path d="M212 98l18 42 42 18-42 18-18 42-18-42-42-18 42-18zM478 74l12 28 28 12-28 12-12 28-12-28-28-12 28-12z" fill="none" stroke="#2f7d78" stroke-width="8" stroke-linejoin="round"/>
+</svg>

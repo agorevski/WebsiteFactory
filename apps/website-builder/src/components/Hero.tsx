@@ -19,6 +19,8 @@ export default function Hero({ business, hero, theme, variant = 'landing' }: Pro
   const isPageHero = variant === 'page';
   const address = business.address;
   const primaryHours = business.hours[0];
+  const heroImage = hero.image;
+  const imageLabel = hero.mediaAlt ?? heroImage?.alt ?? `${business.name} care preview`;
 
   return (
     <section className={`hero section-pad ${isPageHero ? 'hero-page' : ''}`}>
@@ -40,12 +42,16 @@ export default function Hero({ business, hero, theme, variant = 'landing' }: Pro
         </div>
         {isPageHero ? null : (
           <aside className="hero-showcase" aria-label={`${business.name} website preview`}>
-            <div className="hero-photo-card" role="img" aria-label={hero.mediaAlt ?? `${business.name} dental care preview`}>
-              <div className="hero-photo-art" aria-hidden="true">
-                <span className="smile-arc" />
-                <span className="spark spark-one" />
-                <span className="spark spark-two" />
-              </div>
+            <div className={`hero-photo-card ${heroImage ? 'hero-photo-card-has-image' : ''}`} role="img" aria-label={imageLabel}>
+              {heroImage ? (
+                <img className="hero-photo-image" src={heroImage.src} alt="" aria-hidden="true" decoding="async" />
+              ) : (
+                <div className="hero-photo-art" aria-hidden="true">
+                  <span className="smile-arc" />
+                  <span className="spark spark-one" />
+                  <span className="spark spark-two" />
+                </div>
+              )}
               <div className="hero-photo-caption">
                 <span>Comfort-focused visits</span>
                 <strong>{business.areaServed.slice(0, 2).join(' + ')}</strong>

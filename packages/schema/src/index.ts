@@ -565,6 +565,7 @@ const universalLabelValueSchema = z.object({
 const universalContentItemSchema = z.object({
   title: nonEmptyStringSchema,
   description: nonEmptyStringSchema,
+  image: imageSchema.optional(),
 });
 
 const universalTestimonialSchema = z.object({
@@ -633,6 +634,7 @@ export const universalSiteSchema = z.object({
     summary: nonEmptyStringSchema,
     primaryCta: universalActionSchema,
     secondaryCta: universalActionSchema.optional(),
+    image: imageSchema.optional(),
     mediaAlt: textSchema.optional(),
   }),
   sections: z.array(universalSectionSchema).min(1),
