@@ -424,7 +424,7 @@ function normalizeStartUrl(input, baseUrl) {
   return normalizedUrl;
 }
 
-function normalizeDiscoveredUrl(value, baseUrl) {
+export function normalizeDiscoveredUrl(value, baseUrl) {
   let url;
 
   try {
@@ -441,6 +441,12 @@ function normalizeDiscoveredUrl(value, baseUrl) {
 
   if (!looksLikePageUrl(url)) {
     return undefined;
+  }
+
+  if (url.pathname === '/index.html') {
+    url.pathname = '/';
+  } else if (url.pathname.endsWith('/index.html')) {
+    url.pathname = url.pathname.slice(0, -'index.html'.length);
   }
 
   return url.href;

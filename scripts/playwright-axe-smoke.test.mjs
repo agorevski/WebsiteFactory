@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  normalizeDiscoveredUrl,
   normalizeViewport,
   parseArgs,
   screenshotPathForUrl,
@@ -40,5 +41,14 @@ test('screenshotPathForUrl creates deterministic local PNG paths', () => {
   assert.equal(
     screenshotPathForUrl('http://127.0.0.1:4173/', '.website-factory-qa/screenshots'),
     '.website-factory-qa/screenshots/index.png',
+  );
+});
+
+test('normalizeDiscoveredUrl canonicalizes generated index.html page links', () => {
+  const baseUrl = new URL('http://127.0.0.1:4173/');
+
+  assert.equal(
+    normalizeDiscoveredUrl('http://127.0.0.1:4173/templates/ecoImpactCampaign/index.html', baseUrl),
+    'http://127.0.0.1:4173/templates/ecoImpactCampaign/',
   );
 });
