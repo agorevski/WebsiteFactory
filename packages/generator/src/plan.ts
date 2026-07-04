@@ -12,6 +12,7 @@ import { isUniversalSite } from './inventory.js';
 import { appendLifecycleEvent, runGeneratorHooks } from './plugins.js';
 import { inferSectionCandidates } from './sections.js';
 import { inferContentSignals } from './signals.js';
+import { selectTemplateForContent } from './template.js';
 import { selectThemeForContent } from './theme.js';
 import type {
   CreateGenerationPlanOptions,
@@ -411,6 +412,15 @@ export function createGenerationPlan(input: GeneratorInput, options: CreateGener
   context = runGeneratorHooks('sections:inferred', context, plugins);
   const sectionInference = context.sectionInference ?? inferredSections;
 
+  const inferredTemplate = context.template ?? selectTemplateForContent(input, content, options);
+  context = {
+    ...context,
+    template: inferredTemplate,
+    lifecycleEvents: appendLifecycleEvent(context.lifecycleEvents, 'template:resolved', `Resolved template ${inferredTemplate.resolvedTemplateId} with score ${inferredTemplate.score}.`)
+  };
+  context = runGeneratorHooks('template:resolved', context, plugins);
+  const template = context.template ?? inferredTemplate;
+
   const inferredTheme = context.theme ?? selectThemeForContent(input, content, options);
   context = {
     ...context,
@@ -442,6 +452,7 @@ export function createGenerationPlan(input: GeneratorInput, options: CreateGener
     slug: planSlug,
     verticals: content.inventory.verticals,
     content,
+    template,
     theme,
     sections: selected.sections,
     omittedSections: allOmittedSections,

@@ -20,6 +20,7 @@
     "@website-factory/components": "0.1.0",
     "@website-factory/schema": "0.1.0",
     "@website-factory/seo": "0.1.0",
+    "@website-factory/templates": "0.1.0",
     "@website-factory/themes": "0.1.0"
   },
   "scripts": {

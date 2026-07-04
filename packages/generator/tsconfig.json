@@ -11,6 +11,9 @@
       "@website-factory/seo": [
         "../seo/src/index.ts"
       ],
+      "@website-factory/templates": [
+        "../templates/src/index.ts"
+      ],
       "@website-factory/themes": [
         "../themes/src/index.ts"
       ]

@@ -9,6 +9,7 @@ export const defaultGeneratorLifecycleEvents = [
   'generator:init',
   'content:signals:inferred',
   'sections:inferred',
+  'template:resolved',
   'theme:resolved',
   'components:selected',
   'plan:created',

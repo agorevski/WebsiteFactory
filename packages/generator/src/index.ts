@@ -1,6 +1,7 @@
 export { createGenerationPlan } from './plan.js';
 export { inferContentSignals } from './signals.js';
 export { inferSectionCandidates } from './sections.js';
+export { selectTemplateForContent } from './template.js';
 export { deriveThemeTraits, selectThemeForContent } from './theme.js';
 export { createGeneratorPlugin, defaultGeneratorLifecycleEvents, runGeneratorHooks } from './plugins.js';
 export { validateGenerationPlan } from './validation.js';
@@ -36,6 +37,9 @@ export type {
   StaticArtifactKind,
   StaticArtifactReference,
   StaticGenerationPlan,
+  TemplateResolutionPlan,
+  TemplateSelectionCandidate,
+  TemplateSelectionOptions,
   ThemeResolutionPlan,
   ThemeSelectionOptions
 } from './types.js';

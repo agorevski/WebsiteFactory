@@ -9,6 +9,7 @@ import type {
 } from '@website-factory/components/marketplace';
 import type { PageSeoInput, SeoArtifactOptions } from '@website-factory/seo';
 import type { UniversalContentV2, UniversalSite, WebsiteData } from '@website-factory/schema';
+import type { TemplateAudience, TemplateLayout, WebsiteTemplate } from '@website-factory/templates';
 import type { ThemeMode, WebsiteTheme } from '@website-factory/themes';
 
 export type GeneratorInput = WebsiteData | UniversalSite;
@@ -146,6 +147,51 @@ export interface ThemeSelectionOptions {
   readonly mode?: ThemeMode;
 }
 
+export interface TemplateSelectionOptions {
+  readonly templateId?: string;
+  readonly templateCandidates?: readonly string[];
+  readonly preferredTemplateLayout?: TemplateLayout;
+  readonly requiredTemplateSections?: readonly string[];
+  readonly conversionGoal?: string;
+  readonly templateRecommendationLimit?: number;
+}
+
+export interface TemplateSelectionCandidate {
+  readonly id: string;
+  readonly displayName: string;
+  readonly audience: TemplateAudience;
+  readonly layout: TemplateLayout;
+  readonly defaultThemeId: string;
+  readonly score: number;
+  readonly reasons: readonly string[];
+  readonly cautions: readonly string[];
+  readonly matchedTags: readonly string[];
+  readonly matchedSections: readonly string[];
+  readonly matchedCapabilities: readonly string[];
+  readonly missingRequiredSections: readonly string[];
+  readonly template: WebsiteTemplate;
+}
+
+export interface TemplateResolutionPlan {
+  readonly requestedTemplateId?: string;
+  readonly resolvedTemplateId: string;
+  readonly displayName: string;
+  readonly audience: TemplateAudience;
+  readonly layout: TemplateLayout;
+  readonly defaultThemeId: string;
+  readonly source: 'explicit' | 'site-template' | 'content-match' | 'default';
+  readonly score: number;
+  readonly reasons: readonly string[];
+  readonly cautions: readonly string[];
+  readonly matchedTags: readonly string[];
+  readonly matchedSections: readonly string[];
+  readonly matchedCapabilities: readonly string[];
+  readonly missingRequiredSections: readonly string[];
+  readonly routeNeeds: readonly TemplateLayout[];
+  readonly rankedTemplates: readonly TemplateSelectionCandidate[];
+  readonly template: WebsiteTemplate;
+}
+
 export interface ThemeResolutionPlan {
   readonly requestedThemeId?: string;
   readonly resolvedThemeId: string;
@@ -219,6 +265,7 @@ export type GeneratorLifecycleEventName =
   | 'generator:init'
   | 'content:signals:inferred'
   | 'sections:inferred'
+  | 'template:resolved'
   | 'theme:resolved'
   | 'components:selected'
   | 'plan:created'
@@ -237,6 +284,7 @@ export interface GenerationPlan {
   readonly slug: string;
   readonly verticals: readonly string[];
   readonly content: ContentSignalSummary;
+  readonly template: TemplateResolutionPlan;
   readonly theme: ThemeResolutionPlan;
   readonly sections: readonly GeneratedSectionPlan[];
   readonly omittedSections: readonly OmittedSectionReason[];
@@ -256,6 +304,7 @@ export interface GeneratorHookContext {
   readonly input: GeneratorInput;
   readonly content?: ContentSignalSummary;
   readonly sectionInference?: SectionInferenceResult;
+  readonly template?: TemplateResolutionPlan;
   readonly theme?: ThemeResolutionPlan;
   readonly plan?: GenerationPlan;
   readonly diagnostics: readonly GenerationDiagnostic[];
@@ -273,7 +322,7 @@ export interface GeneratorPlugin {
   readonly hooks?: GeneratorHookMap;
 }
 
-export interface CreateGenerationPlanOptions extends ThemeSelectionOptions {
+export interface CreateGenerationPlanOptions extends ThemeSelectionOptions, TemplateSelectionOptions {
   readonly plugins?: readonly GeneratorPlugin[];
   readonly validators?: readonly GenerationPlanValidator[];
   readonly customContentTypes?: readonly GeneratorContentTypeDefinition[];
