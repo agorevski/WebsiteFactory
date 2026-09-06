@@ -4,12 +4,13 @@ import { readFile, readdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { dirname, extname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { resolveNpmInvocation } from './build-workspaces.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const defaultDistDir = 'apps/website-builder/dist';
 const validationEntry = join(root, 'packages/validation/dist/index.js');
 
-export async function collectHtmlFiles(directory) {
+async function collectStaticFiles(directory) {
   if (!existsSync(directory)) {
     throw new Error(`Static output directory ${relative(root, directory)} does not exist. Build the static app first.`);
   }
@@ -19,10 +20,10 @@ export async function collectHtmlFiles(directory) {
     const absolutePath = join(directory, entry.name);
 
     if (entry.isDirectory()) {
-      return collectHtmlFiles(absolutePath);
+      return collectStaticFiles(absolutePath);
     }
 
-    if (entry.isFile() && extname(entry.name) === '.html') {
+    if (entry.isFile()) {
       return [absolutePath];
     }
 
@@ -30,6 +31,10 @@ export async function collectHtmlFiles(directory) {
   }));
 
   return files.flat().sort((left, right) => left.localeCompare(right));
+}
+
+export async function collectHtmlFiles(directory) {
+  return (await collectStaticFiles(directory)).filter((file) => extname(file).toLowerCase() === '.html');
 }
 
 export function createPageValidationInput(htmlFile, distDir, html) {
@@ -46,7 +51,8 @@ export function createPageValidationInput(htmlFile, distDir, html) {
 export async function runGeneratedDistValidation(options = {}) {
   const distDir = resolve(root, options.distDir ?? defaultDistDir);
   const failOnWarnings = options.failOnWarnings ?? false;
-  const htmlFiles = await collectHtmlFiles(distDir);
+  const files = await collectStaticFiles(distDir);
+  const htmlFiles = files.filter((file) => extname(file).toLowerCase() === '.html');
 
   if (htmlFiles.length === 0) {
     return {
@@ -62,20 +68,28 @@ export async function runGeneratedDistValidation(options = {}) {
     };
   }
 
-  const { validatePage } = await loadValidationPackage();
-  const pageResults = await Promise.all(htmlFiles.map(async (htmlFile) => {
+  const baseUrl = new URL(options.baseUrl ?? 'https://website-factory.invalid/');
+  if (!baseUrl.pathname.endsWith('/')) {
+    baseUrl.pathname += '/';
+  }
+  const { validateSite } = await loadValidationPackage();
+  const pages = await Promise.all(htmlFiles.map(async (htmlFile) => {
     const html = await readFile(htmlFile, 'utf8');
     const input = createPageValidationInput(htmlFile, distDir, html);
-    return validatePage(input, { failOnWarnings });
+    return { ...input, url: new URL(input.url.slice(1), baseUrl).href };
   }));
-  const issues = pageResults.flatMap((result) => result.issues);
-  const hasErrors = issues.some((issue) => issue.severity === 'error');
-  const hasWarnings = issues.some((issue) => issue.severity === 'warning');
+  const assetPaths = files
+    .filter((file) => extname(file).toLowerCase() !== '.html')
+    .map((file) => relative(distDir, file).split(sep).map(encodeURIComponent).join('/'));
+  const result = validateSite({
+    pages,
+    routeInventory: { baseUrl: baseUrl.href, assetPaths },
+  }, { failOnWarnings });
 
   return {
-    ok: !hasErrors && (!failOnWarnings || !hasWarnings),
+    ok: result.ok,
     pageCount: htmlFiles.length,
-    issues,
+    issues: result.issues,
   };
 }
 
@@ -96,6 +110,11 @@ export function parseArgs(args) {
       index += 1;
     } else if (arg.startsWith('--dist=')) {
       options.distDir = readInlineValue(arg, '--dist');
+    } else if (arg === '--base-url') {
+      options.baseUrl = readRequiredValue(args, index, arg);
+      index += 1;
+    } else if (arg.startsWith('--base-url=')) {
+      options.baseUrl = readInlineValue(arg, '--base-url');
     } else if (arg === '--fail-on-warnings') {
       options.failOnWarnings = true;
     } else {
@@ -120,6 +139,7 @@ export async function runCli(argv = process.argv.slice(2)) {
 }
 
 function htmlFileToUrlPath(relativePath) {
+  relativePath = relativePath.split('/').map(encodeURIComponent).join('/');
   if (relativePath === 'index.html') {
     return '/';
   }
@@ -128,7 +148,7 @@ function htmlFileToUrlPath(relativePath) {
     return `/${relativePath.slice(0, -'index.html'.length)}`;
   }
 
-  return `/${relativePath.replace(/\.html$/, '')}/`;
+  return `/${relativePath}`;
 }
 
 function extractSeo(html) {
@@ -186,7 +206,8 @@ function escapeRegExp(value) {
 
 async function loadValidationPackage() {
   if (!existsSync(validationEntry)) {
-    const result = spawnSync('npm', ['run', 'build', '--workspace', '@website-factory/validation'], {
+    const invocation = resolveNpmInvocation();
+    const result = spawnSync(invocation.command, [...invocation.args, 'run', 'build', '--workspace', '@website-factory/validation'], {
       cwd: root,
       stdio: 'inherit',
     });
@@ -232,6 +253,8 @@ function printHelp() {
 
 Options:
   --dist <dir>           Static output directory. Default: ${defaultDistDir}
+  --base-url <url>       Public HTTP(S) deployment URL, including any path prefix;
+                        enables checking same-origin absolute links (no network requests)
   --fail-on-warnings     Exit non-zero when validation warnings are present
   --help                 Show this help
 `);

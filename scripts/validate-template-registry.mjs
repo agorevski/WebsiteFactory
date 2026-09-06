@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { resolveNpmInvocation } from './build-workspaces.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const packageEntries = [
@@ -148,7 +149,8 @@ async function ensureWorkspaceBuild() {
     : ['@website-factory/schema', '@website-factory/themes', '@website-factory/components', '@website-factory/templates'];
 
   for (const workspace of workspaces) {
-    const result = spawnSync('npm', ['run', 'build', '--workspace', workspace], {
+    const invocation = resolveNpmInvocation();
+    const result = spawnSync(invocation.command, [...invocation.args, 'run', 'build', '--workspace', workspace], {
       cwd: root,
       stdio: 'inherit',
     });

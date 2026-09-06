@@ -1,5 +1,5 @@
 import { createDeterministicId, stableStringify, toReadonlyRecord, type JsonValue, type PromptEnvelope, type PromptMessage } from "./common.js";
-import type { ValidationReport } from "./feedback.js";
+import type { FeedbackProgress, ValidationReport } from "./feedback.js";
 import type { YamlGenerationInput } from "./pipeline.js";
 import type { BusinessResearchInput, BusinessResearchQuestion } from "./research.js";
 import type { AIGenerationTask } from "./tasks.js";
@@ -139,10 +139,13 @@ export function buildTaskPrompt(task: AIGenerationTask): PromptEnvelope {
 export function buildValidationRepairPrompt(
   currentYaml: string,
   report: ValidationReport,
-  constraints: readonly string[] = []
+  constraints: readonly string[] = [],
+  progress?: FeedbackProgress
 ): PromptEnvelope {
   return buildPromptEnvelope({
-    id: createDeterministicId("validation-repair-prompt", currentYaml, report.id, constraints),
+    id: progress === undefined
+      ? createDeterministicId("validation-repair-prompt", currentYaml, report.id, constraints)
+      : createDeterministicId("validation-repair-prompt", currentYaml, report.id, constraints, progress),
     instructions: [
       "Repair the YAML so validation issues are resolved.",
       "Preserve valid content and ordering where possible.",
@@ -158,7 +161,14 @@ export function buildValidationRepairPrompt(
         message: issue.message,
         suggestion: issue.suggestion ?? null
       })),
-      constraints
+      constraints,
+      ...(progress === undefined ? {} : {
+        progress: {
+          resolved: progress.resolved.map((issue) => ({ code: issue.code, path: issue.path, severity: issue.severity })),
+          introduced: progress.introduced.map((issue) => ({ code: issue.code, path: issue.path, severity: issue.severity })),
+          persistent: progress.persistent.map((issue) => ({ code: issue.code, path: issue.path, severity: issue.severity }))
+        }
+      })
     },
     outputFormat: "yaml"
   });

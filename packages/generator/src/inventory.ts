@@ -236,7 +236,7 @@ export function createContentInventory(input: GeneratorInput): ContentInventory 
   const testimonials = content.testimonials.length || (legacyUniversal ? legacyUniversal.sections.reduce((total, section) => total + section.testimonials.length, 0) : website?.testimonials.length ?? 0);
   const reviews = content.reviews.length || (isUniversal ? 0 : website?.reviews.length ?? 0);
   const faq = content.faq.length || (legacyUniversal ? legacyUniversal.sections.reduce((total, section) => total + section.questions.length, 0) : website?.faq.length ?? 0);
-  const services = content.services.length || (legacyUniversal ? legacyUniversal.sections.reduce((total, section) => total + section.items.length, 0) : website?.services.length ?? 0);
+  const services = content.services.length || (legacyUniversal ? legacyUniversal.sections.filter((section) => section.type === 'services').reduce((total, section) => total + section.items.length, 0) : website?.services.length ?? 0);
   const products = content.products.length || (isUniversal ? 0 : website?.products.length ?? 0);
   const productCatalogs = content.productCatalogs.length || (isUniversal ? 0 : website?.productCatalogs.length ?? 0);
   const pricingOptions = countPricingOptions(input, content);

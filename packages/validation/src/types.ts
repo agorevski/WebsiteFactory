@@ -230,6 +230,8 @@ export interface PageValidationInput {
   path?: string | undefined;
   url?: string | undefined;
   html?: string | undefined;
+  fragmentIds?: string[] | undefined;
+  baseHref?: string | undefined;
   headings?: HeadingNode[] | undefined;
   images?: ImageNode[] | undefined;
   formControls?: FormControlNode[] | undefined;
@@ -252,6 +254,14 @@ export interface SiteValidationInput {
   schema?: unknown;
   pages?: PageValidationInput[] | undefined;
   contrastTokens?: ContrastToken[] | undefined;
+  routeInventory?: StaticRouteInventory | undefined;
+}
+
+export interface StaticRouteInventory {
+  /** Enables link checking against the complete pages array, using this HTTP(S) URL as its origin. */
+  baseUrl: string;
+  /** Known non-HTML output paths, resolved relative to baseUrl. */
+  assetPaths?: readonly string[] | undefined;
 }
 
 export interface RuleContext {

@@ -3,6 +3,7 @@ import { createValidationResult } from "./result.js";
 import { enrichFromHtml } from "./html.js";
 import { runRules } from "./rules.js";
 import { validateSchemaHooks } from "./schema.js";
+import { validateSiteLinks } from "./siteGraph.js";
 
 export function validatePage(input: PageValidationInput, options: ValidationOptions = {}): ValidationResult {
   const page = enrichFromHtml(input);
@@ -21,7 +22,11 @@ export function validateSite(input: SiteValidationInput, options: ValidationOpti
     return validatePage(withSiteTokens, options).issues;
   });
 
-  return createValidationResult([...schemaIssues, ...pageIssues], options.failOnWarnings);
+  const linkIssues = input.routeInventory
+    ? validateSiteLinks(input.pages ?? [], input.routeInventory)
+    : [];
+
+  return createValidationResult([...schemaIssues, ...pageIssues, ...linkIssues], options.failOnWarnings);
 }
 
 export function assertValidationPassed(result: ValidationResult): void {

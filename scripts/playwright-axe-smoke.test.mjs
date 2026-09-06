@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { join } from 'node:path';
 import test from 'node:test';
 import {
   normalizeDiscoveredUrl,
@@ -36,11 +37,11 @@ test('normalizeViewport rejects malformed viewport values', () => {
 test('screenshotPathForUrl creates deterministic local PNG paths', () => {
   assert.equal(
     screenshotPathForUrl('http://127.0.0.1:4173/service/plumbing/?debug=1', '.website-factory-qa/screenshots'),
-    '.website-factory-qa/screenshots/service-plumbing.png',
+    join('.website-factory-qa', 'screenshots', 'service-plumbing.png'),
   );
   assert.equal(
     screenshotPathForUrl('http://127.0.0.1:4173/', '.website-factory-qa/screenshots'),
-    '.website-factory-qa/screenshots/index.png',
+    join('.website-factory-qa', 'screenshots', 'index.png'),
   );
 });
 

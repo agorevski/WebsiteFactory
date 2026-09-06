@@ -8,11 +8,11 @@
     "apps/*"
   ],
   "scripts": {
-    "_workspaces:present": "test -n \"$(find apps packages -mindepth 2 -maxdepth 2 -name package.json -print -quit 2>/dev/null)\"",
     "build": "node scripts/build-workspaces.mjs",
-    "typecheck": "if npm run _workspaces:present --silent; then npm run typecheck --workspaces --if-present; else echo \"No workspace type checks configured yet.\"; fi",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "node --test scripts/*.test.mjs packages/validation/tests/*.test.mjs",
     "lint": "echo \"No linting configured yet.\"",
-    "validate": "npm run typecheck && npm run lint && npm run build && npm run validate:examples",
+    "validate": "npm run build && npm run typecheck && npm test && npm run lint && npm run validate:examples",
     "validate:examples": "npm run validate:examples --workspace @website-factory/website-builder",
     "qa:generated:build": "npm run build",
     "qa:generated:serve": "npm run preview --workspace @website-factory/website-builder -- --host 127.0.0.1 --port 4173",

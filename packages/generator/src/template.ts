@@ -401,7 +401,7 @@ function availableSchemaTypes(input: GeneratorInput, summary: ContentSignalSumma
     available.add('pricing');
   }
 
-  if (inventory.faq > 0 || inventory.regulatedContent) {
+  if (inventory.faq > 0) {
     available.add('faq');
   }
 
@@ -426,7 +426,7 @@ function availableSchemaTypes(input: GeneratorInput, summary: ContentSignalSumma
     available.add('contact');
   }
 
-  if (inventory.credentials + inventory.awards + inventory.certifications > 0 || inventory.regulatedContent) {
+  if (inventory.credentials + inventory.awards + inventory.certifications > 0) {
     available.add('trustBadges');
   }
 

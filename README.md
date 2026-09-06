@@ -76,13 +76,16 @@ Run commands from the repository root unless noted.
 | Command | What it does |
 | --- | --- |
 | `npm run build` | Builds packages, including `@website-factory/generator`, in dependency order, then builds `@website-factory/website-builder`. |
+| `npm run build -- --workspace @website-factory/generator` | Builds a selected package and its transitive workspace dependencies, without unrelated packages or the demo app. Repeat `--workspace` to select multiple packages; add `--dry-run` to inspect dependency layers without building. |
 | `npm run typecheck` | Runs `typecheck` in workspaces that define it. |
+| `npm test` | Runs the Node regression suites for planning, AI feedback, build orchestration, HTML/link validation, and QA tooling. Build package outputs first, or use `npm run validate`. |
 | `npm run lint` | Placeholder command that currently prints `No linting configured yet.` |
-| `npm run validate` | Runs typecheck, lint, full build, and example schema validation. |
+| `npm run validate` | Builds in dependency order, then runs typecheck, regression tests, lint, and example schema validation. Works from Windows, macOS, and Linux npm shells. |
 | `npm run validate:examples` | Runs `scripts/validate-website-builder.mjs` through the builder workspace. |
 | `./scripts/run-generated-qa.sh` | Runs generated-site QA and writes a timestamped report under `qa-reports/generated-site/`. |
 | `npm run qa:generated` | Builds, serves the Astro preview at `127.0.0.1:4173`, then runs LHCI, Playwright/axe, and link/static checks. |
 | `npm run qa:generated:build` | Runs the full workspace build used by generated-site QA. |
+| `npm run qa:generated:dist` | Checks every generated HTML file and its internal page/fragment links offline, including pages unreachable from the catalog. Add `-- --base-url https://example.com/project/` to check same-origin absolute links against a deployment prefix. |
 | `npm run qa:generated:serve` | Serves the built Astro site at `http://127.0.0.1:4173`. |
 | `npm run qa:generated:lhci` | Runs Lighthouse CI with `lighthouserc.cjs`. |
 | `npm run qa:generated:playwright` | Runs the Playwright browser smoke crawl with axe accessibility checks. |
@@ -123,6 +126,10 @@ These examples demonstrate how the same data contract supports healthcare, home 
 
 For AI-assisted content, keep the model output schema-first: generate YAML, validate it with Zod, review claims and regulated content, render a static preview, then approve manually before publishing.
 
+Generator template matching distinguishes content needs from content availability: regulated status alone does not count as supplied FAQs or credentials, and legacy service counts include only service-section items. Missing required data remains visible in template diagnostics.
+
+AI repair loops expose resolved, introduced, and persistent validation issues. Opt into `stopOnRepeatedIssues` to stop stalled or oscillating repairs rather than repeat the same work; progress can be included in the next repair prompt. See [AI workflow](./docs/ai-workflow.md).
+
 See [V2 platform reference](./docs/v2-platform-reference.md) for the schema/theme/template/component/generator decision checklist used by agents.
 
 ## Developer and contribution model
@@ -137,7 +144,7 @@ See [V2 platform reference](./docs/v2-platform-reference.md) for the schema/them
 
 `npm run validate:examples` checks that required app/doc files exist, verifies expected YAML tokens, parses each example with `parseUniversalSite`, enforces unique slugs, and confirms the four current example verticals are present.
 
-`npm run validate` is the broad repo check. It runs workspace type checks, the placeholder lint command, the full package/app build, and example validation.
+`npm run validate` is the broad repo check. It builds packages and the app in dependency order before running workspace type checks, Node regression suites, the placeholder lint command, and example validation. Building first ensures package exports and declarations exist on a clean checkout. The build runner invokes npm through Node rather than a shell-specific shim.
 
 The validation package also exposes reusable library and CLI primitives for page-level SEO, accessibility, responsive, performance, contrast, and checklist checks. Its CLI expects a JSON validation config (`website-factory-validate <config.json>`); it is separate from the example YAML validation script.
 
@@ -147,6 +154,7 @@ Use `./scripts/run-generated-qa.sh` for a handoff-ready local QA report. It writ
 
 The QA layers are intentionally complementary:
 
+- Generated-dist validation checks every emitted page and the complete internal-link graph without a server. It checks missing pages, fragments, downloads, and duplicate route aliases; external links are not fetched.
 - LHCI checks generated routes for performance, accessibility, best-practices, and SEO thresholds.
 - Playwright/axe crawls the local site in a browser and catches rendering, navigation, and axe accessibility issues.
 - linkinator/static checks local links, fragments, CSS, and static resources without following external/contact protocols.
