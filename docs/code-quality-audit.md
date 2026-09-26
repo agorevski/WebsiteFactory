@@ -1,8 +1,8 @@
 # Code Quality Audit — website-factory
 
 **Date:** 2026-08-01; findings checked against the repository on 2026-09-25.
-**Scope:** Report only — no package source changes. Tracked test counts below
-exclude concurrent untracked work; other findings describe the inspected worktree.
+**Scope:** Report only — no package source changes as part of this audit.
+The test inventory reflects the merged worktree, including subsequent fixes.
 
 ## Executive summary
 
@@ -14,35 +14,31 @@ implementations overlap across packages, though their contracts are not always i
 
 ## Findings by severity
 
-### HIGH — limited direct tests for package decision logic
+### MEDIUM — limited direct tests for some package decision logic
 
-Among the seven checked-in `*.test.*` files under `apps/`, `packages/`, and `scripts/`,
-one is in the builder (`apps/website-builder/src/lib/themeVariations.test.ts`) and six
-are in `scripts/`. The worktree also has untracked AI pipeline/feedback, SEO artifact, and component
-accessibility tests (`packages/ai/test/guards.test.mjs`,
-`packages/seo/test/artifacts.test.mjs`, and
-`packages/components/src/accessibility.test.mjs`); their eventual inclusion is not assumed.
-The script tests are not exclusively tooling tests:
-`scripts/template-fuzz.test.mjs` exercises schema parsing, template composition,
-and builder page paths. Direct tests of substantial package decision logic remain sparse:
+The merged tree contains 13 `*.test.*` files under `apps/`, `packages/`, and
+`scripts/`: one builder variation test, four package tests, and eight script tests.
+These cover theme variation composition, AI feedback and pipeline transitions,
+SEO artifacts, component accessibility, generator behavior, site graph validation,
+and template fuzzing, among others. Direct tests of some decision logic remain sparse:
 
-- `packages/generator/` (~3,100 lines) — `plan.ts` (475), `sections.ts` (561), `template.ts` (762), `inventory.ts` (313), `signals.ts` (240), `theme.ts` (234)
-- `packages/validation/` (~2,340 lines) — `rules.ts` (859), `html.ts` (771), `types.ts` (288)
+- `packages/generator/` (~3,100 lines) — `plan.ts`, `sections.ts`, `template.ts`, `inventory.ts`, `signals.ts`, `theme.ts` have some script smoke coverage but limited direct unit tests
+- `packages/validation/` — `rules.ts` and `html.ts` have limited direct tests beyond site-graph and script validation checks
 - `packages/schema/` (`index.ts`, 1,556-line Zod schema; covered in part by template fuzz tests)
 - `packages/components/` — notably `marketplace.ts` (~2,700 lines) containing the
   `selectComponentMarketplaceImplementations` ranking algorithm, without direct tests
 - `packages/ai/` and `packages/seo/` — scoring and JSON-LD builders lack direct
-  tests; the untracked files exercise some pipeline/feedback and SEO artifact behavior
+  tests; focused tests cover pipeline/feedback and SEO artifact behavior
 - `packages/deployment/`, `packages/themes/` — lack direct tests; templates have fuzz coverage
 
-AI, SEO, and components now define focused `test` scripts for the new tests; the
-root `lint` script remains a stub (`echo "No linting configured yet."`). Root
-`validate` runs typecheck, that stub, build, workspace tests, and example
-validation; it does not run the script tests or generated-site QA.
+AI, SEO, components, and the builder define focused `test` scripts. The root
+`lint` script remains a stub (`echo "No linting configured yet."`). Root
+`validate` runs build, typecheck, script and workspace tests, that stub, and
+example validation; it does not run generated-site QA.
 
 **Fix:** add focused unit tests for pure decision logic (generator planning, validation
-rules, marketplace ranking, JSON-LD builders), wire relevant tests into validation,
-and configure a real linter if lint enforcement is desired.
+rules, marketplace ranking, JSON-LD builders), and configure a real linter if
+lint enforcement is desired.
 
 ### MEDIUM — overlapping types and helpers across packages
 
@@ -156,10 +152,9 @@ provider-specific configuration may appropriately remain in its adapter.
 - Clean barrel re-exports (`packages/generator/src/index.ts`).
 - QA commands include axe, Lighthouse CI, linkinator, HTML validation,
   Playwright visual smoke, and template fuzzing; several tooling scripts have
-  tests, but not each script, and these QA commands are separate from `validate`.
-- Root `validate` composes typecheck → placeholder lint → build → workspace
-tests → example
-  validation; this describes the command, not a verified passing build.
+  tests, but not each script, and generated-site QA is separate from `validate`.
+- Root `validate` composes build → typecheck → script and workspace tests →
+  placeholder lint → example validation.
 
 ## Deliverable
 

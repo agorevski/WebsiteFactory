@@ -40,7 +40,7 @@ Run the aggregate validation before handoff or after schema/template changes:
 npm run validate
 ```
 
-This runs workspace type checks, the lint placeholder, package/app builds, and example YAML validation. To validate only example sites:
+This builds packages and the app in dependency order, then runs workspace type checks, Node regression suites, the lint placeholder, and example YAML validation. Building first makes dependency declarations available on a clean checkout. To validate only example sites:
 
 ```sh
 npm run validate:examples

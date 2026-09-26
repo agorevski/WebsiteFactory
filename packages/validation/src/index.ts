@@ -4,5 +4,6 @@ export * from "./html.js";
 export * from "./result.js";
 export * from "./rules.js";
 export * from "./schema.js";
+export * from "./siteGraph.js";
 export * from "./types.js";
 export * from "./validator.js";

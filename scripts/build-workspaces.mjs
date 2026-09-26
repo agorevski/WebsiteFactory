@@ -81,7 +81,7 @@ export function createWorkspaceBuildLayers(workspaces) {
 export async function runWorkspaceBuildLayers(layers, options = {}) {
   const {
     rootDir = defaultRoot,
-    npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm',
+    npmCommand,
     stdout = process.stdout,
     stderr = process.stderr,
   } = options;
@@ -107,12 +107,72 @@ export async function runWorkspaceBuildLayers(layers, options = {}) {
   return 0;
 }
 
-export async function main(rootDir = defaultRoot) {
+export function selectWorkspaceBuildClosure(workspaces, names = []) {
+  if (names.length === 0) {
+    return workspaces;
+  }
+
+  const byName = new Map(workspaces.map((workspace) => [workspace.name, workspace]));
+  const selected = new Set();
+
+  function include(name) {
+    if (selected.has(name)) {
+      return;
+    }
+
+    const workspace = byName.get(name);
+    if (!workspace) {
+      throw new Error(`Unknown buildable workspace "${name}". Available: ${[...byName.keys()].sort().join(', ')}`);
+    }
+
+    selected.add(name);
+    for (const dependency of workspace.dependencies) {
+      if (byName.has(dependency)) {
+        include(dependency);
+      }
+    }
+  }
+
+  names.forEach(include);
+  return workspaces.filter((workspace) => selected.has(workspace.name));
+}
+
+export function parseBuildArguments(args) {
+  const workspaces = [];
+  let dryRun = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--dry-run') {
+      dryRun = true;
+    } else if (argument === '--workspace' || argument.startsWith('--workspace=')) {
+      const name = argument === '--workspace' ? args[++index] : argument.slice('--workspace='.length);
+      if (!name || name.startsWith('-')) {
+        throw new Error('--workspace requires a package name.');
+      }
+      workspaces.push(name);
+    } else {
+      throw new Error(`Unknown build argument "${argument}". Use --workspace <package-name> and/or --dry-run.`);
+    }
+  }
+
+  return { workspaces, dryRun };
+}
+
+export async function main(rootDir = defaultRoot, args = process.argv.slice(2)) {
+  const options = parseBuildArguments(args);
   const workspaces = await discoverBuildableWorkspaces(rootDir);
-  const layers = createWorkspaceBuildLayers(workspaces);
+  const layers = createWorkspaceBuildLayers(selectWorkspaceBuildClosure(workspaces, options.workspaces));
 
   if (layers.length === 0) {
     console.log('No buildable workspaces found.');
+    return 0;
+  }
+
+  if (options.dryRun) {
+    for (const [index, layer] of layers.entries()) {
+      console.log(`Layer ${index + 1}: ${layer.map((workspace) => workspace.name).join(', ')}`);
+    }
     return 0;
   }
 
@@ -207,9 +267,36 @@ function getDependencyNames(manifest) {
   return [...names].sort();
 }
 
+export function resolveNpmInvocation({
+  npmCommand,
+  npmCliPath = process.env.npm_execpath,
+  nodePath = process.execPath,
+  platform = process.platform,
+} = {}) {
+  if (npmCommand) {
+    return { command: npmCommand, args: [] };
+  }
+
+  const bundledCli = join(dirname(nodePath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+  const cliPath = npmCliPath || (existsSync(bundledCli) ? bundledCli : undefined);
+
+  // Execute npm's JavaScript entry point, not a Windows .cmd shim.
+  if (cliPath) {
+    return { command: nodePath, args: [cliPath] };
+  }
+
+  if (platform === 'win32') {
+    throw new Error('Cannot locate npm-cli.js. Run the build through "npm run build".');
+  }
+
+  return { command: 'npm', args: [] };
+}
+
 function runWorkspaceBuild(workspace, { rootDir, npmCommand, stdout, stderr }) {
+  const invocation = resolveNpmInvocation({ npmCommand });
+
   return new Promise((resolveResult) => {
-    const child = spawn(npmCommand, ['run', 'build', '--workspace', workspace.name], {
+    const child = spawn(invocation.command, [...invocation.args, 'run', 'build', '--workspace', workspace.name], {
       cwd: rootDir,
       env: process.env,
       stdio: ['ignore', 'pipe', 'pipe'],
