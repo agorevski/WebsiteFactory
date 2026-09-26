@@ -76,14 +76,26 @@ This skill is invoked as:
 ## Workflow
 
 1. **Research current facts**
-   - Start with `web_search` using focused queries built from the supplied input:
-     - `"<business name>" official website address phone hours services`
-     - `"<business name>" "<zipcode>" address phone`
-     - `"<business name>" "<business type>" "<zipcode>" official`
-     - `"<business name>" reviews services contact`
-   - Once an official domain is identified, use `web_fetch` on accessible official pages such as the
-     homepage, contact/location page, services/menu/practice-area page, about/team page, FAQ page, booking
-     page, and reviews/testimonials page.
+   - Perform searches with the `microsoft/playwright-mcp` browser tools by driving a real Google search
+     session, not the `web_search`/`web_fetch` tools, so results reflect live rendered search pages:
+     - `browser_navigate` to `https://www.google.com/search?q=<url-encoded query>` for each focused query
+       built from the supplied input:
+       - `"<business name>" official website address phone hours services`
+       - `"<business name>" "<zipcode>" address phone`
+       - `"<business name>" "<business type>" "<zipcode>" official`
+       - `"<business name>" reviews services contact`
+     - `browser_snapshot` (or `browser_take_screenshot` if a snapshot is ambiguous) after each navigation to
+       read the result titles, snippets, and URLs before deciding where to click.
+     - `browser_click` the most relevant organic result (prefer the official domain over
+       aggregators/directories) to open it, then `browser_navigate` to specific official pages such as the
+       homepage, contact/location page, services/menu/practice-area page, about/team page, FAQ page,
+       booking page, and reviews/testimonials page.
+     - Use `browser_snapshot` on each opened page to extract facts; use `browser_wait_for` if content loads
+       asynchronously, and `browser_navigate_back` to return to search results between queries.
+     - Close extra tabs with `browser_tabs`/`browser_close` when a research thread is finished to keep the
+       session manageable.
+   - Fall back to `web_search`/`web_fetch` only if the Playwright MCP browser tools are unavailable, blocked,
+     or a target page cannot be rendered (e.g., hard bot-detection).
    - Prefer official pages over third-party listings. Use reputable public listings only to corroborate
      or fill gaps, and label those facts as requiring business review when they are not confirmed by the
      official site.

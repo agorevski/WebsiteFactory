@@ -43,7 +43,8 @@ export function generateSeoArtifacts(
 ): SeoArtifactManifest {
   const normalizedPages = pages.length > 0 ? pages : [{ path: "/", title: site.name }];
   const pageArtifacts = normalizedPages.map((page) => generatePageSeoArtifact(site, page, options));
-  const sitemapEntries = options.sitemapEntries ?? normalizedPages.map((page) => pageToSitemapEntry(site, page));
+  const indexablePages = normalizedPages.filter((page) => page.noIndex !== true);
+  const sitemapEntries = options.sitemapEntries ?? indexablePages.map((page) => pageToSitemapEntry(site, page));
   const sitemapXml = generateSitemap(sitemapEntries, site.url);
   const hasImageEntries = sitemapEntries.some((entry) => (entry.images ?? []).length > 0);
   const shouldIncludeImageSitemap = options.includeImageSitemap === true || (options.includeImageSitemap !== false && hasImageEntries);
@@ -61,7 +62,7 @@ export function generateSeoArtifacts(
   const llmsTxt = generateLlmsTxt(site, {
     ...options.llms,
     siteUrl: site.url,
-    pages: normalizedPages,
+    pages: indexablePages,
     sitemapUrl: options.llms?.sitemapUrl ?? primarySitemapUrl
   });
   const rssXml = options.rssFeed ? generateRssFeed(options.rssFeed, options.rssItems ?? []) : undefined;

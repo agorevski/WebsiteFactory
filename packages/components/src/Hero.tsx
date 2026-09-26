@@ -19,7 +19,8 @@ export function Hero({ id, data, variant = 'split', className, theme, mode }: He
       {data.backgroundImage ? (
         <img
           src={data.backgroundImage.src}
-          alt={data.backgroundImage.alt}
+          alt=""
+          aria-hidden="true"
           className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20"
           loading={data.backgroundImage.loading ?? 'lazy'}
         />

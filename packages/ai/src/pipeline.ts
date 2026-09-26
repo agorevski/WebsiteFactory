@@ -110,6 +110,11 @@ export function startYamlPipelineStep<TSiteSchema>(
   state: YamlPipelineState<TSiteSchema>,
   stepId: string
 ): YamlPipelineState<TSiteSchema> {
+  const status = state.stepStatuses[stepId];
+  if (!state.pipeline.steps.some((step) => step.id === stepId) || status !== "ready") {
+    throw new Error(`Cannot start pipeline step "${stepId}" with status "${status ?? "unknown"}"`);
+  }
+
   return {
     ...state,
     stepStatuses: {
@@ -123,6 +128,11 @@ export function recordYamlPipelineStepResult<TSiteSchema>(
   state: YamlPipelineState<TSiteSchema>,
   result: PipelineStepResult
 ): YamlPipelineState<TSiteSchema> {
+  const status = state.stepStatuses[result.stepId];
+  if (!state.pipeline.steps.some((step) => step.id === result.stepId) || status !== "running") {
+    throw new Error(`Cannot record pipeline step "${result.stepId}" with status "${status ?? "unknown"}"`);
+  }
+
   const nextStatuses: Record<string, PipelineStepStatus> = {
     ...state.stepStatuses,
     [result.stepId]: result.status

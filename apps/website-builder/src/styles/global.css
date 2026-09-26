@@ -331,9 +331,21 @@ h3 {
   align-items: center;
 }
 
+.hero-layout-media .hero-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
 .hero-showcase {
   display: grid;
   gap: 1rem;
+}
+
+@media (min-width: 901px) {
+  .hero-layout-media .hero-showcase {
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+    align-items: stretch;
+  }
 }
 
 .hero-photo-card {
@@ -646,6 +658,16 @@ h3 {
 
 .card-grid {
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+@media (min-width: 641px) {
+  .section-services.section-variant-featured .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .section-services.section-variant-featured .card:first-child {
+    grid-column: 1 / -1;
+  }
 }
 
 .content-grid {

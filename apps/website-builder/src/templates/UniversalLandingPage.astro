@@ -4,22 +4,27 @@ import SectionRenderer from '../components/SectionRenderer';
 import SiteFooter from '../components/SiteFooter';
 import SiteHeader from '../components/SiteHeader';
 import { formatPageLabel, normalizePagePath, type UniversalPage } from '../lib/pages';
+import { composeVariationSections } from '../lib/themeVariations';
 import type { UniversalSection, UniversalSite } from '../lib/schema';
 import { templateThemeClassName } from '../lib/theme';
+import type { WebsiteTemplate } from '@website-factory/templates';
 
 interface Props {
   site: UniversalSite;
   page?: UniversalPage;
   sections?: UniversalSection[];
+  template?: WebsiteTemplate;
 }
 
-const { site, page } = Astro.props;
+const { site, page, template } = Astro.props;
 const sections = Astro.props.sections ?? site.sections;
+const composition = template ? composeVariationSections(sections, template) : { sections, variants: {} };
+const heroLayout = template?.sections.find((section) => section.schemaType === 'hero')?.variant;
 const isRootPage = !page || normalizePagePath(page.path) === '/';
 const pageHero = isRootPage ? site.hero : {
   eyebrow: site.business.name,
   title: page ? formatPageLabel(page) : site.hero.title,
-  summary: sections[0]?.summary ?? site.business.description,
+  summary: composition.sections[0]?.summary ?? site.business.description,
   primaryCta: site.hero.primaryCta,
   secondaryCta: {
     label: 'Back to home',
@@ -28,11 +33,11 @@ const pageHero = isRootPage ? site.hero : {
   },
 };
 ---
-<div class={`site-shell ${templateThemeClassName(site)} radius-${site.theme.radius}`}>
+<div class={`site-shell ${templateThemeClassName(site)} radius-${site.theme.radius}`} data-template={template?.id}>
   <SiteHeader site={site} />
   <main id="main-content">
-    <Hero business={site.business} hero={pageHero} theme={site.theme} variant={isRootPage ? 'landing' : 'page'} />
-    <SectionRenderer cta={site.ctas?.final} sections={sections} />
+    <Hero business={site.business} hero={pageHero} theme={site.theme} variant={isRootPage ? 'landing' : 'page'} layout={heroLayout} />
+    <SectionRenderer cta={site.ctas?.final} sections={composition.sections} sectionVariants={composition.variants} />
   </main>
   <SiteFooter site={site} />
 </div>

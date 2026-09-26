@@ -2,6 +2,7 @@ import type { UniversalAction, UniversalSection } from '../lib/schema';
 
 type Props = {
   sections: UniversalSection[];
+  sectionVariants?: Readonly<Record<string, string>>;
   cta?: {
     title: string;
     summary: string;
@@ -175,11 +176,11 @@ function FaqList({ section }: { section: UniversalSection }) {
   );
 }
 
-export default function SectionRenderer({ sections, cta }: Props) {
+export default function SectionRenderer({ sections, sectionVariants, cta }: Props) {
   return (
     <>
       {sections.map((section, index) => (
-        <section className={`section-pad page-section section-${section.type} ${index % 2 === 1 ? 'section-alt' : ''}`} id={section.id} key={section.id}>
+        <section className={`section-pad page-section section-${section.type} ${sectionVariants?.[section.id] ? `section-variant-${sectionVariants[section.id]}` : ''} ${index % 2 === 1 ? 'section-alt' : ''}`} id={section.id} key={section.id}>
           <div className="container">
             <SectionIntro section={section} />
 

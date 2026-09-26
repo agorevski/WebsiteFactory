@@ -43,7 +43,7 @@ export function TrustBadges({ id, data, variant = 'default', className, theme, m
 
 export function Hours({ id, data, variant = 'default', className, theme, mode }: HoursProps) {
   return (
-    <section id={id} className={classNames('px-6 py-8', className)} {...themeDataAttributes(theme, mode)}>
+    <section id={id} aria-label={data.title || 'Business hours'} className={classNames('px-6 py-8', className)} {...themeDataAttributes(theme, mode)}>
       <div className={classNames('mx-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-sm', variant === 'compact' ? 'max-w-xl' : 'max-w-3xl')}>
         {data.title ? <h2 className="text-xl font-bold text-slate-950">{data.title}</h2> : null}
         <table className="mt-4 w-full text-left text-sm text-slate-700">

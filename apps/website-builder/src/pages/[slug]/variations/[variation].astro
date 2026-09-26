@@ -46,5 +46,5 @@ const description = `${variation.label} preview using the ${variation.template.n
     </div>
     <a class="button button-secondary" href={`/${site.slug}/`}>Canonical site</a>
   </aside>
-  <UniversalLandingPage site={site} page={page} sections={sections} />
+  <UniversalLandingPage site={site} page={page} sections={sections} template={variation.template} />
 </SiteLayout>

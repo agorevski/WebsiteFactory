@@ -3,7 +3,7 @@ import { dirname, resolve, sep } from 'node:path';
 import { getTemplate, isTemplateId, type TemplateId, type WebsiteTemplate } from '@website-factory/templates';
 import { isThemeName, type ThemeName } from '@website-factory/themes';
 import { parse } from 'yaml';
-import { parseUniversalSite, type UniversalSite } from './schema.ts';
+import { parseUniversalSite, type UniversalSection, type UniversalSite } from './schema.ts';
 
 const workspaceSuffix = `${sep}apps${sep}website-builder`;
 const currentWorkingDirectory = process.cwd();
@@ -193,4 +193,32 @@ export function applyThemeVariation(site: UniversalSite, variation: ThemeVariati
     ...site,
     theme: { ...variation.theme },
   };
+}
+
+export function composeVariationSections(sections: UniversalSection[], template: WebsiteTemplate): {
+  sections: UniversalSection[];
+  variants: Readonly<Record<string, string>>;
+} {
+  const remaining = [...sections];
+  const ordered: UniversalSection[] = [];
+  const variants: Record<string, string> = {};
+
+  for (const definition of template.sections.filter((entry) => entry.slot === 'main')) {
+    const matchIndex = remaining.findIndex((section) =>
+      section.id === definition.id ||
+      section.type === definition.schemaType ||
+      (section.type === 'proof' && definition.schemaType === 'trustBadges')
+    );
+    if (matchIndex < 0) {
+      continue;
+    }
+
+    const [match] = remaining.splice(matchIndex, 1);
+    if (match) {
+      ordered.push(match);
+      variants[match.id] = definition.variant;
+    }
+  }
+
+  return { sections: [...ordered, ...remaining], variants };
 }

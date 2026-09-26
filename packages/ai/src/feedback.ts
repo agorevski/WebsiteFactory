@@ -101,6 +101,10 @@ export function appendFeedbackIteration(
   state: FeedbackLoopState,
   report: ValidationReport
 ): FeedbackLoopState {
+  if (state.status !== "needs-repair") {
+    throw new Error(`Cannot append feedback to a "${state.status}" loop`);
+  }
+
   const nextIteration = enforceIterationLimit(
     createFeedbackIteration(state.iterations.length, report, state.options),
     state.iterations.length + 1,
@@ -162,10 +166,15 @@ function enforceIterationLimit(
 }
 
 function resolveFeedbackOptions(options: Partial<FeedbackLoopOptions>): FeedbackLoopOptions {
+  const maxIterations = options.maxIterations ?? DEFAULT_FEEDBACK_OPTIONS.maxIterations;
+  if (!Number.isFinite(maxIterations) || maxIterations < 1) {
+    throw new RangeError("maxIterations must be a finite positive number");
+  }
+
   return {
     ...DEFAULT_FEEDBACK_OPTIONS,
     ...options,
-    maxIterations: Math.max(1, Math.trunc(options.maxIterations ?? DEFAULT_FEEDBACK_OPTIONS.maxIterations))
+    maxIterations: Math.max(1, Math.trunc(maxIterations))
   };
 }
 

@@ -20,7 +20,7 @@ export function FAQ({ id, data, variant = 'accordion', className, theme, mode }:
         <div className={classNames('mt-10 grid gap-4', variant === 'columns' && 'lg:grid-cols-2')}>
           {data.items.map((item) => (
             <details key={item.question} className="group rounded-2xl border border-slate-200 bg-white p-5">
-              <summary className="cursor-pointer list-none text-lg font-bold text-slate-950 marker:hidden">
+              <summary className="cursor-pointer text-lg font-bold text-slate-950">
                 {item.question}
               </summary>
               <p className="mt-3 leading-7 text-slate-600">{item.answer}</p>

@@ -18,7 +18,7 @@ export function Navigation({ id, data, variant = 'default', className, theme, mo
           ))}
         </nav>
       ) : null}
-      <nav aria-label="Main navigation" className={classNames('mx-auto flex max-w-6xl items-center gap-6 py-4', variant === 'centered' ? 'justify-center' : 'justify-between')}>
+      <nav aria-label="Main navigation" className={classNames('mx-auto flex max-w-6xl flex-wrap items-center gap-6 py-4', variant === 'centered' ? 'justify-center' : 'justify-between')}>
         <a href={brandHref} className="flex items-center gap-3 font-bold text-slate-950">
           {data.brand.logo ? <img src={data.brand.logo.src} alt={data.brand.logo.alt} width={data.brand.logo.width} height={data.brand.logo.height} className="h-10 w-auto" /> : null}
           <span>{data.brand.name}</span>
@@ -34,6 +34,25 @@ export function Navigation({ id, data, variant = 'default', className, theme, mo
           <a href={data.cta.href} aria-label={data.cta.ariaLabel} className={classNames(ctaClassName(data.cta.variant), 'hidden md:inline-flex')} {...externalLinkAttributes(data.cta.external)}>
             {data.cta.label}
           </a>
+        ) : null}
+        {data.links.length || data.cta ? (
+          <details className="w-full md:hidden">
+            <summary className="cursor-pointer rounded-md py-2 text-sm font-semibold text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+              Menu
+            </summary>
+            <div className="flex flex-col items-start gap-4 border-t border-slate-200 py-4">
+              {data.links.map((link) => (
+                <a key={`${link.href}-${link.label}`} href={link.href} aria-current={link.current ? 'page' : undefined} className="text-sm font-medium text-slate-700 hover:text-slate-950" {...externalLinkAttributes(link.external)}>
+                  {link.label}
+                </a>
+              ))}
+              {data.cta ? (
+                <a href={data.cta.href} aria-label={data.cta.ariaLabel} className={ctaClassName(data.cta.variant)} {...externalLinkAttributes(data.cta.external)}>
+                  {data.cta.label}
+                </a>
+              ) : null}
+            </div>
+          </details>
         ) : null}
       </nav>
     </header>

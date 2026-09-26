@@ -5,6 +5,7 @@ type Props = {
   hero: UniversalSite['hero'];
   theme: UniversalSite['theme'];
   variant?: 'landing' | 'page';
+  layout?: string;
 };
 
 function phoneHref(phone: string): string {
@@ -15,7 +16,7 @@ function formatAddress(address: UniversalSite['business']['address']): string {
   return `${address.street}, ${address.city}, ${address.region} ${address.postalCode}`;
 }
 
-export default function Hero({ business, hero, theme, variant = 'landing' }: Props) {
+export default function Hero({ business, hero, theme, variant = 'landing', layout }: Props) {
   const isPageHero = variant === 'page';
   const address = business.address;
   const primaryHours = business.hours[0];
@@ -23,7 +24,7 @@ export default function Hero({ business, hero, theme, variant = 'landing' }: Pro
   const imageLabel = hero.mediaAlt ?? heroImage?.alt ?? `${business.name} care preview`;
 
   return (
-    <section className={`hero section-pad ${isPageHero ? 'hero-page' : ''}`}>
+    <section className={`hero section-pad ${isPageHero ? 'hero-page' : ''} ${layout ? `hero-layout-${layout}` : ''}`}>
       <div className={`container ${isPageHero ? 'hero-page-grid' : 'hero-grid'}`}>
         <div className="hero-copy">
           {hero.eyebrow ? <p className="eyebrow">{hero.eyebrow}</p> : null}

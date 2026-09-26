@@ -4,7 +4,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { resolveUniversalTheme } from './theme.ts';
-import { applyThemeVariation, getExampleThemeVariationGroups } from './themeVariations.ts';
+import { applyThemeVariation, composeVariationSections, getExampleThemeVariationGroups } from './themeVariations.ts';
+import { getPageSections, getRootPage } from './pages.ts';
 
 const siteYaml = `schemaVersion: 1
 slug: sample-site
@@ -134,4 +135,25 @@ test('loads exactly five preview variations and overlays a registered theme with
   assert.equal(previewSite.theme.name, 'lawFirm');
   assert.equal(previewSite.theme.palette, 'professional');
   assert.equal(resolveUniversalTheme(previewSite).id, 'lawFirm');
+});
+
+test('two templates compose the same business sections into distinct rendered rhythms', async () => {
+  const [group] = await getExampleThemeVariationGroups();
+  assert.ok(group);
+  const sections = getPageSections(group.site, getRootPage(group.site));
+  const clinic = group.variations.find((variation) => variation.id === 'recommended');
+  const editorial = group.variations.find((variation) => variation.id === 'premium-editorial');
+  assert.ok(clinic && editorial);
+
+  const clinicComposition = composeVariationSections(sections, clinic.template);
+  const editorialComposition = composeVariationSections(sections, editorial.template);
+  const ids = sections.map((section) => section.id).sort();
+  assert.deepEqual(clinicComposition.sections.map((section) => section.id).sort(), ids);
+  assert.deepEqual(editorialComposition.sections.map((section) => section.id).sort(), ids);
+  assert.notDeepEqual(
+    clinicComposition.sections.map((section) => section.id),
+    editorialComposition.sections.map((section) => section.id)
+  );
+  assert.equal(clinicComposition.variants.services, 'cards');
+  assert.equal(editorialComposition.variants.services, 'featured');
 });
