@@ -2705,9 +2705,3 @@ export function getComponentMarketplaceSummary(): ComponentMarketplaceSummary {
     implementationCount: componentMarketplaceImplementations.length,
   };
 }
-
-export const listComponentCategories = listComponentMarketplaceCategories;
-export const getComponentCategory = getComponentMarketplaceCategory;
-export const listComponentImplementations = listComponentMarketplaceImplementations;
-export const getComponentImplementation = getComponentMarketplaceImplementation;
-export const selectComponentImplementations = selectComponentMarketplaceImplementations;

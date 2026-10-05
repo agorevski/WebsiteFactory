@@ -20,17 +20,12 @@ export {
   componentMarketplaceCategories,
   componentMarketplaceImplementations,
   componentMarketplaceRegistry,
-  getComponentCategory,
-  getComponentImplementation,
   getComponentMarketplaceCategory,
   getComponentMarketplaceImplementation,
   getComponentMarketplaceSummary,
   getComponentMarketplaceVariant,
-  listComponentCategories,
-  listComponentImplementations,
   listComponentMarketplaceCategories,
   listComponentMarketplaceImplementations,
-  selectComponentImplementations,
   selectComponentMarketplaceImplementations
 } from './marketplace';
 export type {
