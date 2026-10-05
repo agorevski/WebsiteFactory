@@ -77,7 +77,7 @@ export function buildOrganizationJsonLd(site: SiteSeoInput, organization: Organi
     name: organization.name ?? site.name,
     legalName: organization.legalName,
     url: normalizeUrl(organization.url ?? site.url, site.url),
-    logo: normalizeLogo(organization.logo, site.url),
+    logo: normalizeImageUrl(organization.logo, site.url),
     sameAs: organization.sameAs,
     telephone: organization.telephone,
     email: organization.email,
@@ -98,7 +98,7 @@ export function buildBusinessJsonLd(site: SiteSeoInput, business: BusinessProfil
     description: business.description ?? site.description,
     url: businessUrl,
     image: normalizeImages(business.image, site.url).map((image) => image.url),
-    logo: normalizeLogo(business.logo, site.url),
+    logo: normalizeImageUrl(business.logo, site.url),
     telephone: business.telephone,
     email: business.email,
     address: business.address,
@@ -127,7 +127,7 @@ export function buildPersonJsonLd(person: PersonProfile, baseUrl: string): JsonL
     "@type": "Person",
     name: person.name,
     url: person.url ? normalizeUrl(person.url, baseUrl) : undefined,
-    image: normalizeImageValue(person.image, baseUrl),
+    image: normalizeImageUrl(person.image, baseUrl),
     jobTitle: person.jobTitle,
     sameAs: person.sameAs
   });
@@ -240,15 +240,7 @@ function resolveBusinessType(business: BusinessProfile): string {
   return type;
 }
 
-function normalizeLogo(logo: string | SeoImage | undefined, baseUrl: string): string | undefined {
-  if (!logo) {
-    return undefined;
-  }
-
-  return normalizeImage(logo, baseUrl).url;
-}
-
-function normalizeImageValue(image: string | SeoImage | undefined, baseUrl: string): string | undefined {
+function normalizeImageUrl(image: string | SeoImage | undefined, baseUrl: string): string | undefined {
   if (!image) {
     return undefined;
   }
@@ -283,7 +275,7 @@ function normalizeBrand(brand: string | OrganizationProfile | undefined, baseUrl
   return cleanJsonLd({
     "@type": "Brand",
     name: brand.name,
-    logo: normalizeLogo(brand.logo, baseUrl),
+    logo: normalizeImageUrl(brand.logo, baseUrl),
     url: brand.url ? normalizeUrl(brand.url, baseUrl) : undefined,
     sameAs: brand.sameAs
   });
