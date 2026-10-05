@@ -6,10 +6,6 @@ const severityWeight: Record<ValidationSeverity, number> = {
   info: 1
 };
 
-export function createIssue(issue: ValidationIssue): ValidationIssue {
-  return issue;
-}
-
 export function summarizeIssues(issues: ValidationIssue[]): ValidationSummary {
   return issues.reduce<ValidationSummary>(
     (summary, issue) => ({
