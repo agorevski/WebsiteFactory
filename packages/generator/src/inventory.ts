@@ -181,10 +181,6 @@ function countCareers(input: GeneratorInput): number {
   return input.careers.openings.length;
 }
 
-function countLegacyUniversalSections(input: UniversalSite, sectionType: UniversalSite['sections'][number]['type']): number {
-  return input.sections.filter((section) => section.type === sectionType).length;
-}
-
 function hasLegacyHours(input: GeneratorInput): boolean {
   if (isUniversalSite(input)) {
     return input.business.hours.length > 0;
@@ -305,5 +301,5 @@ export function createContentInventory(input: GeneratorInput): ContentInventory 
 }
 
 export function countUniversalLegacySections(input: GeneratorInput, sectionType: UniversalSite['sections'][number]['type']): number {
-  return isUniversalSite(input) ? countLegacyUniversalSections(input, sectionType) : 0;
+  return isUniversalSite(input) ? input.sections.filter((section) => section.type === sectionType).length : 0;
 }
