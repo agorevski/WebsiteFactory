@@ -5,10 +5,6 @@ import { inferContentSignals } from './signals.js';
 import { isUniversalSite } from './inventory.js';
 import type { ContentSignalSummary, GeneratorInput, ThemeResolutionPlan, ThemeSelectionOptions } from './types.js';
 
-function addTrait(traits: Set<ComponentThemeTrait>, trait: ComponentThemeTrait): void {
-  traits.add(trait);
-}
-
 function tagMatches(tags: readonly string[], values: readonly string[]): boolean {
   return tags.some((tag) => values.includes(tag));
 }
@@ -22,62 +18,62 @@ export function deriveThemeTraits(theme: WebsiteTheme): readonly ComponentThemeT
   const traits = new Set<ComponentThemeTrait>();
 
   if (tagMatches(tags, ['professional', 'professional-services', 'legal', 'consulting', 'enterprise', 'b2b', 'trust'])) {
-    addTrait(traits, 'professional');
-    addTrait(traits, 'trustFocused');
+    traits.add('professional');
+    traits.add('trustFocused');
   }
 
   if (tagMatches(tags, ['clinic', 'dental', 'medical', 'healthcare', 'wellness', 'local-business', 'local-service'])) {
-    addTrait(traits, 'professional');
-    addTrait(traits, 'trustFocused');
-    addTrait(traits, 'local');
+    traits.add('professional');
+    traits.add('trustFocused');
+    traits.add('local');
   }
 
   if (tagMatches(tags, ['hospitality', 'restaurant', 'food', 'hotel', 'portfolio', 'photography', 'visual', 'creative', 'boutique'])) {
-    addTrait(traits, 'imageForward');
+    traits.add('imageForward');
   }
 
   if (tagMatches(tags, ['ecommerce', 'retail', 'shop', 'product', 'payments', 'saas'])) {
-    addTrait(traits, 'commerce');
-    addTrait(traits, 'conversionFocused');
+    traits.add('commerce');
+    traits.add('conversionFocused');
   }
 
   if (tagMatches(tags, ['documentation', 'developer', 'technical', 'editorial', 'content-first', 'blog'])) {
-    addTrait(traits, 'editorial');
-    addTrait(traits, 'copyDense');
+    traits.add('editorial');
+    traits.add('copyDense');
   }
 
   if (tagMatches(tags, ['minimal', 'one-page'])) {
-    addTrait(traits, 'minimal');
-    addTrait(traits, 'lightweight');
+    traits.add('minimal');
+    traits.add('lightweight');
   }
 
   if (tagMatches(tags, ['premium', 'luxury', 'fine-dining'])) {
-    addTrait(traits, 'premium');
+    traits.add('premium');
   }
 
   if (tagMatches(tags, ['creative', 'launch', 'family', 'education', 'community'])) {
-    addTrait(traits, 'playful');
+    traits.add('playful');
   }
 
   if (theme.defaultMode === 'highContrast' || theme.supportedModes.includes('highContrast')) {
-    addTrait(traits, 'highContrast');
+    traits.add('highContrast');
   }
 
   if (theme.tokens.hero.layout === 'media' || theme.tokens.hero.layout === 'editorial' || theme.tokens.hero.mediaShape === 'bleed') {
-    addTrait(traits, 'imageForward');
+    traits.add('imageForward');
   }
 
   if (theme.tokens.navigation.layout === 'sidebar' || theme.tokens.footer.density === 'compact') {
-    addTrait(traits, 'utility');
-    addTrait(traits, 'compact');
+    traits.add('utility');
+    traits.add('compact');
   }
 
   if (theme.tokens.cards.standard.shadow === 'none' && theme.tokens.hero.overlay === 'none') {
-    addTrait(traits, 'minimal');
+    traits.add('minimal');
   }
 
   if (traits.size === 0) {
-    addTrait(traits, 'professional');
+    traits.add('professional');
   }
 
   return [...traits].sort();
