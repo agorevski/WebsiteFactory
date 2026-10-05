@@ -83,14 +83,12 @@ export function validateS3CloudFrontConfig(
   config: S3CloudFrontConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "s3-cloudfront.project-name", "S3 deployment project name"),
     ...requireNonEmpty(config.bucketName, "s3-cloudfront.bucket-name", "S3 bucket name"),
     ...requireNonEmpty(config.region, "s3-cloudfront.region", "AWS region"),
     ...requireNonEmpty(artifact.outputDirectory, "s3-cloudfront.output-directory", "Output directory")
   ];
-
-  return diagnostics;
 }
 
 function renderS3CloudFrontConfig(config: S3CloudFrontConfig, cacheControl: string): string {

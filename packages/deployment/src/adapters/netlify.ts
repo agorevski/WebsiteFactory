@@ -78,12 +78,10 @@ export function validateNetlifyConfig(
   config: NetlifyConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "netlify.project-name", "Netlify project name"),
     ...requireNonEmpty(config.publishDirectory ?? artifact.outputDirectory, "netlify.publish-directory", "Publish directory")
   ];
-
-  return diagnostics;
 }
 
 function renderNetlifyToml(

@@ -75,12 +75,10 @@ export function validateCloudflarePagesConfig(
   config: CloudflarePagesConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "cloudflare-pages.project-name", "Cloudflare Pages project name"),
     ...requireNonEmpty(artifact.outputDirectory, "cloudflare-pages.output-directory", "Output directory")
   ];
-
-  return diagnostics;
 }
 
 function renderWranglerToml(projectName: string, outputDirectory: string, compatibilityDate: string): string {

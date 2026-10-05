@@ -75,12 +75,10 @@ export function validateVercelConfig(
   config: VercelConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "vercel.project-name", "Vercel project name"),
     ...requireNonEmpty(config.outputDirectory ?? artifact.outputDirectory, "vercel.output-directory", "Output directory")
   ];
-
-  return diagnostics;
 }
 
 function renderVercelJson(config: VercelConfig, outputDirectory: string): string {

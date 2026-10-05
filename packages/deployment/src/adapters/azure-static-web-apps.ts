@@ -80,12 +80,10 @@ export function validateAzureStaticWebAppsConfig(
   config: AzureStaticWebAppsConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "azure-static-web-apps.project-name", "Azure Static Web Apps project name"),
     ...requireNonEmpty(config.outputLocation ?? artifact.outputDirectory, "azure-static-web-apps.output-location", "Output location")
   ];
-
-  return diagnostics;
 }
 
 function renderStaticWebAppConfig(config: AzureStaticWebAppsConfig): string {
