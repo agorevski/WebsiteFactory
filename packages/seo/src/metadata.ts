@@ -5,6 +5,7 @@ import {
   formatIsoDate,
   normalizeImages,
   normalizeUrl,
+  optional,
   stripHtml,
   truncateText
 } from "./utils.js";
@@ -186,8 +187,4 @@ function normalizeTwitterHandle(author: PageSeoInput["author"]): string | undefi
 
   const username = handle.split("/").filter(Boolean).at(-1);
   return username ? `@${username.replace(/^@/, "")}` : undefined;
-}
-
-function optional<TKey extends string, TValue>(key: TKey, value: TValue | undefined): Partial<Record<TKey, TValue>> {
-  return value === undefined ? {} : { [key]: value } as Record<TKey, TValue>;
 }

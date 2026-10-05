@@ -102,6 +102,10 @@ export function unique(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))];
 }
 
+export function optional<TKey extends string, TValue>(key: TKey, value: TValue | undefined): Partial<Record<TKey, TValue>> {
+  return value === undefined ? {} : { [key]: value } as Record<TKey, TValue>;
+}
+
 export function cleanJsonLd<T extends JsonLdNode>(node: T): T {
   return removeEmpty(node) as T;
 }

@@ -9,7 +9,7 @@ import type {
   SeoImage,
   SiteSeoInput
 } from "./types.js";
-import { normalizePath } from "./utils.js";
+import { normalizePath, optional } from "./utils.js";
 
 export interface SchemaSeoSource {
   site?: Record<string, unknown>;
@@ -167,10 +167,6 @@ function readStringArray(source: Record<string, unknown> | undefined, key: strin
 
   const strings = value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
   return strings.length > 0 ? strings : undefined;
-}
-
-function optional<TKey extends string, TValue>(key: TKey, value: TValue | undefined): Partial<Record<TKey, TValue>> {
-  return value === undefined ? {} : { [key]: value } as Record<TKey, TValue>;
 }
 
 function readImage(source: Record<string, unknown> | undefined, key: string): string | SeoImage | undefined {
