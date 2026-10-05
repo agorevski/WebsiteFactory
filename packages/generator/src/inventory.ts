@@ -193,10 +193,6 @@ function hasLegacyHours(input: GeneratorInput): boolean {
   return Object.values(input.hours.weekly).some((entry) => entry && (!entry.isClosed || entry.ranges.length > 0 || entry.note));
 }
 
-function getBusinessName(input: GeneratorInput): string {
-  return input.business.name;
-}
-
 function getSlug(input: GeneratorInput): string {
   if (isUniversalSite(input)) {
     return input.slug;
@@ -265,7 +261,7 @@ export function createContentInventory(input: GeneratorInput): ContentInventory 
 
   return {
     inputKind: getInputKind(input),
-    businessName: getBusinessName(input),
+    businessName: input.business.name,
     slug: getSlug(input),
     verticals: getVerticals(input, content),
     services,
