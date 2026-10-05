@@ -1,5 +1,6 @@
 import type { SectionProps, TestimonialsData } from './types';
 import { classNames, containerClassName, sectionClassName, themeDataAttributes } from './utils';
+import { SectionHeader } from './SectionHeader';
 
 export type TestimonialsVariant = 'cards' | 'quote' | 'carousel-ready';
 export type TestimonialsProps = SectionProps<TestimonialsData, TestimonialsVariant>;
@@ -11,11 +12,7 @@ export function Testimonials({ id, data, variant = 'cards', className, theme, mo
     <section id={id} aria-labelledby={headingId} className={sectionClassName(classNames('bg-white text-slate-950', className))} {...themeDataAttributes(theme, mode)}>
       <div className={containerClassName()}>
         <div className="max-w-3xl">
-          {data.eyebrow ? <p className="text-sm font-bold uppercase tracking-wide text-blue-700">{data.eyebrow}</p> : null}
-          <h2 id={headingId} className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-            {data.title}
-          </h2>
-          {data.description ? <p className="mt-4 text-lg leading-8 text-slate-600">{data.description}</p> : null}
+          <SectionHeader headingId={headingId} eyebrow={data.eyebrow} title={data.title} description={data.description} />
         </div>
         <div className={classNames('mt-10 grid gap-6', variant === 'quote' ? 'lg:grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3')}>
           {data.testimonials.map((testimonial) => (

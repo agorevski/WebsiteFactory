@@ -1,5 +1,6 @@
 import type { ContactData, SectionProps } from './types';
 import { classNames, containerClassName, formatAddress, sectionClassName, telHref, themeDataAttributes } from './utils';
+import { SectionHeader } from './SectionHeader';
 
 export type ContactVariant = 'split' | 'centered' | 'card';
 export type ContactProps = SectionProps<ContactData, ContactVariant>;
@@ -14,11 +15,7 @@ export function Contact({ id, data, variant = 'split', className, theme, mode }:
     <section id={id} aria-labelledby={headingId} className={sectionClassName(classNames('bg-slate-50 text-slate-950', className))} {...themeDataAttributes(theme, mode)}>
       <div className={containerClassName(classNames('grid gap-10', variant === 'split' && 'lg:grid-cols-[0.9fr_1.1fr]'))}>
         <div>
-          {data.eyebrow ? <p className="text-sm font-bold uppercase tracking-wide text-blue-700">{data.eyebrow}</p> : null}
-          <h2 id={headingId} className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-            {data.title}
-          </h2>
-          {data.description ? <p className="mt-4 text-lg leading-8 text-slate-600">{data.description}</p> : null}
+          <SectionHeader headingId={headingId} eyebrow={data.eyebrow} title={data.title} description={data.description} />
           <dl className="mt-8 space-y-4 text-slate-700">
             {addressText ? (
               <div>
