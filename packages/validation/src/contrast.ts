@@ -39,12 +39,13 @@ export function validateContrastTokens(tokens: ContrastToken[] = [], path?: stri
 
 export function assessContrastTokens(tokens: ContrastToken[] = []): ContrastAssessment[] {
   return tokens.map((token) => {
-    const requiredRatio = isLargeText(token) ? 3 : 4.5;
+    const largeText = isLargeText(token);
+    const requiredRatio = largeText ? 3 : 4.5;
     const base = {
       token,
       requiredRatio,
       wcagLevel: "AA" as const,
-      largeText: isLargeText(token)
+      largeText
     };
     const foreground = parseColor(token.foreground);
     const background = parseColor(token.background);
