@@ -77,7 +77,7 @@ export function getInputKind(input: GeneratorInput): GeneratorInputKind {
   return isUniversalSite(input) ? 'universal-site' : 'website-data';
 }
 
-function slugify(value: string): string {
+export function slugify(value: string): string {
   const slug = value
     .trim()
     .toLowerCase()

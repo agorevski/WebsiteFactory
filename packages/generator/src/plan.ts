@@ -8,7 +8,7 @@ import type {
 } from '@website-factory/components/marketplace';
 import { selectComponentMarketplaceImplementations } from '@website-factory/components/marketplace';
 import type { PageSeoInput } from '@website-factory/seo';
-import { isUniversalSite } from './inventory.js';
+import { isUniversalSite, slugify } from './inventory.js';
 import { appendLifecycleEvent, runGeneratorHooks } from './plugins.js';
 import { inferSectionCandidates } from './sections.js';
 import { inferContentSignals } from './signals.js';
@@ -68,16 +68,6 @@ function joinRoutePath(basePath: string | undefined, routePath: string): string 
 
   const normalizedBase = normalizePath(basePath).replace(/\/$/, '');
   return normalizedRoute === '/' ? `${normalizedBase}/` : `${normalizedBase}${normalizedRoute}`;
-}
-
-function slugify(value: string): string {
-  const slug = value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-  return slug.length > 0 ? slug : 'site';
 }
 
 function matchedValues<TValue extends string>(available: readonly TValue[], requested: readonly TValue[]): readonly TValue[] {
