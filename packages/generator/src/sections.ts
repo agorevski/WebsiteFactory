@@ -91,7 +91,7 @@ function createUnsupportedCandidate(input: {
   };
 }
 
-function createOmitted(candidate: InferredSectionCandidate, code: OmittedSectionReason['reasonCode'], message: string): OmittedSectionReason {
+function createOmitted(candidate: Pick<InferredSectionCandidate, 'id' | 'label' | 'sources'>, code: OmittedSectionReason['reasonCode'], message: string): OmittedSectionReason {
   return {
     candidateId: candidate.id,
     label: candidate.label,
@@ -484,27 +484,19 @@ export function inferSectionCandidates(
   }
 
   if (inventory.events > 0) {
-    const unsupportedEvents = createUnsupportedCandidate({
-      id: 'events-listing',
-      label: 'Events listing',
-      reason: 'Event data is available, but no event listing category exists in the component marketplace yet.',
-      sources: ['content.events'],
-      confidence: 0.82,
-      signals: ['timeSensitive', 'availability', 'transactional']
-    });
-    omittedSections.push(createOmitted(unsupportedEvents, 'unsupported-category', 'Events listing was omitted because the component marketplace does not expose an events category yet.'));
+    omittedSections.push(createOmitted(
+      { id: 'events-listing', label: 'Events listing', sources: ['content.events'] },
+      'unsupported-category',
+      'Events listing was omitted because the component marketplace does not expose an events category yet.'
+    ));
   }
 
   if (inventory.courses > 0) {
-    const unsupportedCourses = createUnsupportedCandidate({
-      id: 'course-catalog',
-      label: 'Course catalog',
-      reason: 'Course data is available, but no course catalog category exists in the component marketplace yet.',
-      sources: ['content.courses'],
-      confidence: 0.82,
-      signals: ['resourceLibrary', 'leadCapture', 'transactional']
-    });
-    omittedSections.push(createOmitted(unsupportedCourses, 'unsupported-category', 'Course catalog was omitted because the component marketplace does not expose a course category yet.'));
+    omittedSections.push(createOmitted(
+      { id: 'course-catalog', label: 'Course catalog', sources: ['content.courses'] },
+      'unsupported-category',
+      'Course catalog was omitted because the component marketplace does not expose a course category yet.'
+    ));
   }
 
   if (inventory.events + inventory.courses > 0 || inventory.forms > 0) {
