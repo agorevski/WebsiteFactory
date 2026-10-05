@@ -62,12 +62,10 @@ export function validateStaticServerConfig(
   config: StaticServerConfig,
   artifact: StaticSiteArtifact
 ): readonly DeploymentDiagnostic[] {
-  const diagnostics: DeploymentDiagnostic[] = [
+  return [
     ...requireNonEmpty(config.projectName, "static-server.project-name", "Static server project name"),
     ...requireNonEmpty(artifact.outputDirectory, "static-server.output-directory", "Output directory")
   ];
-
-  return diagnostics;
 }
 
 function renderStaticServerManifest(config: StaticServerConfig, artifact: StaticSiteArtifact): string {
